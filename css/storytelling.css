@@ -1,0 +1,8 @@
+/*Stop the navbar covering the content*/
+body { 
+    padding-top: 65px; 
+}
+
+.file-button{
+    margin-right: 15px; 
+}
