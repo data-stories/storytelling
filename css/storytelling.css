@@ -6,3 +6,7 @@ body {
 .file-button{
     margin-right: 15px; 
 }
+
+.scroll {
+    overflow-y: auto;
+}

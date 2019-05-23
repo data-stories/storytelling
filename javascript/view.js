@@ -18,7 +18,7 @@ var DATA_INSPECTOR_VIEW=`
           <div class="col h-100">
             <div class="card h-100">
               <h6 class="card-header">Fields of Interest</h6>
-              <div class="card-body text-centre">
+              <div class="card-body scroll text-centre">
                 <form>
                   <div class="form-group">
                     <div class="form-check">
@@ -65,7 +65,7 @@ var DATA_INSPECTOR_VIEW=`
           <div class="col h-100">
             <div class="card h-100">
               <h6 class="card-header">Dependency</h6>
-              <div class="card-body text-centre">
+              <div class="card-body scroll text-centre">
                 <form>
                   <div class="form-group">
                     <label class="form-check-label" for="independent-dropdown">
@@ -90,7 +90,7 @@ var DATA_INSPECTOR_VIEW=`
                     </select>
                   </div>
                   <div class="form-group form-inline">
-                    <button class="btn btn-primary">Apply</button>
+                    <button class="btn btn-primary">Apply</button>&nbsp;&nbsp;
                     <button class="btn btn-secondary">Revert</button>
                   </div>
                 </form>
@@ -105,7 +105,7 @@ var DATA_INSPECTOR_VIEW=`
       <div class="col-6 h-100">
         <div class="card h-100">
           <h6 class="card-header">Value Distribution</h6>
-              <div class="card-body text-centre">
+              <div class="card-body scroll text-centre">
                 <table class="table table-striped">
                   <thead>
                     <tr>
@@ -173,7 +173,7 @@ var DATA_INSPECTOR_VIEW=`
           <div class="col h-100">
             <div class="card h-100">
               <h6 class="card-header">Field Property</h6>
-              <div class="card-body text-centre">
+              <div class="card-body scroll text-centre">
                 <form>
                   <div class="form-group">
                     <label class="form-check-label" for="independent-dropdown">
@@ -220,7 +220,7 @@ var DATA_INSPECTOR_VIEW=`
                     </select>
                   </div>
                   <div class="form-group form-inline">
-                    <button class="btn btn-primary">Apply</button>
+                    <button class="btn btn-primary">Apply</button>&nbsp;&nbsp;
                     <button class="btn btn-secondary">Revert</button>
                   </div>
                 </form>
@@ -232,7 +232,7 @@ var DATA_INSPECTOR_VIEW=`
           <div class="col h-100">
             <div class="card h-100">
               <h6 class="card-header">Dataset Summary</h6>
-              <div class="card-body text-centre">
+              <div class="card-body scroll text-centre">
                 <p>Containing Errors:</p>
                 <p>Data set size:</p>
                 <p>Number of rows:</p>
@@ -273,7 +273,7 @@ var STORY_VIEWER_VIEW = `
       <div class="col-9 h-100">
         <div class="card h-100">
           <h6 class="card-header">Story Sections</h6>
-          <div class="card-body text-centre">
+          <div class="card-body scroll text-centre">
             <form>
                 <div class="form-group">
                   <textarea rows="4" cols="100">
@@ -291,7 +291,7 @@ var STORY_VIEWER_VIEW = `
         <div class="col h-100">
           <div class="card h-100">
             <h6 class="card-header">Visualisation Recommendations</h6>
-            <div class="card-body text-centre">
+            <div class="card-body scroll text-centre">
               <p>Recommended Chart</p>
               <p>Recommended Chart</p>
               <p>Recommended Chart</p>
@@ -306,7 +306,7 @@ var STORY_VIEWER_VIEW = `
         <div class="col h-100">
           <div class="card h-100">
             <h6 class="card-header">Annotation Toolkit</h6>
-            <div class="card-body text-centre">
+            <div class="card-body scroll text-centre">
               <p><i class="fas fa-mouse-pointer"></i>Select</p>
               <p><i class="fas fa-font"></i>Text Box</p>
               <p><i class="fas fa-grip-lines"></i>Line</p>
@@ -332,7 +332,7 @@ var STORY_VIEWER_VIEW = `
       <div class="col">
         <div class="card">
             <h6 class="card-header">Section Information</h6>
-            <div class="card-body text-centre">
+            <div class="card-body scroll text-centre">
               <p>Section Type:</p>
               <p>Recommended Decision:</p>
             </div>
