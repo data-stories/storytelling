@@ -132,14 +132,21 @@ function getSparkline(header){
 }
 
 
-function getExampleValues(header){
+function getExampleValues(header, examples=4){
 
-  var values = ""
+  var values = "";
+  var maxExamples = (DATAFILE.length >= examples) ? examples : DATAFILE.length;
+  var exampleIndexes = [];
 
-  for(let i=0; i < 3; i++){
+  for(let i=0; i < maxExamples; i++){
 
-    values += DATAFILE[Math.floor(Math.random() * DATAFILE.length)][header] + ", ";
+    var index = Math.floor(Math.random() * DATAFILE.length);
+    while(index in exampleIndexes){
+      index = Math.floor(Math.random() * DATAFILE.length);
+    }
+    exampleIndexes.push(index);
 
+    values += DATAFILE[index][header] + ", ";
   }
 
   return values.slice(0, -2);
@@ -159,7 +166,7 @@ function fieldProperties(){
         `+header+`
       </label>
       <select class="custom-select" id="field-property-`+index+`">
-        <option selected>Detected Type (`+detectColumnType(header)+`)</option>
+        <option value="`+detectColumnType(header).toLowerCase()+`" selected>Detected Type (`+detectColumnType(header)+`)</option>
         <option value="string">String</option>
         <option value="number">Number</option>
         <option value="datetime">Date/Time</option>
@@ -217,10 +224,9 @@ function getType(datum){
 function datasetSummary(){
 
   var datasetSummary = `
-  <p>Containing Errors: None</p>
+  <!--<p>Containing Errors: None</p>-->
   <p>Number of fields: `+HEADERS.length+`</p>
-  <p>Number of rows: `+DATAFILE.length+`</p>
-  <p>Number of NA rows: `+""+`</p>`;
+  <p>Number of rows: `+DATAFILE.length+`</p>`;
 
   $("#dataset-summary").html(datasetSummary);
 
