@@ -65,19 +65,27 @@ function valueDistribution(){
     <thead>
       <tr>
         <th scope="col">Field Name</th>
-        <th scope="col">Column Sparkline</th>
         <th scope="col">Example Values</th>
+        <th scope="col">Max.</th>
+        <th scope="col">Min.</th>
+        <th scope="col">Sparkline</th>
       </tr>
     </thead>
     <tbody>`;
 
   HEADERS.forEach(function(header, index){
 
+    minMax = getMinMax(header)
+    min = minMax[0];
+    max = minMax[1];
+
     valueDistribution += `
       <tr>
         <td>`+header+`</td>
-        <td>Sparkline</td>
-        <td>Example Values</td>
+        <td>`+getExampleValues(header)+`</td>
+        <td>`+max+`</td>
+        <td>`+min+`</td>
+        <td>`+getSparkline(header)+`</td>
       </tr>`;
 
   });
@@ -87,6 +95,54 @@ function valueDistribution(){
   </table>`;
 
   $("#value-distribution").html(valueDistribution);
+
+}
+
+function getMinMax(header){
+
+  if(detectColumnType(header) != "Number"){
+    return ["n/a", "n/a"]
+  }
+  else{
+
+    var min = Infinity;
+    var max = -Infinity;
+
+    DATAFILE.forEach(function(row, index){
+
+      min = (row[header] < min) ? row[header] : min;
+      max = (row[header] > max) ? row[header] : max;
+
+    });
+
+    return [min, max];
+  }
+
+}
+
+function getSparkline(header){
+
+  if(detectColumnType(header) != "Number"){
+    return "n/a";
+  }
+  else{
+    return "v-^---^--v--";
+  }
+
+}
+
+
+function getExampleValues(header){
+
+  var values = ""
+
+  for(let i=0; i < 3; i++){
+
+    values += DATAFILE[Math.floor(Math.random() * DATAFILE.length)][header] + ", ";
+
+  }
+
+  return values.slice(0, -2);
 
 }
 
