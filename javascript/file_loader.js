@@ -103,7 +103,7 @@ function fieldProperties(){
         `+header+`
       </label>
       <select class="custom-select" id="field-property-`+index+`">
-        <option selected>Detected Type (`+detectColumnType()+`)</option>
+        <option selected>Detected Type (`+detectColumnType(header)+`)</option>
         <option value="string">String</option>
         <option value="number">Number</option>
         <option value="datetime">Date/Time</option>
@@ -123,10 +123,38 @@ function fieldProperties(){
 
 }
 
-function detectColumnType(){
+function detectColumnType(header){
 
-  return "String";
+  var types = {};
 
+  DATAFILE.forEach(function(row, index){
+
+    type = getType(row[header])
+
+    if(!types[type]){
+      types[type] = 1
+    }
+    else{
+      types[type] += 1
+    }
+
+  });
+
+  type = Object.keys(types).reduce((a, b) => types[a] > types[b] ? a : b);
+  return type.charAt(0).toUpperCase() + type.slice(1);
+
+}
+
+function getType(datum){
+  
+  //TODO: Modify this to account for, e.g., datetimes
+
+  if(parseFloat(datum) || parseInt(datum)){
+    return "Number";
+  }
+  else{
+    return "String";
+  }
 }
 
 
