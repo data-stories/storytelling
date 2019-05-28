@@ -25,6 +25,9 @@ function initView(){
   valueDistribution();
   //fieldProperties();
   //datasetSummary();
+
+  //Generate Sparklines
+  $('.sparkline').sparkline('html', {type: 'bar', barColor: 'blue'} );
 }
 
 
@@ -156,7 +159,14 @@ function getSparkline(header){
     return "n/a";
   }
   else{
-    return "v-^---^--v--";
+
+    var values = "";
+    DATAFILE.forEach(function(row, index){
+      values += row[header] + ",";
+    });
+    values = values.slice(0, -1);
+
+    return `<span class="sparkline">`+values+`</span>`;
   }
 
 }
