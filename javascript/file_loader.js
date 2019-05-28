@@ -27,7 +27,7 @@ function initView(){
   //datasetSummary();
 
   //Generate Sparklines
-  $('.sparkline').sparkline('html', {type: 'bar', barColor: 'blue'} );
+  $('.sparkline').sparkline('html', {barColor: 'blue', width: '100px'} );
 }
 
 
