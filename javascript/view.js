@@ -67,7 +67,7 @@ var DATA_INSPECTOR_VIEW=`
       </div>
 
       <!-- CENTRE COLUMN -->
-      <div class="col-6 h-100">
+      <div class="col-9 h-100">
         <div class="card h-100">
           <h6 class="card-header">Value Distribution</h6>
               <div class="card-body scroll text-centre" id="value-distribution">
@@ -78,6 +78,7 @@ var DATA_INSPECTOR_VIEW=`
       </div>
 
       <!-- RIGHT COLUMN -->
+      <!--
       <div class="col-3 h-100">
         <div class="row h-50">
           <div class="col h-100">
@@ -100,6 +101,7 @@ var DATA_INSPECTOR_VIEW=`
           </div>
         </div>
       </div>
+      -->
 
     </div>
 

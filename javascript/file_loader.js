@@ -23,8 +23,8 @@ function initView(){
   fieldsOfInterest();
   dependency();
   valueDistribution();
-  fieldProperties();
-  datasetSummary();
+  //fieldProperties();
+  //datasetSummary();
 }
 
 
@@ -65,6 +65,7 @@ function valueDistribution(){
     <thead>
       <tr>
         <th scope="col">Field Name</th>
+        <th scope="col">Datatype</th>
         <th scope="col">Example Values</th>
         <th scope="col">Max.</th>
         <th scope="col">Min.</th>
@@ -82,6 +83,32 @@ function valueDistribution(){
     valueDistribution += `
       <tr>
         <td>`+header+`</td>
+        <td>
+          <select class="custom-select" id="field-property-`+index+`">`;
+          if (detectColumnType(header) == "String"){
+            valueDistribution += `<option value="string" selected>String</option>`;
+          }
+          else{
+            valueDistribution += `<option value="string">String</option>`;
+          }
+
+          if (detectColumnType(header) == "Number"){
+            valueDistribution += `<option value="number" selected>Number</option>`;
+          }
+          else{
+            valueDistribution += `<option value="number">Number</option>`;
+          }
+
+          if (detectColumnType(header) == "Date/Time"){
+            valueDistribution += `<option value="datetime" selected>Date/Time</option>`;
+          }
+          else{
+            valueDistribution += `<option value="datetime">Date/Time</option>`;
+          }
+
+          valueDistribution += `
+          </select>
+        </td>
         <td>`+getExampleValues(header)+`</td>
         <td>`+max+`</td>
         <td>`+min+`</td>
@@ -92,7 +119,10 @@ function valueDistribution(){
 
   valueDistribution += ` 
     </tbody>
-  </table>`;
+  </table>
+  <!--<p>Containing Errors: None</p>-->
+  <p>Number of fields: `+HEADERS.length+`</p>
+  <p>Number of rows: `+DATAFILE.length+`</p>`;
 
   $("#value-distribution").html(valueDistribution);
 
