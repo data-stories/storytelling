@@ -27,7 +27,7 @@ function initView(){
   //datasetSummary();
 
   //Generate Sparklines
-  $('.sparkline').sparkline('html', {barColor: 'blue', width: '100px'} );
+  $('.sparkline').sparkline('html', {barColor: '#007bff', width: '50px'} );
 }
 
 
@@ -95,11 +95,18 @@ function valueDistribution(){
             valueDistribution += `<option value="string">String</option>`;
           }
 
-          if (detectColumnType(header) == "Number"){
-            valueDistribution += `<option value="number" selected>Number</option>`;
+          if (detectColumnType(header) == "Float"){
+            valueDistribution += `<option value="float" selected>Float</option>`;
           }
           else{
-            valueDistribution += `<option value="number">Number</option>`;
+            valueDistribution += `<option value="float">Float</option>`;
+          }
+
+          if (detectColumnType(header) == "Integer"){
+            valueDistribution += `<option value="integer" selected>Integer</option>`;
+          }
+          else{
+            valueDistribution += `<option value="integer">Integer</option>`;
           }
 
           if (detectColumnType(header) == "Date/Time"){
@@ -253,7 +260,13 @@ function getType(datum){
   //TODO: Modify this to account for, e.g., datetimes
 
   if(parseFloat(datum) || parseInt(datum)){
-    return "Number";
+
+    if(datum.includes(".")){
+      return "Float";
+    }
+    else{
+      return "Integer";  
+    }
   }
   else{
     return "String";
