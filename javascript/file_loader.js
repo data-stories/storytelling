@@ -11,7 +11,7 @@ $("#file-upload").change(function(){
 
 
 function parseFile(){
-  DATAFILE = d3.csv.parse(reader.result, function(d){
+  DATAFILE = d3.csvParse(reader.result, function(d){
     return d;   
   });
   
@@ -27,7 +27,7 @@ function initView(){
   //datasetSummary();
 
   //Generate Sparklines
-  $('.sparkline').sparkline('html', {barColor: '#007bff', width: '50px'} );
+  $('.sparkline').sparkline('html', {type: 'bar', barColor: '#007bff', width: '50px'} );
 }
 
 
@@ -162,18 +162,29 @@ function getMinMax(header){
 
 function getSparkline(header){
 
-  if(detectColumnType(header) != "Number"){
-    return "n/a";
+  if(detectColumnType(header) == "Float" || detectColumnType(header) == "Integer"){
+
+    var values = [];
+    DATAFILE.forEach(function(row, index){
+      values.push(parseFloat(row[header]));
+    });
+
+    var histGenerator = d3.histogram()
+      .domain([d3.min(values), d3.max(values)])    // Set the domain to cover the entire intervall [0;]
+      .thresholds(10);  // number of thresholds; this will create 19+1 bins
+
+    var bins = histGenerator(values);
+    
+    var sparks = "";
+    bins.forEach(function(element){
+      sparks += element.length + ","
+    })
+    sparks = sparks.slice(0, -1);
+
+    return `<span class="sparkline">`+sparks+`</span>`;
   }
   else{
-
-    var values = "";
-    DATAFILE.forEach(function(row, index){
-      values += row[header] + ",";
-    });
-    values = values.slice(0, -1);
-
-    return `<span class="sparkline">`+values+`</span>`;
+    return "n/a";
   }
 
 }
