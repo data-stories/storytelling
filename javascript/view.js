@@ -64,7 +64,7 @@ var DATA_INSPECTOR_VIEW=`
     <br/>
 
     <div class="row" align="center">
-        <a class="btn btn-lg btn-primary" href="#" role="button" onClick="switchView(\'story\')">Create Story</a>
+        <a class="btn btn-lg btn-primary" href="#" role="button" onClick="validateData();">Create Story</a>
     </div>    
 `
 
@@ -187,6 +187,9 @@ var VIEWS = {"data": DATA_INSPECTOR_VIEW, "story": STORY_VIEWER_VIEW};
 function switchView(view){
     if(view in VIEWS){
         $("main").html(VIEWS[view]+FOOTER);
+
+        $(".nav-item").removeClass("active");
+        $("#nav-"+view).addClass("active");
 
         if(view == "data" && DATAFILE){
           initView();

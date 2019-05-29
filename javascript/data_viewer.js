@@ -283,3 +283,20 @@ function datasetSummary(){
   $("#dataset-summary").html(datasetSummary);
 
 }
+
+
+function validateData(){
+
+  //TODO: Actually validate that sensible options have been chosen
+  var dataIsValid = true;
+
+  if(dataIsValid){
+    $('#nav-story-template').find("a").removeClass("disabled");
+    $('#nav-story').find("a").removeClass("disabled");
+    switchView('story');
+  }
+  else{
+    //TODO: explain to the user what has gone wrong
+  }
+
+}
