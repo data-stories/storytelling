@@ -14,98 +14,53 @@ var DATA_INSPECTOR_VIEW=`
 
     <div class="row" style="height: 600px;">
 
-      <!-- LEFT COLUMN -->
-      <div class="col-3 h-100">
-        <div class="row h-50">
-          <div class="col h-100">
-            <div class="card h-100">
-              <h6 class="card-header">Fields of Interest</h6>
-              <div class="card-body scroll text-centre" id="fields-of-interest">
-                
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row h-50">
-          <div class="col h-100">
-            <div class="card h-100">
-              <h6 class="card-header">Dependency</h6>
-              <div class="card-body scroll text-centre">
-                <form>
-                  <div class="form-group">
-                    <label class="form-check-label" for="independent-dropdown">
-                      Independent
-                    </label>
-                    <select class="custom-select" id="independent-dropdown">
-                      <option selected>Choose a field</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label class="form-check-label" for="dependent-dropdown">
-                      Dependent
-                    </label>
-                    <select class="custom-select" id="dependent-dropdown">
-                      <option selected>Choose a field</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                    </select>
-                  </div>
-                  <div class="form-group form-inline">
-                    <button class="btn btn-primary">Apply</button>&nbsp;&nbsp;
-                    <button class="btn btn-secondary">Revert</button>
-                  </div>
-                </form>
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CENTRE COLUMN -->
       <div class="col-9 h-100">
         <div class="card h-100">
-          <h6 class="card-header">Value Distribution</h6>
-              <div class="card-body scroll text-centre" id="value-distribution">
+          <h6 class="card-header">Data View</h6>
+              <div class="card-body scroll text-centre" id="data-view">
               <p>To begin, upload a .CSV file</p>
               <a class="btn btn-lg btn-primary file-button" href="#" onClick="$('#file-upload').click(); return;" role="button"><i class="fas fa-file-upload"></i>&nbsp;Upload</a>
               </div>
         </div>
       </div>
 
-      <!-- RIGHT COLUMN -->
-      <!--
       <div class="col-3 h-100">
-        <div class="row h-50">
-          <div class="col h-100">
-            <div class="card h-100">
-              <h6 class="card-header">Field Properties</h6>
-              <div class="card-body scroll text-centre" id="field-properties">
-                
+        <div class="card h-100">
+          <h6 class="card-header">Dependencies</h6>
+          <div class="card-body scroll text-centre">
+            <form>
+              <div class="form-group">
+                <label class="form-check-label" for="independent-dropdown">
+                  Independent
+                </label>
+                <select class="custom-select" id="independent-dropdown">
+                  <option selected>Choose a field</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="row h-50">
-          <div class="col h-100">
-            <div class="card h-100">
-              <h6 class="card-header">Dataset Summary</h6>
-              <div class="card-body scroll text-centre" id="dataset-summary">
-                
+              <div class="form-group">
+                <label class="form-check-label" for="dependent-dropdown">
+                  Dependent
+                </label>
+                <select class="custom-select" id="dependent-dropdown">
+                  <option selected>Choose a field</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
               </div>
-            </div>
+              <div class="form-group form-inline">
+                <button class="btn btn-primary">Apply</button>&nbsp;&nbsp;
+                <button class="btn btn-secondary">Revert</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-      -->
-
     </div>
 
-    <br/>
     <br/>
 
     <div class="row" align="center">
