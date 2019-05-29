@@ -27,35 +27,8 @@ var DATA_INSPECTOR_VIEW=`
       <div class="col-3 h-100">
         <div class="card h-100">
           <h6 class="card-header">Dependencies</h6>
-          <div class="card-body scroll text-centre">
-            <form>
-              <div class="form-group">
-                <label class="form-check-label" for="independent-dropdown">
-                  Independent
-                </label>
-                <select class="custom-select" id="independent-dropdown">
-                  <option selected>Choose a field</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-check-label" for="dependent-dropdown">
-                  Dependent
-                </label>
-                <select class="custom-select" id="dependent-dropdown">
-                  <option selected>Choose a field</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-              <div class="form-group form-inline">
-                <button class="btn btn-primary">Apply</button>&nbsp;&nbsp;
-                <button class="btn btn-secondary">Revert</button>
-              </div>
-            </form>
+          <div class="card-body scroll text-centre" id="dependencies">
+            
           </div>
         </div>
       </div>

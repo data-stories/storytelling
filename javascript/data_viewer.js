@@ -27,7 +27,89 @@ function initView(){
 
 function dependencies(){
 
+  var dependencies = `
+  <form>
+    <div class="form-group">
+      <label class="form-check-label" for="independent-dropdown">
+        Independent
+      </label>
+      <select class="custom-select" id="independent-dropdown">
+        <option selected>Choose a field</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-check-label" for="dependent-dropdown">
+        Dependent
+      </label>
+      <select class="custom-select" id="dependent-dropdown">
+        <option selected>Choose a field</option>
+      </select>
+    </div>
+    <div class="form-group form-inline">
+      <button class="btn btn-primary" onClick="createDependency();">Apply</button>&nbsp;&nbsp;
+      <button class="btn btn-secondary" onClick="revertDependencies();">Revert</button>
+    </div>
+  </form>
+
+  <ul id="dependency-list">
+
+  </ul>
+  `;
+
+  $("#dependencies").html(dependencies);
+
+  HEADERS.forEach(function(header, index){
+    $("#independent-dropdown").append(new Option(header, index));
+    $("#dependent-dropdown").append(new Option(header, index));
+  });
 }
+
+function createDependency(){
+
+    //If no selection
+    if($( "#independent-dropdown option:selected" ).text() == "Choose a field" || $( "#dependent-dropdown option:selected" ).text() == "Choose a field"){
+      //TODO: print out a user-friendly error
+      return;
+    }
+
+    //If duplicate selection
+    if($( "#independent-dropdown option:selected" ).text() == $( "#dependent-dropdown option:selected" ).text()){
+      //TODO: print out a user-friendly error
+      return;
+    }
+
+    //If dependency already exists
+    if( $("#dependency-"+$( "#independent-dropdown option:selected" ).val() +'-'+ $( "#dependent-dropdown option:selected" ).val()).length){
+      //TODO: print out a user-friendly error
+      return;
+    }
+
+
+
+    var dependencyList = `
+      <li id="dependency-`+$( "#independent-dropdown" ).val()+`-`+$( "#dependent-dropdown" ).val()+`">`+$( "#independent-dropdown option:selected" ).text()+`
+        &nbsp;<i class="fas fa-arrow-right"></i>&nbsp;`+
+        $( "#dependent-dropdown option:selected" ).text()+`
+        <a href="#" onClick="removeDependency('`+$( "#independent-dropdown" ).val()+`-`+$( "#dependent-dropdown" ).val()+`');"><i class="fas fa-backspace"></i></a>
+      </li>`;
+  $("#dependency-list").append(dependencyList);
+}
+
+function removeDependency(index){
+  console.log(index);
+  console.log($("#dependency-"+index));
+  $("#dependency-"+index).remove();
+
+}
+
+function revertDependencies(){
+  //TODO: Add a user-friendly "Are you sure?" message
+  $("#dependency-list").empty();
+}
+
+
+
+
 
 
 function dataView(){
