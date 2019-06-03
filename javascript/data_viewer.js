@@ -128,8 +128,8 @@ function dataView(){
         </th>
         <th scope="col">Datatype</th>
         <th scope="col">Example Values</th>
-        <th scope="col">Max.</th>
         <th scope="col">Min.</th>
+        <th scope="col">Max.</th>
         <th scope="col">Distribution</th>
       </tr>
     </thead>
@@ -195,8 +195,8 @@ function dataView(){
           </select>
         </td>
         <td>`+getExampleValues(header)+`</td>
-        <td>`+max+`</td>
         <td>`+min+`</td>
+        <td>`+max+`</td>
         <td>`+getSparkline(header)+`</td>
       </tr>`;
 
