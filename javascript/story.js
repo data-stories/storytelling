@@ -12,7 +12,7 @@ class StoryBlock {
 
   constructor(index, semantic_label) {
 
-    if (new.target === Block) {
+    if (new.target === StoryBlock) {
       throw new TypeError("Cannot construct StoryBlock instances directly");
     }
     this.index = index;
