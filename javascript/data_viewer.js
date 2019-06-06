@@ -280,6 +280,9 @@ function getExampleValues(header, examples=4){
   for(let i=0; i < maxExamples; i++){
 
     var index = Math.floor(Math.random() * DATAFILE.length);
+
+    //Don't show duplicate indexes (i.e. the same cell more than once)
+    //TODO: Don't show *any* duplicate *values*
     while(index in exampleIndexes){
       index = Math.floor(Math.random() * DATAFILE.length);
     }
@@ -288,7 +291,7 @@ function getExampleValues(header, examples=4){
     values.push(DATAFILE[index][header]);
   }
 
-  return values.sort().join(", ").slice(0, -2);
+  return values.sort().join(", ");
 
 }
 
