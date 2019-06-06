@@ -1,0 +1,40 @@
+<div id="data">
+
+  <div class="row">
+    <input type="file" class="form-control-file" id="file-upload" accept=".csv" style="display:none">
+    <a class="btn btn-primary file-button" href="#" onClick="$('#file-upload').click(); return;" role="button"><i class="fas fa-file-upload"></i>&nbsp;Upload</a>
+    <a class="btn btn-secondary file-button" href="#" role="button"><i class="fas fa-save"></i>&nbsp;Save</a>
+    <a class="btn btn-secondary file-button" href="#" role="button"><i class="fas fa-copy"></i>&nbsp;Load</a> 
+  </div>
+
+  <br/>
+
+  <div class="row" style="height: 600px;">
+    <div class="col-9 h-100">
+      <div class="card h-100">
+        <h6 class="card-header">Data View</h6>
+            <div class="card-body scroll text-centre" id="data-view">
+              <p>To begin, upload a .CSV file</p>
+              <a class="btn btn-lg btn-primary file-button" href="#" onClick="$('#file-upload').click(); return;" role="button"><i class="fas fa-file-upload"></i>&nbsp;Upload</a>
+              <!-- Data overview will be generated here -->
+            </div>
+      </div>
+    </div>
+
+    <div class="col-3 h-100">
+      <div class="card h-100">
+        <h6 class="card-header">Dependencies</h6>
+        <div class="card-body scroll text-centre" id="dependencies">
+          <!-- Dependencies will be generated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <br/>
+
+  <div class="row" align="center">
+    <a class="btn btn-lg btn-primary" href="#" role="button" onClick="validateData();">Create Story</a>
+  </div>
+
+</div>

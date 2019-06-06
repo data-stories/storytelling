@@ -1,0 +1,57 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Data Storytelling Tool</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Storytelling CSS -->
+    <link href="css/storytelling.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    {% include navbar.html %}
+
+    <main role="main" class="container">
+
+      {% include data.html %}
+      {% include interest.html %}
+      {% include template.html %}
+      {% include story.html %}
+      {% include export.html %}
+
+      <br/>
+      <br/>
+      <br/>
+
+      {% include footer.html %}
+
+    </main><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="javascript/bootstrap/bootstrap.min.js"></script>
+
+    <!-- Storytelling JavaScript
+    ================================================== -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="javascript/jquery.sparkline.min.js"></script>
+    <script src="javascript/data.js"></script>
+    <script src="javascript/view.js"></script>
+    <script src="javascript/data_viewer.js"></script>
+  </body>
+</html>
