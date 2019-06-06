@@ -227,6 +227,8 @@ function dataView(){
     }
   });
 
+  $("#continue-row").toggle();
+
 }
 
 

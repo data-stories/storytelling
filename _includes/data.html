@@ -1,13 +1,6 @@
 <div id="data">
 
-  <div class="row">
-    <input type="file" class="form-control-file" id="file-upload" accept=".csv" style="display:none">
-    <a class="btn btn-primary file-button" href="#" onClick="$('#file-upload').click(); return;" role="button"><i class="fas fa-file-upload"></i>&nbsp;Upload</a>
-    <a class="btn btn-secondary file-button" href="#" role="button"><i class="fas fa-save"></i>&nbsp;Save</a>
-    <a class="btn btn-secondary file-button" href="#" role="button"><i class="fas fa-copy"></i>&nbsp;Load</a> 
-  </div>
-
-  <br/>
+  <input type="file" class="form-control-file" id="file-upload" accept=".csv" style="display:none">
 
   <div class="row" style="height: 600px;">
     <div class="col-9 h-100">
@@ -33,8 +26,10 @@
 
   <br/>
 
-  <div class="row" align="center">
+  <div id="continue-row" class="row" align="center" style="display: none;">
     <a class="btn btn-lg btn-primary" href="#" role="button" onClick="validateData();">Create Story</a>
+    &nbsp;&nbsp;
+    <a class="btn btn-secondary file-button" href="#" onClick="$('#file-upload').click(); return;" role="button"><i class="fas fa-file-upload"></i>&nbsp;Change Datafile</a>
   </div>
 
 </div>
