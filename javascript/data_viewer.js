@@ -49,6 +49,9 @@ function dependencies(){
       <button class="btn btn-primary" onClick="createDependency();">Apply</button>&nbsp;&nbsp;
       <button class="btn btn-secondary" onClick="revertDependencies();">Revert</button>
     </div>
+    <div id="dependency-error" class="invalid-feedback" style="display: none;">
+        
+    </div>
   </form>
 
   <ul id="dependency-list">
@@ -68,23 +71,28 @@ function createDependency(){
 
     //If no selection
     if($( "#independent-dropdown option:selected" ).text() == "Choose a field" || $( "#dependent-dropdown option:selected" ).text() == "Choose a field"){
-      //TODO: print out a user-friendly error
+      $("#dependency-error").text("Ensure sure both fields are selected");
+      $("#dependency-error").show();
       return;
     }
 
     //If duplicate selection
     if($( "#independent-dropdown option:selected" ).text() == $( "#dependent-dropdown option:selected" ).text()){
-      //TODO: print out a user-friendly error
+      $("#dependency-error").text("Field cannot depend on itself");
+      $("#dependency-error").show();
       return;
     }
 
     //If dependency already exists
     if( $("#dependency-"+$( "#independent-dropdown option:selected" ).val() +'-'+ $( "#dependent-dropdown option:selected" ).val()).length){
-      //TODO: print out a user-friendly error
+      $("#dependency-error").text("This dependency already exists");
+      $("#dependency-error").show();
       return;
     }
 
-
+    //If there are NO errors, clear the error message
+    $("#dependency-error").text("");
+    $("#dependency-error").hide();
 
     var dependencyList = `
       <li id="dependency-`+$( "#independent-dropdown" ).val()+`-`+$( "#dependent-dropdown" ).val()+`">`+$( "#independent-dropdown option:selected" ).text()+`
@@ -96,15 +104,16 @@ function createDependency(){
 }
 
 function removeDependency(index){
-  console.log(index);
-  console.log($("#dependency-"+index));
   $("#dependency-"+index).remove();
-
+  $("#dependency-error").text("");
+  $("#dependency-error").hide();
 }
 
 function revertDependencies(){
   //TODO: Add a user-friendly "Are you sure?" message
   $("#dependency-list").empty();
+  $("#dependency-error").text("");
+  $("#dependency-error").hide();
 }
 
 
