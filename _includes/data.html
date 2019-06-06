@@ -26,10 +26,12 @@
 
   <br/>
 
-  <div id="continue-row" class="row" align="center" style="display: none;">
-    <a class="btn btn-lg btn-primary" href="#" role="button" onClick="validateData();">Create Story</a>
-    &nbsp;&nbsp;
-    <a class="btn btn-secondary file-button" href="#" onClick="$('#file-upload').click(); return;" role="button"><i class="fas fa-file-upload"></i>&nbsp;Change Datafile</a>
+  <div id="continue-row" class="row" align="right" style="display: none;">
+    <div class="col-12">
+      <a class="btn btn-lg btn-secondary" href="#" onClick="if(window.confirm('This will discard any changes to this dataset. Proceed?')){$('#file-upload').click();} return;" role="button"><i class="fas fa-file-upload"></i>&nbsp;Change Datafile</a>
+      &nbsp;&nbsp;
+      <a class="btn btn-lg btn-primary" href="#" role="button" onClick="validateData();">Create Story</a>
+    </div>
   </div>
 
 </div>
