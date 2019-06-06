@@ -273,7 +273,7 @@ function getSparkline(header){
 
 function getExampleValues(header, examples=4){
 
-  var values = "";
+  var values = [];
   var maxExamples = (DATAFILE.length >= examples) ? examples : DATAFILE.length;
   var exampleIndexes = [];
 
@@ -285,10 +285,10 @@ function getExampleValues(header, examples=4){
     }
     exampleIndexes.push(index);
 
-    values += DATAFILE[index][header] + ", ";
+    values.push(DATAFILE[index][header]);
   }
 
-  return values.slice(0, -2);
+  return values.sort().join(", ").slice(0, -2);
 
 }
 
@@ -299,13 +299,15 @@ function fieldProperties(){
 
   HEADERS.forEach(function(header, index){
 
+    var columnType = detectColumnType(header);
+
     fieldProperties += `
       <div class="form-group">
       <label class="form-check-label" for="field-property-`+index+`">
         `+header+`
       </label>
       <select class="custom-select" id="field-property-`+index+`">
-        <option value="`+detectColumnType(header).toLowerCase()+`" selected>Detected Type (`+detectColumnType(header)+`)</option>
+        <option value="`+columnType.toLowerCase()+`" selected>Detected Type (`+columnType+`)</option>
         <option value="string">String</option>
         <option value="number">Number</option>
         <option value="datetime">Date/Time</option>
