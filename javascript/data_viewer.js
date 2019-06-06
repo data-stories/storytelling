@@ -125,6 +125,14 @@ function dataView(){
 
   var dataView = `
   <table class="table table-striped">
+    <colgroup>
+       <col span="1" style="width: 20%;">
+       <col span="1" style="width: 20%;">
+       <col span="1" style="width: 30%;">
+       <col span="1" style="width: 10%;">
+       <col span="1" style="width: 10%;">
+       <col span="1" style="width: 10%;">
+    </colgroup>
     <thead>
       <tr>
         <th scope="col">
