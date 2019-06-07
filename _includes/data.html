@@ -18,7 +18,35 @@
       <div class="card h-100">
         <h6 class="card-header">Dependencies</h6>
         <div class="card-body scroll text-centre" id="dependencies">
-          <!-- Dependencies will be generated here -->
+          <form id="dependencyForm" style="display: none;">
+            <div class="form-group">
+              <label class="form-check-label" for="independent-dropdown">
+                Independent
+              </label>
+              <select class="custom-select" id="independent-dropdown">
+                <option selected>Choose a field</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-check-label" for="dependent-dropdown">
+                Dependent
+              </label>
+              <select class="custom-select" id="dependent-dropdown">
+                <option selected>Choose a field</option>
+              </select>
+            </div>
+            <div class="form-group form-inline">
+              <button class="btn btn-secondary" onClick="revertDependencies();">Revert</button>&nbsp;&nbsp;
+              <button class="btn btn-primary" onClick="createDependency();">Apply</button>
+            </div>
+            <div id="dependency-error" class="invalid-feedback" style="display: none;">
+                
+            </div>
+          </form>
+
+          <ul id="dependency-list">
+
+          </ul>
         </div>
       </div>
     </div>

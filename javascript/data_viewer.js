@@ -27,39 +27,7 @@ function initView(){
 
 function dependencies(){
 
-  var dependencies = `
-  <form>
-    <div class="form-group">
-      <label class="form-check-label" for="independent-dropdown">
-        Independent
-      </label>
-      <select class="custom-select" id="independent-dropdown">
-        <option selected>Choose a field</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-check-label" for="dependent-dropdown">
-        Dependent
-      </label>
-      <select class="custom-select" id="dependent-dropdown">
-        <option selected>Choose a field</option>
-      </select>
-    </div>
-    <div class="form-group form-inline">
-      <button class="btn btn-primary" onClick="createDependency();">Apply</button>&nbsp;&nbsp;
-      <button class="btn btn-secondary" onClick="revertDependencies();">Revert</button>
-    </div>
-    <div id="dependency-error" class="invalid-feedback" style="display: none;">
-        
-    </div>
-  </form>
-
-  <ul id="dependency-list">
-
-  </ul>
-  `;
-
-  $("#dependencies").html(dependencies);
+  $("#dependencyForm").show();
 
   HEADERS.forEach(function(header, index){
     $("#independent-dropdown").append(new Option(header, index));
