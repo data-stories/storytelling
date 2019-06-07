@@ -1,3 +1,3 @@
-function export(){
+function exportStory(){
 	//TODO: Do export
 }
