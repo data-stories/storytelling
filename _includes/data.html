@@ -2,7 +2,7 @@
 
   <input type="file" class="form-control-file" id="file-upload" accept=".csv" style="display:none">
 
-  <div class="row" style="height: 600px;">
+  <div class="row" style="height: {{page.content_height}}px;">
     <div class="col-9 h-100">
       <div class="card h-100">
         <h6 class="card-header">Data View</h6>
@@ -30,7 +30,7 @@
     <div class="col-12">
       <a class="btn btn-lg btn-secondary" href="#" onClick="if(window.confirm('This will discard any changes to this dataset. Proceed?')){$('#file-upload').click();} return;" role="button"><i class="fas fa-file-upload"></i>&nbsp;Change Datafile</a>
       &nbsp;&nbsp;
-      <a class="btn btn-lg btn-primary" href="#" role="button" onClick="validateData();">Create Story</a>
+      <a class="btn btn-lg btn-primary" href="#" role="button" onClick="validateData();">Continue</a>
     </div>
   </div>
 
