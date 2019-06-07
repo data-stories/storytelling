@@ -397,9 +397,8 @@ function validateData(){
   var dataIsValid = true;
 
   if(dataIsValid){
-    $('#nav-story-template').find("a").removeClass("disabled");
-    $('#nav-story').find("a").removeClass("disabled");
-    switchView('story');
+    $('#nav-interest').find("a").removeClass("disabled");
+    switchView('interest');
   }
   else{
     //TODO: explain to the user what has gone wrong
