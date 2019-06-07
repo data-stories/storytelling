@@ -24,7 +24,19 @@
 
     <main role="main" class="container">
 
-      <div class="row">
+      <noscript>
+        <div class="row text-center">
+          <div class="col-6 h-100">
+            <div class="card h-100">
+              <div class="card-body text-center">
+                This service requires Javascript to run correctly. Please enable Javascript in your browser's settings, and reload the page.
+              </div>
+            </div>
+          </div>
+        </div>
+      </noscript>
+
+      <div class="row showOnLoad" style="display: none;">
         <a class="btn btn-secondary file-button" href="#" role="button" onClick="newStory()"><i class="fas fa-file"></i>&nbsp;New</a>
         <a class="btn btn-secondary file-button" href="#" role="button" onClick="saveStory()"><i class="fas fa-save"></i>&nbsp;Save As</a>
         <a class="btn btn-secondary file-button" href="#" role="button" onClick="loadStory()"><i class="fas fa-folder-open"></i>&nbsp;Load</a> 
@@ -67,5 +79,11 @@
     <script src="javascript/template_viewer.js"></script>
     <script src="javascript/story_viewer.js"></script>
     <script src="javascript/export_viewer.js"></script>
+
+    <script>
+      $(document).ready(function(){
+        $(".showOnLoad").show();
+      });
+    </script>
   </body>
 </html>
