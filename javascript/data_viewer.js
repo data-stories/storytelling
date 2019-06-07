@@ -212,7 +212,9 @@ function dataView(){
     }
   });
 
-  $("#continue-row").toggle();
+  $('#field-of-interest-all').click(); 
+
+  $("#continue-row").show();
 
 }
 
