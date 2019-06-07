@@ -24,6 +24,14 @@
 
     <main role="main" class="container">
 
+      <div class="row">
+        <a class="btn btn-secondary file-button" href="#" role="button" onClick="newStory()"><i class="fas fa-file"></i>&nbsp;New</a>
+        <a class="btn btn-secondary file-button" href="#" role="button" onClick="saveStory()"><i class="fas fa-save"></i>&nbsp;Save As</a>
+        <a class="btn btn-secondary file-button" href="#" role="button" onClick="loadStory()"><i class="fas fa-folder-open"></i>&nbsp;Load</a> 
+      </div>
+
+      <br/>
+
       {% include data.html %}
       {% include interest.html %}
       {% include template.html %}
@@ -53,6 +61,7 @@
     <script src="javascript/data.js"></script>
     <script src="javascript/story.js"></script>
     <script src="javascript/view.js"></script>
+    <script src="javascript/file_manager.js"></script>
     <script src="javascript/data_viewer.js"></script>
     <script src="javascript/interest_viewer.js"></script>
     <script src="javascript/template_viewer.js"></script>
