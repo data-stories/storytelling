@@ -12,5 +12,10 @@ function switchView(view){
     $("#nav-"+currentView).removeClass("active");
     $("#nav-"+view).addClass("active");
 
+    if(view == "data" && DATAFILE){
+      initView();
+      $("#continue-row").show();
+    }
+
     currentView = view;
 }
