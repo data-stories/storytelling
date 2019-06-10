@@ -1,17 +1,13 @@
+class Story {
 
-class DataStory {
-  constructor(data, headersOfInterest=[]) {
-    this.data = data;
-    this.headersOfInterest = headersOfInterest;
-    this.blocks = [];
+  constructor(index, semantic_label) {
+    this.blocks = []
   }
 }
-
 
 class StoryBlock {
 
   constructor(index, semantic_label) {
-
     if (new.target === StoryBlock) {
       throw new TypeError("Cannot construct StoryBlock instances directly");
     }
@@ -32,4 +28,18 @@ class ChartBlock extends StoryBlock {
     super(index, semantic_label);
     this.chart = chart;
   }
+}
+
+class DataBlock extends StoryBlock {
+  constructor(index, dataSnippet, semantic_label) {
+    super(index, semantic_label);
+    this.dataSnippet = dataSnippet;
+  }
+}
+
+
+
+var dataStory = {
+  data: new Data(),
+  story: new Story()
 }

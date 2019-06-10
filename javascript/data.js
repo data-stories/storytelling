@@ -1,2 +1,8 @@
-var DATAFILE;
-var HEADERS;
+
+class Data {
+  constructor(rawData=null, headersOfInterest=[]) {
+    this.rawData = rawData;
+    this.headers = [];
+    this.headersOfInterest = headersOfInterest;
+  }
+}
