@@ -12,7 +12,7 @@ function switchView(view){
     $("#nav-"+currentView).removeClass("active");
     $("#nav-"+view).addClass("active");
 
-    if(view == "data" && dataStory.data.rawData){
+    if(view == "data" && story.data.rawData){
       initView();
       $("#continue-row").show();
     }

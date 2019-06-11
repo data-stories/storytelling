@@ -1,7 +1,28 @@
+var story;
+
 class Story {
 
-  constructor(index, semantic_label) {
+  constructor(data) {
+    this.data = new Data(data);
     this.blocks = []
+  }
+
+  static createFromDataFile(file, callback){
+    var reader = new FileReader();
+    reader.addEventListener("load", function(){
+
+      var data = d3.csvParse(reader.result, function(d){
+        return d;   
+      });
+
+      //I feel like there's a better way of setting this variable
+      story = new Story(data);
+      callback();
+    });
+
+    if (file) {
+      reader.readAsText(file);
+    }
   }
 }
 
@@ -35,11 +56,4 @@ class DataBlock extends StoryBlock {
     super(index, semantic_label);
     this.dataSnippet = dataSnippet;
   }
-}
-
-
-
-var dataStory = {
-  data: new Data(),
-  story: new Story()
 }

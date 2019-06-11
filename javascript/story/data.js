@@ -1,9 +1,9 @@
 
 class Data {
-  constructor(rawData=null, headersOfInterest=[]) {
+  constructor(rawData=null) {
     this.rawData = rawData;
-    this.headers = [];
-    this.headersOfInterest = headersOfInterest;
+    this.headers = Object.keys(rawData[0]);
+    this.headersOfInterest = [];
   }
 
 

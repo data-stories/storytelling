@@ -1,23 +1,9 @@
-var reader = new FileReader();  
-
 $("#file-upload").change(function(){
-  var file = document.querySelector('input[type=file]').files[0];      
-  reader.addEventListener("load", parseFile, false);
-  if (file) {
-    reader.readAsText(file);
-  }
-
+  Story.createFromDataFile(document.querySelector('input[type=file]').files[0], function(){
+    initView();  
+  });
 });
 
-
-function parseFile(){
-  dataStory.data.rawData = d3.csvParse(reader.result, function(d){
-    return d;   
-  });
-  
-  dataStory.data.headers = Object.keys(dataStory.data.rawData[0]);
-  initView();
-}
 
 function initView(){
   dependencies();
@@ -29,7 +15,7 @@ function dependencies(){
 
   $("#dependencyForm").show();
 
-  dataStory.data.headers.forEach(function(header, index){
+  story.data.headers.forEach(function(header, index){
     $("#independent-dropdown").append(new Option(header, index));
     $("#dependent-dropdown").append(new Option(header, index));
   });
@@ -120,11 +106,11 @@ function dataView(){
     </thead>
     <tbody>`;
 
-  dataStory.data.headers.forEach(function(header, index){
+  story.data.headers.forEach(function(header, index){
 
     //TODO: There must be a more efficient way d3 can do this
     var values = [];
-    dataStory.data.rawData.forEach(function(row){
+    story.data.rawData.forEach(function(row){
       values.push(parseFloat(row[header]));
     });
 
@@ -191,8 +177,8 @@ function dataView(){
     </tbody>
   </table>
   <!--<p>Containing Errors: None</p>-->
-  <p>Number of fields: `+dataStory.data.headers.length+`</p>
-  <p>Number of rows: `+dataStory.data.rawData.length+`</p>`;
+  <p>Number of fields: `+story.data.headers.length+`</p>
+  <p>Number of rows: `+story.data.rawData.length+`</p>`;
 
   $("#data-view").html(dataView);
 
@@ -224,7 +210,7 @@ function getSparkline(header){
   if(detectColumnType(header) == "Float" || detectColumnType(header) == "Integer"){
 
     var values = [];
-    dataStory.data.rawData.forEach(function(row, index){
+    story.data.rawData.forEach(function(row, index){
       values.push(parseFloat(row[header]));
     });
 
@@ -252,21 +238,21 @@ function getSparkline(header){
 function getExampleValues(header, examples=4){
 
   var values = [];
-  var maxExamples = (dataStory.data.rawData.length >= examples) ? examples : dataStory.data.rawData.length;
+  var maxExamples = (story.data.rawData.length >= examples) ? examples : story.data.rawData.length;
   var exampleIndexes = [];
 
   for(let i=0; i < maxExamples; i++){
 
-    var index = Math.floor(Math.random() * dataStory.data.rawData.length);
+    var index = Math.floor(Math.random() * story.data.rawData.length);
 
     //Don't show duplicate indexes (i.e. the same cell more than once)
     //TODO: Don't show *any* duplicate *values*
     while(index in exampleIndexes){
-      index = Math.floor(Math.random() * dataStory.data.rawData.length);
+      index = Math.floor(Math.random() * story.data.rawData.length);
     }
     exampleIndexes.push(index);
 
-    values.push(dataStory.data.rawData[index][header]);
+    values.push(story.data.rawData[index][header]);
   }
 
   return values.sort().join(", ");
@@ -278,7 +264,7 @@ function fieldProperties(){
 
   var fieldProperties = "<form>";
 
-  dataStory.data.headers.forEach(function(header, index){
+  story.data.headers.forEach(function(header, index){
 
     var columnType = detectColumnType(header);
 
@@ -312,7 +298,7 @@ function detectColumnType(header){
 
   var types = {};
 
-  dataStory.data.rawData.forEach(function(row, index){
+  story.data.rawData.forEach(function(row, index){
 
     type = getType(row[header])
 
@@ -353,8 +339,8 @@ function datasetSummary(){
 
   var datasetSummary = `
   <!--<p>Containing Errors: None</p>-->
-  <p>Number of fields: `+dataStory.data.headers.length+`</p>
-  <p>Number of rows: `+dataStory.data.rawData.length+`</p>`;
+  <p>Number of fields: `+story.data.headers.length+`</p>
+  <p>Number of rows: `+story.data.rawData.length+`</p>`;
 
   $("#dataset-summary").html(datasetSummary);
 
