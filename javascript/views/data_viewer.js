@@ -185,7 +185,7 @@ function dataView(){
   $("#data-view").html(dataView);
 
 
-  $('.sparkline').sparkline('html', {type: 'bar', barColor: '#007bff'} );
+  $('.sparkline').sparkline('html', {type: 'bar', barColor: '#007bff', disableInteraction:true} );
 
   $('#field-of-interest-all').click(function(event) {   
     if(this.checked) {

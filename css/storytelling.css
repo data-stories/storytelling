@@ -11,6 +11,13 @@ body {
     overflow-y: auto;
 }
 
+.sparkline {
+    cursor: pointer;
+}
+
+.modalSparkline {
+    cursor: auto;
+}
 
 #modalSparkline{
     max-width: 800px;
