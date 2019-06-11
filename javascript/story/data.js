@@ -1,9 +1,10 @@
 
 class Data {
-  constructor(rawData=null) {
+  constructor(rawData) {
     this.rawData = rawData;
     this.headers = Object.keys(rawData[0]);
     this.headersOfInterest = [];
+    this.dependencies = [];
   }
 
 
