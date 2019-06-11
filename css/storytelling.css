@@ -11,7 +11,8 @@ body {
     overflow-y: auto;
 }
 
-.modal { 
-    margin-top: 60px; 
-    margin-bottom: 60px; 
+
+#modalSparkline{
+    max-width: 800px;
+    max-height: 600px;
 }

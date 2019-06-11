@@ -185,7 +185,7 @@ function dataView(){
   $("#data-view").html(dataView);
 
 
-  $('.sparkline').sparkline('html', {type: 'bar', barColor: '#007bff', width: '50px'} );
+  $('.sparkline').sparkline('html', {type: 'bar', barColor: '#007bff'} );
 
   $('#field-of-interest-all').click(function(event) {   
     if(this.checked) {
@@ -211,16 +211,7 @@ function getSparkline(header){
 
   if(detectColumnType(header) == "Float" || detectColumnType(header) == "Integer"){
 
-    var values = [];
-    Story.instance.data.rawData.forEach(function(row, index){
-      values.push(parseFloat(row[header]));
-    });
-
-    var histGenerator = d3.histogram()
-      .domain([d3.min(values), d3.max(values)])    // Set the domain to cover the entire intervall [0;]
-      .thresholds(10);  // number of thresholds; this will create 19+1 bins
-
-    var bins = histGenerator(values);
+    var bins = getSparks(header);
     
     var sparks = "";
     bins.forEach(function(element){
@@ -236,12 +227,34 @@ function getSparkline(header){
 
 }
 
+function getSparks(header){
+
+  assert((detectColumnType(header) == "Float" || detectColumnType(header) == "Integer"), "Can't get sparks for non-numeric column");
+
+  var values = [];
+  Story.instance.data.rawData.forEach(function(row, index){
+    values.push(parseFloat(row[header]));
+  });
+
+  var histGenerator = d3.histogram()
+    .domain([d3.min(values), d3.max(values)])
+    .thresholds(10);
+
+  return histGenerator(values);
+}
+
 function modalSparkline(header){
-  var spark = $(getSparkline(header));
+  var spark = getSparkline(header);
+  if(spark == "n/a"){
+    return;
+  }
+  var spark = $(spark);
   spark.addClass("modalSparkline");
   $("#modalSparkline").html(spark);
   $("#modalSparkline").modal();
-  $('.modalSparkline').sparkline('html', {type: 'bar', barColor: '#007bff'} );
+  $('.modalSparkline').sparkline('html', {type: 'bar', barColor: '#007bff', barWidth: (700/getSparks(header).length)+'px', height: '500px'} );
+  $("#modalSparkline").width(800);
+  $("#modalSparkline").height(600);
 }
 
 
