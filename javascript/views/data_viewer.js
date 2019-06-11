@@ -1,6 +1,8 @@
-$("#file-upload").change(function(){
-  Story.createFromDataFile(document.querySelector('input[type=file]').files[0], function(){
-    initView();  
+$(document).ready(function(){
+  $("#file-upload").change(function(){
+    Story.createFromDataFile(document.querySelector('input[type=file]').files[0], function(){
+      initView();  
+    });
   });
 });
 
@@ -168,7 +170,7 @@ function dataView(){
         <td>`+getExampleValues(header)+`</td>
         <td>`+min+`</td>
         <td>`+max+`</td>
-        <td>`+getSparkline(header)+`</td>
+        <td><a onClick="modalSparkline('`+header+`')">`+getSparkline(header)+`</a></td>
       </tr>`;
 
   });
@@ -232,6 +234,14 @@ function getSparkline(header){
     return "n/a";
   }
 
+}
+
+function modalSparkline(header){
+  var spark = $(getSparkline(header));
+  spark.addClass("modalSparkline");
+  $("#modalSparkline").html(spark);
+  $("#modalSparkline").modal();
+  $('.modalSparkline').sparkline('html', {type: 'bar', barColor: '#007bff'} );
 }
 
 
