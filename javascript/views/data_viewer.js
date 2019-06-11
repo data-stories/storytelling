@@ -15,7 +15,7 @@ function dependencies(){
 
   $("#dependencyForm").show();
 
-  story.data.headers.forEach(function(header, index){
+  Story.instance.data.headers.forEach(function(header, index){
     $("#independent-dropdown").append(new Option(header, index));
     $("#dependent-dropdown").append(new Option(header, index));
   });
@@ -106,11 +106,11 @@ function dataView(){
     </thead>
     <tbody>`;
 
-  story.data.headers.forEach(function(header, index){
+  Story.instance.data.headers.forEach(function(header, index){
 
     //TODO: There must be a more efficient way d3 can do this
     var values = [];
-    story.data.rawData.forEach(function(row){
+    Story.instance.data.rawData.forEach(function(row){
       values.push(parseFloat(row[header]));
     });
 
@@ -177,8 +177,8 @@ function dataView(){
     </tbody>
   </table>
   <!--<p>Containing Errors: None</p>-->
-  <p>Number of fields: `+story.data.headers.length+`</p>
-  <p>Number of rows: `+story.data.rawData.length+`</p>`;
+  <p>Number of fields: `+Story.instance.data.headers.length+`</p>
+  <p>Number of rows: `+Story.instance.data.rawData.length+`</p>`;
 
   $("#data-view").html(dataView);
 
@@ -210,7 +210,7 @@ function getSparkline(header){
   if(detectColumnType(header) == "Float" || detectColumnType(header) == "Integer"){
 
     var values = [];
-    story.data.rawData.forEach(function(row, index){
+    Story.instance.data.rawData.forEach(function(row, index){
       values.push(parseFloat(row[header]));
     });
 
@@ -238,21 +238,21 @@ function getSparkline(header){
 function getExampleValues(header, examples=4){
 
   var values = [];
-  var maxExamples = (story.data.rawData.length >= examples) ? examples : story.data.rawData.length;
+  var maxExamples = (Story.instance.data.rawData.length >= examples) ? examples : Story.instance.data.rawData.length;
   var exampleIndexes = [];
 
   for(let i=0; i < maxExamples; i++){
 
-    var index = Math.floor(Math.random() * story.data.rawData.length);
+    var index = Math.floor(Math.random() * Story.instance.data.rawData.length);
 
     //Don't show duplicate indexes (i.e. the same cell more than once)
     //TODO: Don't show *any* duplicate *values*
     while(index in exampleIndexes){
-      index = Math.floor(Math.random() * story.data.rawData.length);
+      index = Math.floor(Math.random() * Story.instance.data.rawData.length);
     }
     exampleIndexes.push(index);
 
-    values.push(story.data.rawData[index][header]);
+    values.push(Story.instance.data.rawData[index][header]);
   }
 
   return values.sort().join(", ");
@@ -264,7 +264,7 @@ function fieldProperties(){
 
   var fieldProperties = "<form>";
 
-  story.data.headers.forEach(function(header, index){
+  Story.instance.data.headers.forEach(function(header, index){
 
     var columnType = detectColumnType(header);
 
@@ -298,7 +298,7 @@ function detectColumnType(header){
 
   var types = {};
 
-  story.data.rawData.forEach(function(row, index){
+  Story.instance.data.rawData.forEach(function(row, index){
 
     type = getType(row[header])
 
@@ -339,8 +339,8 @@ function datasetSummary(){
 
   var datasetSummary = `
   <!--<p>Containing Errors: None</p>-->
-  <p>Number of fields: `+story.data.headers.length+`</p>
-  <p>Number of rows: `+story.data.rawData.length+`</p>`;
+  <p>Number of fields: `+Story.instance.data.headers.length+`</p>
+  <p>Number of rows: `+Story.instance.data.rawData.length+`</p>`;
 
   $("#dataset-summary").html(datasetSummary);
 

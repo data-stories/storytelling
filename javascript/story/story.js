@@ -1,5 +1,3 @@
-var story;
-
 class Story {
 
   constructor(data) {
@@ -15,8 +13,7 @@ class Story {
         return d;   
       });
 
-      //I feel like there's a better way of setting this variable
-      story = new Story(data);
+      Story.instance = new Story(data);
       callback();
     });
 
