@@ -2,7 +2,10 @@ class Story {
 
   constructor(data) {
     this.data = new Data(data);
-    this.blocks = []
+    //this.blocks = [];
+
+    //TODO: Adding a generic block, just for debugging purposes.
+    this.blocks = [new TextBlock(0, "This is some story content", "introduction")];
   }
 
   static createFromDataFile(file, callback){
