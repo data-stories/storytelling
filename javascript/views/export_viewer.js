@@ -3,6 +3,7 @@ $(document).ready(function(){
 	$(".export-form").on('keyup paste change', generatePreview);
 })
 
+
 function generatePreview(){
 
 	var preview = $("#export-preview");
@@ -27,6 +28,7 @@ function generatePreview(){
 	preview.height((preview[0].scrollHeight + 3) + "px");
 }
 
+
 function storyToHTML(){
 	var out = `
 <!doctype html>
@@ -50,6 +52,42 @@ function storyToHTML(){
 	return out;
 }
 
+
 function storyToDS(){
 	return JSON.stringify(Story.instance, null, 4);
 }
+
+
+function downloadStory() {
+
+	var data = $("#export-preview").val();
+	var filename = $("#export-file").val();
+	var type = $("#export-format").val();
+
+	//TODO: Errors!
+	if(Story.instance.blocks.length <= 0){
+		return;		
+	}
+
+	if(!filename){
+		filename = "datastory";	
+	}
+
+	filename += "." + type;
+	
+    var file = new Blob([data], {type: type});
+    if (window.navigator.msSaveOrOpenBlob) // IE10+
+        window.navigator.msSaveOrOpenBlob(file, filename);
+    else { // Others
+        var a = document.createElement("a"),
+                url = URL.createObjectURL(file);
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function() {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);  
+        }, 0); 
+    }
+} 
