@@ -44,6 +44,9 @@ function storyToHTML(){
 		if(storyBlock instanceof TextBlock){
 			out += "<p>"+storyBlock.content+"</p>\n";
 		}
+		else if(storyBlock instanceof ChartBlock){
+			out += "<div>"+storyBlock.content+"</div>\n";
+		}
 	});
 	out += `
   </body>
