@@ -1,6 +1,6 @@
 $(document).ready(function(){
   $("#file-upload").change(function(){
-    Story.createFromDataFile(document.querySelector('input[type=file]').files[0], function(){
+    Story.createFromDataFile(document.querySelector('input#file-upload').files[0], function(){
       initView();  
     });
   });

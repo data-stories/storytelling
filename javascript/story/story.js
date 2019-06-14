@@ -40,6 +40,32 @@ class Story {
       reader.readAsText(file);
     }
   }
+
+
+  static createFromStoryFile(file, callback){
+    var reader = new FileReader();
+    reader.addEventListener("load", function(){
+
+      var storyData = JSON.parse(reader.result);
+
+      Story.instance = new Story(storyData["data"]["rawData"]);
+      Story.instance.data.headersOfInterest = storyData["data"]["headersOfInterest"];
+      Story.instance.data.dependencies = storyData["data"]["dependencies"];
+
+      Story.instance.title = storyData["title"];
+      Story.instance.author = storyData["author"];
+
+      storyData["blocks"].forEach(function(block){
+        Story.instance.blocks.push(StoryBlock.createFromJSON(block));
+      });
+
+      callback();
+    });
+
+    if (file) {
+      reader.readAsText(file);
+    }
+  }
 }
 
 class StoryBlock {
@@ -50,6 +76,12 @@ class StoryBlock {
     }
     this.index = index;
     this.semantic_label = semantic_label;
+  }
+
+  static createFromJSON(json){
+    //TODO: IMPLEMENT THIS
+    console.error("StoryBlock.createFromJSON is not yet implemented!");
+    return new TextBlock(0, "StoryBlock.createFromJSON is not yet implemented!", "error");
   }
 }
 

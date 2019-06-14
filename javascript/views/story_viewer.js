@@ -8,12 +8,13 @@ function validateStory(){
     switchView('export');
 
     if(Story.instance.title){
-    	$("export-title").val(Story.instance.title)
+    	$("#export-title").val(Story.instance.title);
     }
 
     if(Story.instance.author){
-    	$("export-author").val(Story.instance.author)	
+    	$("#export-author").val(Story.instance.author);
     }
+
     generatePreview();
   }
   else{

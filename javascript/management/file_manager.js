@@ -1,3 +1,9 @@
+$("#story-upload").change(function(){
+    Story.createFromStoryFile(document.querySelector('input#story-upload').files[0], function(){
+        initView();  
+    });
+});
+
 
 function newStory(){
 	if(window.confirm('This will discard any unsaved changes to the current story. Proceed?')){
@@ -13,7 +19,7 @@ function saveStory(){
 
 
 function loadStory(){
-	if(window.confirm('This will discard any unsaved changes to the current story. Proceed?')){
+	if(!Story.instance || window.confirm('This will discard any unsaved changes to the current story. Proceed?')){
 		$('#story-upload').click();
 	}
 	//TODO: Reinitialise data, story, etc. etc.
