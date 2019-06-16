@@ -1,29 +1,64 @@
 /**
- * 
+ * A data story class containing different story blocks.
  */
 class Story {
 
+  /**
+   * Constructs a Story object with initialising all the class properties.
+   */
   constructor() {
+    /** All the story blocks. 
+     * @private
+     * @type {Array}
+    */
     this.blocks = [];
+    /**
+     * Data used in the Story object.
+     * @private
+     * @type {Data}
+     */
+    this.data = null;
+    /**
+     * Metadata of the Story object.
+     * @private
+     * @type {Metadata}
+     */
+    this.metaData = null;
     //TODO: Adding a generic block, just for debugging purposes.
     //this.blocks = [new TextBlock(0, "This is some story content", "introduction")];
   }
 
   /**
-   * 
+   * Sets the data property of the object.
+   * @param {Data} newData 
    */
-  set loadData(data){
-    this.data = data
+  setData(newData){
+    this.data = newData;
   }
 
   /**
-   * 
-   * @param {*} block 
+   * Sets the metaData property of the object.
+   * @param {Metadata} newMetadata 
    */
-  appendBlock(block){
-    this.blocks.push(block)
+  setMetadata(newMetadata){
+    this.metaData = newMetadata;
   }
 
+  /**
+   * Appends a new story block in the blocks property.
+   * @param {StoryBlock} block 
+   */
+  appendBlock(newBlock){
+    this.blocks.push(newBlock);
+  }
+
+  // TODO: Comment this static method. This method cannot be implemented before
+  // the implementation of exporting story to json.
+  /**
+   * 
+   * @param {*} file 
+   * @param {*} callback 
+   */
   static createFromDataFile(file, callback){
     var reader = new FileReader();
     reader.addEventListener("load", function(){
@@ -42,6 +77,13 @@ class Story {
   }
 
 
+  // TODO: Comment this static method. This method cannot be implemented before
+  // the implementation of exporting story to json.
+  /**
+   *
+   * @param {*} file 
+   * @param {*} callback 
+   */
   static createFromStoryFile(file, callback){
     var reader = new FileReader();
     reader.addEventListener("load", function(){
@@ -68,38 +110,92 @@ class Story {
   }
 }
 
+/**
+ * A base class describing individual story blocks.
+ */
 class StoryBlock {
 
-  constructor(index, semantic_label) {
-    if (new.target === StoryBlock) {
-      throw new TypeError("Cannot construct StoryBlock instances directly");
-    }
-    this.index = index;
-    this.semantic_label = semantic_label;
+  /**
+   * Initialises the properties of the base class.
+   */
+  constructor() {
   }
 
+  // TODO: Add comments to explain this static method. This method cannot be
+  // implemented before the implementation of exporting story to json.
+  /**
+   * 
+   * @param {*} json 
+   */
   static createFromJSON(json){
-    //TODO: IMPLEMENT THIS
+    //TODO: IMPLEMENT THIS.
     console.error("StoryBlock.createFromJSON is not yet implemented!");
     return new TextBlock(0, "StoryBlock.createFromJSON is not yet implemented!", "error");
   }
 }
 
+/**
+ * A story block containing textual information.
+ */
 class TextBlock extends StoryBlock {
-  constructor(index, content, semantic_label) {
-    super(index, semantic_label);
-    this.content = content;
+  /**
+   * Initialises the properties of the super class and the child class.
+   */
+  constructor() {
+    super();
+    /**
+     * Textual information 
+     * @private
+     * @type {string}
+     */
+    this.text = null;
+  }
+
+  /**
+   * Sets the text property of the object.
+   * @param {string} newText 
+   */
+  setText(newText){
+    this.text = newText;
   }
 }
 
+/**
+ * A story block containing a data visualisation.
+ */
 class ChartBlock extends StoryBlock {
-  constructor(index, chart, semantic_label) {
-    super(index, semantic_label);
-    this.chart = chart;
+  /**
+   * Initialises the properties of the super class and the child class.
+   */
+  constructor() {
+    super();
+    /**
+     * @private
+     * @type {Chart}
+     */
+    this.chart = null;
+  }
+
+  /**
+   * Sets the chart property of the object.
+   * @param {Chart} newChart 
+   */
+  setChart(newChart){
+    this.chart = newChart;
   }
 }
 
+// TODO: Add comments to explain this class.
+/**
+ * 
+ */
 class DataBlock extends StoryBlock {
+  /**
+   * 
+   * @param {*} index 
+   * @param {*} dataSnippet 
+   * @param {*} semantic_label 
+   */
   constructor(index, dataSnippet, semantic_label) {
     super(index, semantic_label);
     this.dataSnippet = dataSnippet;

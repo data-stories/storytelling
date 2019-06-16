@@ -1,4 +1,3 @@
-
 class Data {
   constructor(rawData) {
     this.rawData = rawData;
