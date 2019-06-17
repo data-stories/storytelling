@@ -8,10 +8,10 @@ function generatePreview(){
 
 	var preview = $("#export-preview");
 
-	if(Story.instance.blocks.length <= 0){
-		preview.val("This story has no content! Go back and create at least one block");
-		return;		
-	}
+	// if(Story.instance.blocks.length <= 0){
+	// 	preview.val("This story has no content! Go back and create at least one block");
+	// 	return;		
+	// }
 
 	Story.instance.title = $("#export-title").val();
 	Story.instance.author = $("#export-author").val();

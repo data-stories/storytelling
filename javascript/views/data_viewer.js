@@ -258,6 +258,7 @@ function modalSparkline(header){
 }
 
 
+// TODO: move this to Data class.
 function getExampleValues(header, examples=4){
 
   var values = [];
@@ -283,40 +284,9 @@ function getExampleValues(header, examples=4){
 }
 
 
-function fieldProperties(){
 
-  var fieldProperties = "<form>";
 
-  Story.instance.data.headers.forEach(function(header, index){
-
-    var columnType = detectColumnType(header);
-
-    fieldProperties += `
-      <div class="form-group">
-      <label class="form-check-label" for="field-property-`+index+`">
-        `+header+`
-      </label>
-      <select class="custom-select" id="field-property-`+index+`">
-        <option value="`+columnType.toLowerCase()+`" selected>Detected Type (`+columnType+`)</option>
-        <option value="string">String</option>
-        <option value="number">Number</option>
-        <option value="datetime">Date/Time</option>
-      </select>
-    </div>`;
-
-  });
-
-  fieldProperties += `
-    <div class="form-group form-inline">
-      <button class="btn btn-primary">Apply</button>&nbsp;&nbsp;
-      <button class="btn btn-secondary">Revert</button>
-    </div>
-  </form>`;
-
-  $("#field-properties").html(fieldProperties);
-
-}
-
+// TODO: Move to data class.
 function detectColumnType(header){
 
   var types = {};

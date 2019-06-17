@@ -3,11 +3,12 @@
  */
 class Story {
 
+
   /**
    * Constructs a Story object with initialising all the class properties.
    */
   constructor() {
-    /** All the story blocks. 
+    /** All the StoryBlocks. 
      * @private
      * @type {Array}
     */
@@ -52,8 +53,7 @@ class Story {
     this.blocks.push(newBlock);
   }
 
-  // TODO: Comment this static method. This method cannot be implemented before
-  // the implementation of exporting story to json.
+  // TODO: Comment this static method. 
   /**
    * 
    * @param {*} file 
@@ -67,7 +67,9 @@ class Story {
         return d;   
       });
 
-      Story.instance = new Story(data);
+      Data.instance = new Data(data);
+      Story.instance = new Story();
+      Story.instance.setData(Data.instance);
       callback();
     });
 
@@ -119,6 +121,7 @@ class StoryBlock {
    * Initialises the properties of the base class.
    */
   constructor() {
+    this.content = null;
   }
 
   // TODO: Add comments to explain this static method. This method cannot be
@@ -130,7 +133,7 @@ class StoryBlock {
   static createFromJSON(json){
     //TODO: IMPLEMENT THIS.
     console.error("StoryBlock.createFromJSON is not yet implemented!");
-    return new TextBlock(0, "StoryBlock.createFromJSON is not yet implemented!", "error");
+    return new TextBlock("StoryBlock.createFromJSON is not yet implemented!", "error");
   }
 }
 
@@ -143,20 +146,14 @@ class TextBlock extends StoryBlock {
    */
   constructor() {
     super();
-    /**
-     * Textual information 
-     * @private
-     * @type {string}
-     */
-    this.text = null;
-  }
+    }
 
   /**
    * Sets the text property of the object.
    * @param {string} newText 
    */
   setText(newText){
-    this.text = newText;
+    this.content = newText;
   }
 }
 
@@ -169,11 +166,6 @@ class ChartBlock extends StoryBlock {
    */
   constructor() {
     super();
-    /**
-     * @private
-     * @type {Chart}
-     */
-    this.chart = null;
   }
 
   /**
@@ -185,19 +177,14 @@ class ChartBlock extends StoryBlock {
   }
 }
 
-// TODO: Add comments to explain this class.
 /**
- * 
+ * A story block containing a data table. 
  */
 class DataBlock extends StoryBlock {
   /**
-   * 
-   * @param {*} index 
-   * @param {*} dataSnippet 
-   * @param {*} semantic_label 
+   * Initialises the properties of the super class and the child class.
    */
-  constructor(index, dataSnippet, semantic_label) {
-    super(index, semantic_label);
-    this.dataSnippet = dataSnippet;
+  constructor() {
+    super();
   }
 }
