@@ -92,7 +92,10 @@ class Story {
 
       var storyData = JSON.parse(reader.result);
 
-      Story.instance = new Story(storyData["data"]["rawData"]);
+      Data.instance = new Data(storyData["data"]["rawData"]);
+
+      Story.instance = new Story();
+      Story.instance.setData(Data.instance);
       Story.instance.data.headersOfInterest = storyData["data"]["headersOfInterest"];
       Story.instance.data.dependencies = storyData["data"]["dependencies"];
 
