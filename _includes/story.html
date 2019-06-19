@@ -1,83 +1,36 @@
 <div id="story" style="display: none;">
 
+<!--   <div class="row">
+    <div class="col">
+      <a class="btn btn-lg btn-secondary" href="#" role="button" onClick="switchView('template');">Back</a>
+    </div>
+    <div class="col" align="right">
+      <a class="btn btn-lg btn-primary" href="#" role="button" onClick="validateStory();">Continue</a>
+    </div>
+  </div>
+
+  <br> -->
+
   <div class="row" style="height: {{page.content_height}}px;">
 
-    <div class="col-9 h-100">
+    <div class="col h-100">
       <div class="card h-100">
         <h6 class="card-header">Story Sections</h6>
-        <div class="card-body scroll text-center">
-          <form>
-              <div class="form-group">
-                <textarea rows="4" cols="100">
-                Here is the story 
-                </textarea>
-              </div>
-          </form>
-        </div>
-      </div>
-    </div>
+        <div id="story-sections" class="card-body scroll text-center">
 
-    <div class="col-3">
-
-    <div class="row h-50">
-      <div class="col h-100">
-        <div class="card h-100">
-          <h6 class="card-header">Visualisation Recommendations</h6>
-          <div class="card-body scroll text-center">
-            <p>Recommended Chart</p>
-            <p>Recommended Chart</p>
-            <p>Recommended Chart</p>
-            <p>Recommended Chart</p>
-            <p>Recommended Chart</p>
-            <p>Recommended Chart</p>
-          </div>
         </div>
       </div>
-    </div>
-    <div class="row h-50">
-      <div class="col h-100">
-        <div class="card h-100">
-          <h6 class="card-header">Annotation Toolkit</h6>
-          <div class="card-body scroll text-center">
-            <p><i class="fas fa-mouse-pointer"></i>Select</p>
-            <p><i class="fas fa-font"></i>Text Box</p>
-            <p><i class="fas fa-grip-lines"></i>Line</p>
-            <p><i class="fas fa-vector-square"></i>Rectangle</p>
-          </div>
-        </div>
-      </div>
-    </div>
     </div>
   </div>
 
   <br/>
 
   <div class="row">
-    <div class="col-9" align="center">
-      <a class="btn btn-secondary file-button" href="#" role="button"><i class="fas fa-step-backward"></i>&nbsp;First</a>
-      <a class="btn btn-secondary file-button" href="#" role="button"><i class="fas fa-chevron-left"></i></i>&nbsp;Previous</a> 
-      <a class="btn btn-secondary file-button" href="#" role="button"><i class="fas fa-plus"></i>&nbsp;New</a>
-      <a class="btn btn-secondary file-button" href="#" role="button">Next&nbsp;<i class="fas fa-chevron-right"></i></a>
-      <a class="btn btn-secondary file-button" href="#" role="button">Last&nbsp;<i class="fas fa-step-forward"></i></a>
-    </div>
-
-    <div class="col">
-      <div class="card">
-          <h6 class="card-header">Section Information</h6>
-          <div class="card-body scroll text-center">
-            <p>Section Type:</p>
-            <p>Recommended Decision:</p>
-          </div>
-        </div>
-    </div>
-  </div>
-
-  <div class="row">
     <div class="col">
       <a class="btn btn-lg btn-secondary" href="#" role="button" onClick="switchView('template');">Back</a>
     </div>
     <div class="col" align="right">
-      <a class="btn btn-lg btn-primary" href="#" role="button" onClick="validateStory();">Continue</a>
+      <a class="btn btn-lg btn-primary" href="#" role="button" onClick="switchView('export');">Continue</a>
     </div>
   </div>
 </div>

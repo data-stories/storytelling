@@ -25,19 +25,13 @@ class Data {
   }
 
 
-  detectTrends(){
-      throw new Error("Not Implemented")
-  }
+  //TODO: These *could* be implemented at a later date, to highlight points of interest to the author
 
-  detectSpikes(){
-      throw new Error("Not Implemented")
-  }
+  // detectTrends(){
+  //     throw new Error("Not Implemented")
+  // }
 
-  recommendCharts(){
-      throw new Error("Not Implemented")
-  }
-
-  recommendStructure(){
-      throw new Error("Not Implemented")
-  }
+  // detectSpikes(){
+  //     throw new Error("Not Implemented")
+  // }
 }

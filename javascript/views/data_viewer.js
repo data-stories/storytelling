@@ -1,15 +1,20 @@
 $(document).ready(function(){
   $("#file-upload").change(function(){
     Story.createFromDataFile(document.querySelector('input#file-upload').files[0], function(){
-      initView();  
+      dataViewInit();  
     });
   });
 });
 
+function dataViewInit(){
+  if(Story.instance.data.rawData){
+      dependencies();
+      dataView();
+    }
+}
 
-function initView(){
-  dependencies();
-  dataView();
+function dataViewLeave(){
+  
 }
 
 
@@ -336,21 +341,5 @@ function datasetSummary(){
   <p>Number of rows: `+Story.instance.data.rawData.length+`</p>`;
 
   $("#dataset-summary").html(datasetSummary);
-
-}
-
-
-function validateData(){
-
-  //TODO: Actually validate that sensible options have been chosen
-  var dataIsValid = true;
-
-  if(dataIsValid){
-    $('#nav-interest').find("a").removeClass("disabled");
-    switchView('interest');
-  }
-  else{
-    //TODO: explain to the user what has gone wrong
-  }
 
 }

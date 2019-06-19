@@ -4,17 +4,34 @@ $(document).ready(function(){
 })
 
 
+function exportViewInit(){
+    if(Story.instance.title){
+        $("#export-title").val(Story.instance.metadata.title);
+    }
+
+    if(Story.instance.author){
+        $("#export-author").val(Story.instance.metadata.author);
+    }
+
+    generatePreview();
+}
+
+function exportViewLeave(){
+  //This method intentionally left empty
+}
+
+
 function generatePreview(){
 
-	var preview = $("#export-preview");
+    var preview = $("#export-preview");
 
-	// if(Story.instance.blocks.length <= 0){
-	// 	preview.val("This story has no content! Go back and create at least one block");
-	// 	return;		
-	// }
+    if(Story.instance.blocks.length <= 0){
+        preview.val("This story has no content! Go back and create at least one block");
+        return;        
+    }
 
-	Story.instance.title = $("#export-title").val();
-	Story.instance.author = $("#export-author").val();
+	Story.instance.metadata.title = $("#export-title").val();
+	Story.instance.metadata.author = $("#export-author").val();
 
 	var out;
 	switch($("#export-format").val()){
@@ -35,18 +52,13 @@ function storyToHTML(){
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>`+Story.instance.title+`</title>
-    <meta name="author" content="`+Story.instance.author+`">
+    <title>`+Story.instance.metadata.title+`</title>
+    <meta name="author" content="`+Story.instance.metadata.author+`">
   </head>
   <body>
   `;
-	Story.instance.blocks.forEach(function(storyBlock){
-		if(storyBlock instanceof TextBlock){
-			out += "<p>"+storyBlock.content+"</p>\n";
-		}
-		else if(storyBlock instanceof ChartBlock){
-			out += "<div>"+storyBlock.content+"</div>\n";
-		}
+	Story.instance.blocks.forEach(function(block){
+        block.renderToHTML();
 	});
 	out += `
   </body>
