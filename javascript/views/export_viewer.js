@@ -35,7 +35,9 @@ function generatePreview(){
 
 	var out;
 	switch($("#export-format").val()){
-		case "html": out = storyToHTML(); break;
+		case "raw-html": out = storyToRawHTML(); break;
+        case "magazine-html": out = storyToMagazineHTML(); break;
+        case "slide-html": out = storyToSlideHTML(); break;
 		case "story": out = storyToDS(); break;
 		default: throw new Error("Unexpected export option selected: "+$("#export-format").val()); break;
 	}
@@ -46,8 +48,17 @@ function generatePreview(){
 }
 
 
-function storyToHTML(){
-	var out = `
+function storyToRawHTML(){
+    var out = '<div class="data-story>\n';
+    Story.instance.blocks.forEach(function(block){
+        out += '  '+block.renderToHTML() + '\n';
+    });
+    out += `</div>`;
+    return out;
+}
+
+function storyToMagazineHTML(){
+    var out = `
 <!doctype html>
 <html lang="en">
   <head>
@@ -57,14 +68,39 @@ function storyToHTML(){
   </head>
   <body>
   `;
-	Story.instance.blocks.forEach(function(block){
-        block.renderToHTML();
-	});
-	out += `
+    Story.instance.blocks.forEach(function(block){
+        out += block.renderToHTML() +'\n';
+    });
+    out += `
   </body>
 </html>`;
 
-	return out;
+    return out;
+}
+
+function storyToSlideHTML(){
+    var out = `
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>`+Story.instance.metadata.title+`</title>
+    <meta name="author" content="`+Story.instance.metadata.author+`">
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+  `;
+    Story.instance.blocks.forEach(function(block){
+        out += `    <section>`+block.renderToHTML() + `</section>\n`;
+    });
+    out += `
+      </div>
+    </div>
+  </body>
+</html>`;
+
+    return out;
 }
 
 
