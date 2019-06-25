@@ -25,8 +25,6 @@ class Story {
      * @type {Metadata}
      */
     this.metadata = new Metadata();
-    //TODO: Adding a generic block, just for debugging purposes.
-    //this.blocks = [new TextBlock(0, "This is some story content", "introduction")];
   }
 
   /**
@@ -209,7 +207,7 @@ class ChartBlock extends StoryBlock {
     if(this.content){
       block += '<div class="chart-block">'+this.content+'</div>';
     }
-    block += '<div class="chart-block">Recommended charts: go here</div>';
+    block += '<div class="chart-block">&lt;Display recommended charts here&gt;</div>';
     return block;
   }
 
@@ -240,7 +238,7 @@ class DataBlock extends StoryBlock {
     if(this.content){
       block += '<div class="data-block">'+this.content+'</div>';
     }
-    block += '<div class="data-block">Chose a data snippet to embed:</div>';
+    block += '<div class="data-block">&lt;Display recommended data snippets here&gt;</div>';
     return block;
   }
 

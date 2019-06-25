@@ -14,7 +14,16 @@ function dataViewInit(){
 }
 
 function dataViewLeave(){
-  
+
+  //TODO: Save fields of interest
+
+  //Save dependencies
+  Array.from($("#dependency-list").children()).forEach(function(dependency){
+    Story.instance.metadata.dependencies.push({
+      "independent" : $(dependency).children(".independent").html(),
+      "dependent"   : $(dependency).children(".dependent").html()
+    });
+  });
 }
 
 
@@ -56,11 +65,7 @@ function createDependency(){
     $("#dependency-error").hide();
 
     var dependencyList = `
-      <li id="dependency-`+$( "#independent-dropdown" ).val()+`-`+$( "#dependent-dropdown" ).val()+`">`+$( "#independent-dropdown option:selected" ).text()+`
-        &nbsp;<i class="fas fa-arrow-right"></i>&nbsp;`+
-        $( "#dependent-dropdown option:selected" ).text()+`
-        <a href="#" onClick="removeDependency('`+$( "#independent-dropdown" ).val()+`-`+$( "#dependent-dropdown" ).val()+`');"><i class="fas fa-backspace"></i></a>
-      </li>`;
+      <li id="dependency-`+$( "#independent-dropdown" ).val()+`-`+$( "#dependent-dropdown" ).val()+`"><span class="independent">`+$( "#independent-dropdown option:selected" ).text()+`</span>&nbsp;<i class="fas fa-arrow-right"></i>&nbsp;<span class="dependent">`+$( "#dependent-dropdown option:selected" ).text()+`</span><a href="#" onClick="removeDependency('`+$( "#independent-dropdown" ).val()+`-`+$( "#dependent-dropdown" ).val()+`');"><i class="fas fa-backspace"></i></a></li>`;
   $("#dependency-list").append(dependencyList);
 }
 

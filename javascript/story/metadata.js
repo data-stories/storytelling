@@ -36,7 +36,7 @@ class Metadata{
         this.interests = [];
         /**
          * Array of data field dependencies.
-         * Array member type is Object {"dependent field" : "independent field"}.
+         * Array member type is Object {"independent" : ..., "dependent": ...}.
          * @private
          * @type {Array}
          */

@@ -23,8 +23,8 @@ function defaultTemplate(){
     Story.instance.blocks.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience"));
 
     Story.instance.metadata.dependencies.forEach(function(dependency){
-        Story.instance.blocks.push(new TextBlock("Introduce the independent variable (\""+dependency.independant+"\") here; talk about what it is, why it matters, and so on."));
-        Story.instance.blocks.push(new TextBlock("Introduce the dependent variable (\""+dependency.dependant+"\") here; talk about what it is, why it matters, and so on."));
+        Story.instance.blocks.push(new TextBlock("Introduce the independent variable (\""+dependency["independent"]+"\") here; talk about what it is, why it matters, and so on."));
+        Story.instance.blocks.push(new TextBlock("Introduce the dependent variable (\""+dependency["dependent"]+"\") here; talk about what it is, why it matters, and so on."));
         Story.instance.blocks.push(new ChartBlock());
         Story.instance.blocks.push(new TextBlock("Explain the relationship between the two variables, and reference the correlation or trend visualised above."));
     });
