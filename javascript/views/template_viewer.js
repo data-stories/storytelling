@@ -3,10 +3,7 @@
 function templateViewInit(){
 
   //If the current story is empty, apply the default story template
-
-  console.log(Story.instance.blocks);
   if(Story.instance.blocks.length == 0){
-    console.log("Creating default template");
     defaultTemplate();
     $("#default-template")
       .removeClass("btn-secondary")
