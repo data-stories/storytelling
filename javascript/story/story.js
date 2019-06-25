@@ -240,7 +240,7 @@ class DataBlock extends StoryBlock {
     if(this.content){
       block += '<div class="data-block">'+this.content+'</div>';
     }
-    block += '<div class="data-block">Recommended charts: go here</div>';
+    block += '<div class="data-block">Chose a data snippet to embed:</div>';
     return block;
   }
 
