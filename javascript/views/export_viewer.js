@@ -124,6 +124,10 @@ function downloadStory() {
 		filename = "datastory";	
 	}
 
+    if(type.includes("html")){
+        type = "html";
+    }
+
 	filename += "." + type;
 	
     var file = new Blob([data], {type: type});
