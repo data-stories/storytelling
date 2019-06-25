@@ -178,7 +178,7 @@ class TextBlock extends StoryBlock {
    */
   renderToAuthor() {
     var content = (this.content) ? this.content : "";
-    return '<textarea rows="4" cols="100">'+content+'</textarea>';
+    return '<textarea class="text-block" rows="4" cols="100">'+content+'</textarea>';
   }
 
   /**
@@ -207,9 +207,9 @@ class ChartBlock extends StoryBlock {
   renderToAuthor() {
     var block = "";
     if(this.content){
-      block += "<div>"+this.content+"</div>";
+      block += '<div class="chart-block">'+this.content+'</div>';
     }
-    block += '<p>Recommended charts: go here</p>';
+    block += '<div class="chart-block">Recommended charts: go here</div>';
     return block;
   }
 
@@ -230,5 +230,24 @@ class DataBlock extends StoryBlock {
    */
   constructor(content) {
     super(content);
+  }
+
+  /**
+   * Renders the block to the author, for editing, and pre-fills any existing content
+   */
+  renderToAuthor() {
+    var block = "";
+    if(this.content){
+      block += '<div class="data-block">'+this.content+'</div>';
+    }
+    block += '<div class="data-block">Recommended charts: go here</div>';
+    return block;
+  }
+
+  /**
+   * Renders the block as HTML
+   */
+  renderToHTML() {
+    return "<div>"+this.content+"</div>";
   }
 }

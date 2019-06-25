@@ -14,11 +14,32 @@ function storyViewInit(){
 
 function storyViewLeave(){
   //TODO: Save story!!!
-  console.log($(".story-block").children);
+
   Story.instance.blocks = [];
-  $(".story-block").children().forEach(function(){
-    Story.instance.blocks.push(new StoryBlock());
-  });  
+  Array.from($(".story-block").children()).forEach(function(element){
+
+    element = $(element);
+    console.log(element);
+
+    var storyBlock;
+    
+    if(element.hasClass("text-block")){
+      storyBlock = new TextBlock(element.val());
+    }
+    else if(element.hasClass("chart-block")){
+      storyBlock = new ChartBlock(element.html());
+    }
+    else if(element.hasClass("data-block")){
+      storyBlock = new DataBlock(element.html());
+    }
+
+
+    if(storyBlock){
+      Story.instance.blocks.push(storyBlock);
+    }
+  });
+
+  console.log(Story.instance);
 }
 
 
