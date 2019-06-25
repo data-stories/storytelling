@@ -24,7 +24,7 @@ class Story {
      * @private
      * @type {Metadata}
      */
-    this.metaData = null;
+    this.metadata = new Metadata();
     //TODO: Adding a generic block, just for debugging purposes.
     //this.blocks = [new TextBlock(0, "This is some story content", "introduction")];
   }
@@ -67,9 +67,8 @@ class Story {
         return d;   
       });
 
-      Data.instance = new Data(data);
       Story.instance = new Story();
-      Story.instance.setData(Data.instance);
+      Story.instance.setData(new Data(data));
       callback();
     });
 
@@ -99,8 +98,8 @@ class Story {
       Story.instance.data.headersOfInterest = storyData["data"]["headersOfInterest"];
       Story.instance.data.dependencies = storyData["data"]["dependencies"];
 
-      Story.instance.title = storyData["title"];
-      Story.instance.author = storyData["author"];
+      Story.instance.metadata.title = storyData["title"];
+      Story.instance.metadata.author = storyData["author"];
 
       storyData["blocks"].forEach(function(block){
         Story.instance.blocks.push(StoryBlock.createFromJSON(block));
@@ -123,9 +122,31 @@ class StoryBlock {
   /**
    * Initialises the properties of the base class.
    */
-  constructor() {
-    this.content = null;
+  constructor(content) {
+    //Explicitly force this class to be Abstract
+    if (new.target === StoryBlock) {
+      throw new TypeError("Cannot construct StoryBlock instances directly");
+    }
+    this.content = content;
   }
+
+  renderToAuthor() {
+    throw new Error("Each subclass should implement a renderToAuthor() method")
+  }
+
+  renderToHTML() {
+    throw new Error("Each subclass should implement a renderToHTML() method")
+  }
+
+  // Not needed if using JSON.stringify
+  // renderToJSON() {
+  //   throw new Error("Each subclass should implement a renderToJSON() method")
+  // }
+
+  // Not needed as same structure as renderToHTML
+  // renderToSlides() {
+  //   throw new Error("Each subclass should implement a renderToSlides() method")
+  // }
 
   // TODO: Add comments to explain this static method. This method cannot be
   // implemented before the implementation of exporting story to json.
@@ -147,17 +168,26 @@ class TextBlock extends StoryBlock {
   /**
    * Initialises the properties of the super class and the child class.
    */
-  constructor() {
-    super();
-    }
+  constructor(content) {
+    super(content);
+  }
+
 
   /**
-   * Sets the text property of the object.
-   * @param {string} newText 
+   * Renders the block to the author, for editing, and pre-fills any existing content
    */
-  setText(newText){
-    this.content = newText;
+  renderToAuthor() {
+    var content = (this.content) ? this.content : "";
+    return '<textarea class="text-block" rows="4" cols="100">'+content+'</textarea>';
   }
+
+  /**
+   * Renders the block as HTML
+   */
+  renderToHTML() {
+    return '<p>'+this.content+'</p>'
+  }
+
 }
 
 /**
@@ -167,16 +197,27 @@ class ChartBlock extends StoryBlock {
   /**
    * Initialises the properties of the super class and the child class.
    */
-  constructor() {
-    super();
+  constructor(content) {
+    super(content);
   }
 
   /**
-   * Sets the chart property of the object.
-   * @param {Chart} newChart 
+   * Renders the block to the author, for editing, and pre-fills any existing content
    */
-  setChart(newChart){
-    this.chart = newChart;
+  renderToAuthor() {
+    var block = "";
+    if(this.content){
+      block += '<div class="chart-block">'+this.content+'</div>';
+    }
+    block += '<div class="chart-block">Recommended charts: go here</div>';
+    return block;
+  }
+
+  /**
+   * Renders the block as HTML
+   */
+  renderToHTML() {
+    return "<div>"+this.content+"</div>";
   }
 }
 
@@ -187,7 +228,26 @@ class DataBlock extends StoryBlock {
   /**
    * Initialises the properties of the super class and the child class.
    */
-  constructor() {
-    super();
+  constructor(content) {
+    super(content);
+  }
+
+  /**
+   * Renders the block to the author, for editing, and pre-fills any existing content
+   */
+  renderToAuthor() {
+    var block = "";
+    if(this.content){
+      block += '<div class="data-block">'+this.content+'</div>';
+    }
+    block += '<div class="data-block">Chose a data snippet to embed:</div>';
+    return block;
+  }
+
+  /**
+   * Renders the block as HTML
+   */
+  renderToHTML() {
+    return "<div>"+this.content+"</div>";
   }
 }

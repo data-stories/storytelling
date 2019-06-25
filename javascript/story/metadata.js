@@ -8,7 +8,7 @@ class Metadata{
      * @param {string} title 
      * @param {string} type 
      */
-    constructor(){
+    constructor(title, author, type){
         /**
          * Author of story.
          * @private
