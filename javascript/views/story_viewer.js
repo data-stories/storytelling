@@ -1,26 +1,24 @@
 
-
 function storyViewInit(){
 
   Story.instance.blocks.forEach(function(block){
     $("#story-sections").append(newSection(block.renderToAuthor()));
+
+    $("#story-sections").append($('<button class="btn btn-primary btn-sm btn-add"><i class="fas fa-plus"></i></button>').click(function(){
+      $(this).after(newSection());
+      $(this).remove();
+    }));
   });
-
-  $("#story-sections").append(newSection());
-
-  $("#story-sections").append($('<button class="btn btn-primary btn-sm btn-add"><i class="fas fa-plus"></i></button>').click(function(){
-    $("#story-sections").append(newSection());
-  }));
-
 }
 
 
 function storyViewLeave(){
-
-
   //TODO: Save story!!!
-  $(".story-block")
-  
+  console.log($(".story-block").children);
+  Story.instance.blocks = [];
+  $(".story-block").children().forEach(function(){
+    Story.instance.blocks.push(new StoryBlock());
+  });  
 }
 
 
@@ -28,14 +26,12 @@ function newSection(blockContent){
 
   var block = $('<div class="story-block">');
 
-
-
   if(!blockContent){
     block
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-file-alt"></i> Text</button>')
         .click(function(){
+          $(this).parent().after(newSection(new TextBlock().renderToAuthor()));
           $(this).parent().remove();
-          $("#story-sections").append(newSection(new TextBlock().renderToAuthor()));
           //TODO: Create "new block" buttons between each block
         })
       );
@@ -43,8 +39,8 @@ function newSection(blockContent){
     block
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-chart-bar"></i> Chart</button>')
         .click(function(){
+          $(this).parent().after(newSection(new ChartBlock().renderToAuthor()));
           $(this).parent().remove();
-          $("#story-sections").append(newSection(new ChartBlock().renderToAuthor()));
           //TODO: Create "new block" buttons between each block
         })
       );
@@ -52,8 +48,8 @@ function newSection(blockContent){
     block
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-table"></i> Data</button>')
         .click(function(){
+          $(this).parent().after(newSection(new DataBlock().renderToAuthor()));
           $(this).parent().remove();
-          $("#story-sections").append(newSection(new DataBlock().renderToAuthor()));
           //TODO: Create "new block" buttons between each block
         })
       );
@@ -62,8 +58,6 @@ function newSection(blockContent){
   else{
     block.append($('<button class="btn btn-sm btn-danger trash-button"><i class="fas fa-trash-alt"></i></button>').click(function(){
       $(this).parent().remove();
-      //TODO: ALSO DELETE THE BLOCK FROM STORY.INSTANCE!!!
-      //We don't need to do this if, WHENEVR WE LEAVE THIS PAGE, it regenerates the Story.instance.blocks
     }));
     block.append($(blockContent));
   }
