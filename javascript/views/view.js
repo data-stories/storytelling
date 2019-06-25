@@ -17,5 +17,12 @@ function switchView(view){
     eval(currentView+"ViewLeave()");
     eval(view+"ViewInit()");
 
+    //Perhaps something like this is better:
+
+    //var leave = {"data" : dataViewLeave, "interest" : interestViewLeave, ...}
+    //leave[currentView]();
+    //var init = {"data" : dataViewInit, "interest" : interestViewInit, ...}
+    //init[view]();
+
     currentView = view;
 }

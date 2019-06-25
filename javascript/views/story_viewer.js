@@ -1,6 +1,8 @@
 
 function storyViewInit(){
 
+  $("#story-sections").empty();
+
   Story.instance.blocks.forEach(function(block){
     $("#story-sections").append(newSection(block.renderToAuthor()));
 
@@ -13,16 +15,12 @@ function storyViewInit(){
 
 
 function storyViewLeave(){
-  //TODO: Save story!!!
 
   Story.instance.blocks = [];
   Array.from($(".story-block").children()).forEach(function(element){
-
     element = $(element);
-    console.log(element);
 
     var storyBlock;
-    
     if(element.hasClass("text-block")){
       storyBlock = new TextBlock(element.val());
     }
@@ -38,8 +36,6 @@ function storyViewLeave(){
       Story.instance.blocks.push(storyBlock);
     }
   });
-
-  console.log(Story.instance);
 }
 
 
