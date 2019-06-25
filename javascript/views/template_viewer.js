@@ -20,7 +20,7 @@ function templateViewLeave(){
 
 
 function defaultTemplate(){
-    Story.instance.blocks.push(new TextBlock("Introduction your story here; talk about the background, the context, and why it matters to your audience"));
+    Story.instance.blocks.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience"));
 
     Story.instance.metadata.dependencies.forEach(function(dependency){
         Story.instance.blocks.push(new TextBlock("Introduce the independent variable (\""+dependency.independant+"\") here; talk about what it is, why it matters, and so on."));
