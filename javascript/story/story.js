@@ -128,6 +128,9 @@ class StoryBlock {
     this.content = content;
   }
 
+  /**
+   * 
+   */
   renderToAuthor() {
     throw new Error("Each subclass should implement a renderToAuthor() method")
   }
