@@ -294,9 +294,6 @@ function getExampleValues(header, examples=4){
 }
 
 
-
-
-// TODO: Move to data class.
 function detectColumnType(header){
 
   var types = {};
@@ -321,8 +318,6 @@ function detectColumnType(header){
 
 function getType(datum){
   
-  //TODO: Modify this to account for, e.g., datetimes
-
   if(parseFloat(datum) || parseInt(datum)){
 
     if(datum.includes(".")){
@@ -332,7 +327,11 @@ function getType(datum){
       return "Integer";  
     }
   }
-  else{
+  else if (Date.parse(datum))
+  {
+    return "Date";
+  }
+  else {
     return "String";
   }
 }

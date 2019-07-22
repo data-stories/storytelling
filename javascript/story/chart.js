@@ -153,39 +153,61 @@ class Chart{
     }
 
     /**
+     * Make the data set suitable for rendering line charts.
+     * @param {Array} data 
+     */
+    lineData(newData)
+    {
+        var data = [];
+        for (var i = 0; i < newData.length; i++){
+            data.push({
+                date: new Date(newData[i].name),
+                value: parseFloat(newData[i].value)
+            });
+        }
+        return data;
+    }
+    /**
      * Render the chart as a line chart in the container.
      * @param {Object} container 
      */
     renderLine(container)
     {
-        var parseTime = d3.timeParse("%d-%b-%y");
-        var x = d3.scaleTime().range([0, this.width]);
-        var y = d3.scaleLinear().range([this.height, 0]); 
+        var dataset = this.lineData(this.data);
+        var xScale = d3.scaleTime()
+                        .domain([
+                            d3.min(dataset, function(d) {return d.date;}),
+                            d3.max(dataset, function(d) {return d.date;})
+                        ])
+                        .range([0, this.width]);
+        var yScale = d3.scaleLinear()
+                        .domain([0, d3.max(dataset, function(d) {return d.value;})])
+                        .range([this.height, 0]);
+
         var height = this.height;
 
-        var valueline = d3.line()
-                            .x(function(d){return x(d.name);})
-                            .y(function(d){return y(d.value);});
+        var line = d3.line()
+                     .x(function(d){return xScale(d.date);})
+                     .y(function(d){return yScale(d.value);});
         var svg = container.append("svg")
                         .attr("width", this.svg_width)
                         .attr("height", this.svg_height)
                         .append("g")
                         .attr("transform",
                                 "translate(" + this.margin.left + "," + this.margin.top + ")");
-        x.domain(d3.extent(this.data, function(d){return parseTime(d.name);}));
-        y.domain([0, d3.max(this.data, function(d) {return d.value;})]);
 
-        console.log(valueline);
         svg.append("path")
-                .data([this.data])
-                .attr("class", "line")
-                .attr("d", valueline);
+                .datum(dataset)
+                .attr("fill", "none")
+                .attr("stroke", "teal")
+                .attr("stroke-width", "1.0")
+                .attr("d", line);
 
         svg.append("g")
-                .attr("transform", "translate(0" + height + ")")
-                .call(d3.axisBottom(x));
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(xScale));
 
         svg.append("g")
-                .call(d3.axisLeft(y));
+                .call(d3.axisLeft(yScale));
     }
 }
