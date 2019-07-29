@@ -24,17 +24,6 @@ function dataViewLeave(){
       "dependent"   : $(dependency).children(".dependent").html()
     });
   });
-  
-
-  Story.instance.blocks.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience"));
-  Story.instance.metadata.dependencies.forEach(function(dependency){
-      Story.instance.blocks.push(new TextBlock("Introduce the independent variable (\""+dependency["independent"]+"\") here; talk about what it is, why it matters, and so on."));
-      Story.instance.blocks.push(new TextBlock("Introduce the dependent variable (\""+dependency["dependent"]+"\") here; talk about what it is, why it matters, and so on."));
-      Story.instance.blocks.push(new ChartBlock());
-      Story.instance.blocks.push(new TextBlock("Explain the relationship between the two variables, and reference the correlation or trend visualised above."));
-  });
-  
-  Story.instance.blocks.push(new TextBlock("Conclude your story; summaries the key points you have made and again, emphasise why it is important to your audience."));
 }
 
 

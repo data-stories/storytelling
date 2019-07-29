@@ -1,6 +1,18 @@
 
 function storyViewInit(){
 
+  //TODO: Replace this with a proper dynamic template system
+  if(Story.instance.blocks.length == 0){
+    Story.instance.blocks.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience"));
+    Story.instance.metadata.dependencies.forEach(function(dependency){
+        Story.instance.blocks.push(new TextBlock("Introduce the independent variable (\""+dependency["independent"]+"\") here; talk about what it is, why it matters, and so on."));
+        Story.instance.blocks.push(new TextBlock("Introduce the dependent variable (\""+dependency["dependent"]+"\") here; talk about what it is, why it matters, and so on."));
+        Story.instance.blocks.push(new ChartBlock());
+        Story.instance.blocks.push(new TextBlock("Explain the relationship between the two variables, and reference the correlation or trend visualised above."));
+    });
+    Story.instance.blocks.push(new TextBlock("Conclude your story; summaries the key points you have made and again, emphasise why it is important to your audience."));
+  }
+
   $("#story-sections")
     .empty()
     .append(createAddSectionButton());
@@ -17,6 +29,7 @@ function storyViewLeave(){
 
   Story.instance.blocks = [];
   Array.from($(".story-block").children()).forEach(function(element){
+
     element = $(element);
 
     var storyBlock;
@@ -29,7 +42,6 @@ function storyViewLeave(){
     else if(element.hasClass("data-block")){
       storyBlock = new DataBlock(element.html());
     }
-
 
     if(storyBlock){
       Story.instance.blocks.push(storyBlock);
