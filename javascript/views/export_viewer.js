@@ -5,14 +5,6 @@ $(document).ready(function(){
 
 
 function exportViewInit(){
-    if(Story.instance.title){
-        $("#export-title").val(Story.instance.metadata.title);
-    }
-
-    if(Story.instance.author){
-        $("#export-author").val(Story.instance.metadata.author);
-    }
-
     generatePreview();
 }
 
@@ -29,9 +21,6 @@ function generatePreview(){
         preview.val("This story has no content! Go back and create at least one block");
         return;        
     }
-
-	Story.instance.metadata.title = $("#export-title").val();
-	Story.instance.metadata.author = $("#export-author").val();
 
 	var out;
 	switch($("#export-format").val()){

@@ -1,6 +1,14 @@
 
 function storyViewInit(){
 
+  if(Story.instance.title){
+      $("#export-title").val(Story.instance.metadata.title);
+  }
+
+  if(Story.instance.author){
+      $("#export-author").val(Story.instance.metadata.author);
+  }
+
   //TODO: Replace this with a proper dynamic template system
   if(Story.instance.blocks.length == 0){
     Story.instance.blocks.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience"));
@@ -26,6 +34,9 @@ function storyViewInit(){
 
 
 function storyViewLeave(){
+
+  Story.instance.metadata.title = $("#export-title").val();
+  Story.instance.metadata.author = $("#export-author").val();
 
   Story.instance.blocks = [];
   Array.from($(".story-block").children()).forEach(function(element){
