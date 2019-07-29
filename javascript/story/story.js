@@ -206,11 +206,7 @@ class ChartBlock extends StoryBlock {
    * Renders the block to the author, for editing, and pre-fills any existing content
    */
   renderToAuthor() {
-    var block = "";
-    if(this.content){
-      block += '<div class="chart-block">'+this.content+'</div>';
-    }
-    block += '<div class="chart-block">&lt;Display recommended charts here&gt;</div>';
+    var block = '<div class="chart-block">&lt;Display recommended charts here&gt;</div>';
     return block;
   }
 
@@ -237,11 +233,7 @@ class DataBlock extends StoryBlock {
    * Renders the block to the author, for editing, and pre-fills any existing content
    */
   renderToAuthor() {
-    var block = "";
-    if(this.content){
-      block += '<div class="data-block">'+this.content+'</div>';
-    }
-    block += '<div class="data-block">&lt;Display recommended data snippets here&gt;</div>';
+    var block = '<div class="data-block">&lt;Display recommended data snippets here&gt;</div>';
     return block;
   }
 
