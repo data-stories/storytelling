@@ -80,7 +80,6 @@ function newSection(blockContent){
       )
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-chart-bar"></i> Chart</button>')
         .click(function(){
-
           insertEmptySection($(this).parent(), newSection(new ChartBlock().renderToAuthor()));
         })
       )
