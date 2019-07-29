@@ -61,8 +61,15 @@ function newSection(blockContent){
           insertEmptySection($(this).parent(), newSection(new TextBlock().renderToAuthor()));
         })
       )
+      .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-image"></i> Image</button>')
+        .click(function(){
+          //TODO: Upload image?
+        })
+        .prop('disabled', true)
+      )
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-chart-bar"></i> Chart</button>')
         .click(function(){
+
           insertEmptySection($(this).parent(), newSection(new ChartBlock().renderToAuthor()));
         })
       )
@@ -70,6 +77,7 @@ function newSection(blockContent){
         .click(function(){
           insertEmptySection($(this).parent(), newSection(new DataBlock().renderToAuthor()));
         })
+        .prop('disabled', true)
       );
 
   }
