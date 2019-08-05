@@ -16,6 +16,9 @@ function dataViewInit(){
 function dataViewLeave(){
 
   //TODO: Save fields of interest
+  $(".field-of-interest:checkbox:checked").each(function(index){
+    Story.instance.metadata.interests.push($(this).data('field'));
+  });
 
   //Save dependencies
   Array.from($("#dependency-list").children()).forEach(function(dependency){
@@ -83,10 +86,6 @@ function revertDependencies(){
 }
 
 
-
-
-
-
 function dataView(){
 
   var dataView = `
@@ -138,7 +137,7 @@ function dataView(){
       <tr>
         <td>
           <div class="form-check">
-            <input class="form-check-input field-of-interest" type="checkbox" value="" id="field-of-interest-`+index+`">
+            <input class="form-check-input field-of-interest" type="checkbox" value="" data-field="`+header+`" id="field-of-interest-`+index+`">
             <label class="form-check-label" for="field-of-interest-`+index+`">
               `+header+`
             </label>
