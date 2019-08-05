@@ -51,9 +51,9 @@ class Story {
     this.blocks.push(newBlock);
   }
 
-  // TODO: Comment this static method. 
+
   /**
-   * 
+   * Create a new Story object from a data (.csv) file
    * @param {*} file 
    * @param {*} callback 
    */
@@ -76,10 +76,8 @@ class Story {
   }
 
 
-  // TODO: Comment this static method. This method cannot be implemented before
-  // the implementation of exporting story to json.
   /**
-   *
+   * Create a new Story object from a previously saved .story (.json) file
    * @param {*} file 
    * @param {*} callback 
    */
