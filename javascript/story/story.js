@@ -204,12 +204,16 @@ class ChartBlock extends StoryBlock {
    * Renders the block to the author, for editing, and pre-fills any existing content
    */
   renderToAuthor() {
-    var block = $("<div>");
+    if(this.content){
+      return this.renderToHTML();
+    }
+    var block = $('<div>');
     getRecommendedCharts().forEach(function(chart){
       var button = $('<button class="btn btn-primary btn-story-block">'+chart.title+'</button>');
       button.click(function(){
         var container = $(this).parent();
         container.empty();
+        container.addClass("chart-block");
         chart.render(d3.select(container[0]));
       });
       block.append(button);
@@ -221,7 +225,7 @@ class ChartBlock extends StoryBlock {
    * Renders the block as HTML
    */
   renderToHTML() {
-    return "<div>"+this.content+"</div>";
+    return '<div class="chart-block">'+this.content+'</div>';
   }
 }
 
