@@ -209,8 +209,8 @@ class ChartBlock extends StoryBlock {
       var button = $('<button class="btn btn-primary btn-story-block">'+chart.title+'</button>');
       button.click(function(){
         var container = $(this).parent();
-        container.empty();       
-        chart.render(container);
+        container.empty();
+        chart.render(d3.select(container[0]));
       });
       block.append(button);
     });
