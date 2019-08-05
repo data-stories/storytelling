@@ -66,6 +66,15 @@ class Chart{
     }
 
     /**
+     * Sets the title of the chart.
+     * @param {string} title 
+     */
+    setTitle(title){
+        this.title = title;
+        return this;
+    }
+
+    /**
      * Sets the width of the chart.
      * @param {number} width 
      */
