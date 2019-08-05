@@ -15,12 +15,12 @@ function dataViewInit(){
 
 function dataViewLeave(){
 
-  //TODO: Save fields of interest
+  Story.instance.metadata.interests = []
   $(".field-of-interest:checkbox:checked").each(function(index){
     Story.instance.metadata.interests.push($(this).data('field'));
   });
 
-  //Save dependencies
+  Story.instance.metadata.dependencies = []
   Array.from($("#dependency-list").children()).forEach(function(dependency){
     Story.instance.metadata.dependencies.push({
       "independent" : $(dependency).children(".independent").html(),
