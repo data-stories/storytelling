@@ -33,7 +33,7 @@ function getRecommendedCharts(){
             //chart.setX(Array(values.length));
             labels = [];
             for(let i=0; i<values.length; i++){
-                labels[i] = "";
+                labels[i] = i;
             }
             chart.setX(labels);
             chart.setTitle(interest);
