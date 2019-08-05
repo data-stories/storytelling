@@ -104,6 +104,9 @@ class Chart{
         else if (this.type === "line"){
             this.renderLine(container);
         }
+        else{
+            console.error("Unrecognised chart type: " + this.type);
+        }
     }
 
     /**

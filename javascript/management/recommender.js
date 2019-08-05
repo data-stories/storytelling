@@ -23,6 +23,7 @@ function getRecommendedCharts(){
         var t = detectColumnType(interest);
         if(t == "Float" || t == "Integer"){
             chart = new Chart();
+            chart.setType("bar");
             values = [];
             Story.instance.data.rawData.forEach(function(datum){
                 values.push(datum[interest]);
