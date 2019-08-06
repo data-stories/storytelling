@@ -34,6 +34,10 @@ function dependencies(){
 
   $("#dependencyForm").show();
 
+  if($('#independent-dropdown > option').length > 1){
+    return;
+  }
+
   Story.instance.data.headers.forEach(function(header, index){
     $("#independent-dropdown").append(new Option(header, index));
     $("#dependent-dropdown").append(new Option(header, index));
