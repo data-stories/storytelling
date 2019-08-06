@@ -1,16 +1,14 @@
 $(document).ready(function(){
   $("#file-upload").change(function(){
     Story.createFromDataFile(document.querySelector('input#file-upload').files[0], function(){
-      dataViewInit();  
+      dependencies();
+      dataView(); 
     });
   });
 });
 
 function dataViewInit(){
-  if(Story.instance.data.rawData){
-      dependencies();
-      dataView();
-    }
+  //This method intentionally left blank
 }
 
 function dataViewLeave(){
@@ -33,10 +31,8 @@ function dataViewLeave(){
 function dependencies(){
 
   $("#dependencyForm").show();
-
-  if($('#independent-dropdown > option').length > 1){
-    return;
-  }
+  $("#independent-dropdown").empty();
+  $("#dependent-dropdown").empty();
 
   Story.instance.data.headers.forEach(function(header, index){
     $("#independent-dropdown").append(new Option(header, index));
@@ -45,13 +41,6 @@ function dependencies(){
 }
 
 function createDependency(){
-
-    //If no selection
-    if($( "#independent-dropdown option:selected" ).text() == "Choose a field" || $( "#dependent-dropdown option:selected" ).text() == "Choose a field"){
-      $("#dependency-error").text("Ensure sure both fields are selected");
-      $("#dependency-error").show();
-      return;
-    }
 
     //If duplicate selection
     if($( "#independent-dropdown option:selected" ).text() == $( "#dependent-dropdown option:selected" ).text()){
