@@ -60,3 +60,46 @@ function getRecommendedCharts(){
 
     return charts;
 }
+
+/**
+ * Recommends an array of charts based on authors expressed interests and potential dependencies.
+ * The type of each recommended chart depends on the type of x-axis.
+ */
+function chartsInterestDependency(){
+    var interests = Story.instance.metadata.interests;
+    var dependencies = Story.instance.metadata.dependencies;
+
+    var charts = [];
+    for(var i=0; i< dependencies.length; i++){
+        dependency = dependencies[i]
+        var independentField = dependency.independent;
+        var dependentField = dependency.dependent;
+        if (interests.includes(independentField) || interests.includes(dependentField)){
+            var dependentFieldType = detectColumnType(dependentField);
+            if (dependentFieldType == "Date" || dependentFieldType == "String"){
+                // The dependent field is not a numeric field.
+                continue;
+            }
+            var independentFieldType = detectColumnType(independentField);
+            if (independentFieldType == "Date"){
+                var chartType = "line";
+            }
+            else{
+                var chartType = "bar";
+            }
+            var chart = new Chart();
+            chart.setType(chartType);
+            var x = [];
+            var y = [];
+            Story.instance.data.rawData.forEach(function(datum){
+                x.push(datum[independentField]);
+                y.push(datum[dependentField]);
+            });
+            chart.setX(x);
+            chart.setY(y);
+            charts.push(chart);
+        }
+    }
+    return charts;
+}
+

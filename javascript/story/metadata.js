@@ -52,12 +52,12 @@ class Metadata{
     }
 
     /**
-     * Appends a new dependency string ("dependent field / independent field")
+     * Appends a new dependency Object {"independent" : ..., "dependent": ...}.
      * to the array.
-     * @param {string} newDependency 
+     * @param {Object} newDependency 
      */
     appendDependency(newDependency){
-        this.interests.push(newDependency);
+        this.dependencies.push(newDependency);
     }
 
     setAuthor(){
