@@ -38,6 +38,8 @@ function dependencies(){
     $("#independent-dropdown").append(new Option(header, index));
     $("#dependent-dropdown").append(new Option(header, index));
   });
+
+  $('#dependent-dropdown').val(1).change();
 }
 
 function createDependency(){
