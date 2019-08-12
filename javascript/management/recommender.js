@@ -2,45 +2,9 @@ function getRecommendedCharts(){
 
     var charts = [];
 
-    // chart = new Chart();
-    // chart.setX(Story.instance.metadata.interests);
-    // values = [];
-    // Story.instance.metadata.interests.forEach(function(interest){
-    //     values.push(Story.instance.data.rawData[interest]);
-    //     Story.instance.data.rawData.forEach(function(datum){
-    //         datum[interest]
-    //     });
-    // });
-    // chart.setY(values);
-    // chart.setTitle("Averages")
+    charts = charts.concat(chartsInterestDependency());
 
-    // charts.push(chart);
-
-
-     Story.instance.metadata.interests.forEach(function(interest){
-
-
-        var t = detectColumnType(interest);
-        if(t == "Float" || t == "Integer"){
-            chart = new Chart();
-            chart.setType("bar");
-            values = [];
-            Story.instance.data.rawData.forEach(function(datum){
-                values.push(datum[interest]);
-            });
-            chart.setY(values);
-
-            //chart.setX(Array(values.length));
-            labels = [];
-            for(let i=0; i<values.length; i++){
-                labels[i] = i;
-            }
-            chart.setX(labels);
-            chart.setTitle(interest);
-            charts.push(chart);
-
-        }
-    });
+    charts = charts.concat(chartsInterests());
 
     // Story.instance.metadata.dependencies.forEach(function(dependency){
 
@@ -96,10 +60,41 @@ function chartsInterestDependency(){
                 y.push(datum[dependentField]);
             });
             chart.setX(x);
+            chart.setXLabel(independentField);
             chart.setY(y);
+            chart.setYLabel(dependentField);
+            chart.setTitle(dependentField.charAt(0).toUpperCase() + dependentField.slice(1)+" vs "+independentField)
             charts.push(chart);
         }
     }
+    return charts;
+}
+
+function chartsInterests(){
+    var charts = [];
+    Story.instance.metadata.interests.forEach(function(interest){
+        var t = detectColumnType(interest);
+        if(t == "Float" || t == "Integer"){
+            chart = new Chart();
+            chart.setType("bar");
+            values = [];
+            Story.instance.data.rawData.forEach(function(datum){
+                values.push(datum[interest]);
+            });
+            chart.setY(values);
+
+            //chart.setX(Array(values.length));
+            labels = [];
+            for(let i=0; i<values.length; i++){
+                labels[i] = i;
+            }
+            chart.setX(labels);
+            chart.setXLabel(interest);
+            chart.setTitle("Value of "+interest);
+            charts.push(chart);
+
+        }
+    });
     return charts;
 }
 
