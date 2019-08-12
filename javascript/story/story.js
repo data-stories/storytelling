@@ -208,16 +208,57 @@ class ChartBlock extends StoryBlock {
       return this.renderToHTML();
     }
     var block = $('<div>');
-    getRecommendedCharts().forEach(function(chart){
-      var button = $('<button class="btn btn-primary btn-story-block">'+chart.title+'</button>');
+    var charts = getRecommendedCharts();
+
+    var buttons_to_display;
+    if(charts.length >= 3){
+      buttons_to_display = 3;
+    }
+    else if(charts.length > 0) {
+      buttons_to_display = charts.length;
+    }
+    else{
+      //TODO: Return a way of manually creating charts!!
+      block.append($('<p>No recommended charts!</p>'))
+      return block;
+    }
+
+    for(let i = 0; i<buttons_to_display; i++){
+      var button = $('<button class="btn btn-primary btn-chart">'+charts[i].title+'</button>');
       button.click(function(){
         var container = $(this).parent();
         container.empty();
         container.addClass("chart-block");
-        chart.render(d3.select(container[0]));
+        charts[i].render(d3.select(container[0]));
       });
       block.append(button);
+    }
+
+    if(charts.length <= 3){
+      return block;
+    }
+
+    var button = $('<button class="btn btn-secondary btn-chart">Show more</button>');
+    button.click(function(){
+      $(this).siblings(".btn-chart").each(function(){
+        console.log($(this));
+        $(this).show();
+      });
+      $(this).remove();
     });
+    block.append(button);
+
+    for(let i = 3; i<charts.length; i++){
+      var button = $('<button class="btn btn-primary btn-chart" style="display: none">'+charts[i].title+'</button>');
+      button.click(function(){
+        var container = $(this).parent();
+        container.empty();
+        container.addClass("chart-block");
+        charts[i].render(d3.select(container[0]));
+      });
+      block.append(button);
+    }
+
     return block;
   }
 
