@@ -84,8 +84,11 @@ function chartsInterestDependency(){
             if (independentFieldType == "Date"){
                 var chartType = "line";
             }
-            else{
+            else if (independentFieldType == "String"){
                 var chartType = "bar";
+            }
+            else{
+                var chartType = "scatter";
             }
             var chart = new Chart();
             chart.setType(chartType);

@@ -104,6 +104,9 @@ class Chart{
         else if (this.type === "line"){
             this.renderLine(container);
         }
+        else if (this.type ==="scatter"){
+            this.renderScatter(container);
+        }
         else{
             console.error("Unrecognised chart type: " + this.type);
         }
@@ -221,5 +224,46 @@ class Chart{
 
         svg.append("g")
                 .call(d3.axisLeft(yScale));
+    }
+
+    /**
+     * Render the chart as a scatter plot in the container.
+     * @param {Object} container 
+     */
+    renderScatter(container)
+    {
+        var x = d3.scaleLinear()
+                    .range([0,this.width]);
+        var y = d3.scaleLinear()
+                    .range([this.height, 0]);
+        var height = this.height;
+        var svg = container.append("svg")
+                            .attr("width", this.svg_width)
+                            .attr("height", this.svg_height)
+                            .append("g")
+                            .attr("transform",
+                            "translate(" + this.margin.left + "," + this.margin.top + ")");
+        x.domain([0, d3.max(this.data, function(d){return d.name;})]);
+        y.domain([0, d3.max(this.data, function(d){return d.value;})]);
+
+        svg.selectAll("dot")
+            .data(this.data)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d){
+                console.log(d.name);
+                return x(d.name);
+            })
+            .attr("cy", function(d){
+                console.log(d.value);
+                return y(d.value);
+            })
+            .attr("r", 3.5)
+            .attr("fill", "teal");
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+        svg.append("g")
+            .call(d3.axisLeft(y));
     }
 }
