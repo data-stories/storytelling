@@ -7,11 +7,7 @@ class Chart{
      * Construct an empty Chart object without initialising any class properties.
      */
     constructor(){
-        this.margin = {top: 20, right: 20, bottom: 30, left : 40};
-        this.svg_width = 960;
-        this.svg_height = 500;
-        this.width = this.svg_width - this.margin.left - this.margin.right;
-        this.height = this.svg_height - this.margin.top - this.margin.bottom;
+        
     }
 
     /**
@@ -96,7 +92,14 @@ class Chart{
      * Uses D3 to render the chart within a container.
      * @param {Object} container 
      */
-    render(container){
+    render(container, width, height){
+
+        this.margin = {top: 20, right: 20, bottom: 30, left : 40};
+        this.svg_width = width || 960;
+        this.svg_height = height || 500;
+        this.width = this.svg_width - this.margin.left - this.margin.right;
+        this.height = this.svg_height - this.margin.top - this.margin.bottom;
+
         this.genData();
         if (this.type === "bar"){
             this.renderBar(container);

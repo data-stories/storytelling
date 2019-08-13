@@ -207,7 +207,8 @@ class ChartBlock extends StoryBlock {
     if(this.content){
       return this.renderToHTML();
     }
-    var block = $('<div>');
+    var chartButtons = $('<div>');
+    chartButtons.addClass('story-block-content')
     var charts = getRecommendedCharts();
 
     var buttons_to_display;
@@ -219,47 +220,79 @@ class ChartBlock extends StoryBlock {
     }
     else{
       //TODO: Return a way of manually creating charts!!
-      block.append($('<p>No recommended charts!</p>'))
-      return block;
+      chartButtons.append($('<p>No recommended charts!</p>'))
+      return chartButtons;
     }
 
+    var row = $('<div>');
+    row.addClass('row');
     for(let i = 0; i<buttons_to_display; i++){
+      var col = $('<div>');
+      col.addClass('col-4');
+      var chartPreview = $('<div>');
+      chartPreview.addClass('chart-preview');
+      col.append(chartPreview);
+      charts[i].render(d3.select(chartPreview[0]), 325, 140);
       var button = $('<button class="btn btn-primary btn-chart">'+charts[i].title+'</button>');
       button.click(function(){
-        var container = $(this).parent();
+        var container = $(this).parent().parent().parent();
         container.empty();
         container.addClass("chart-block");
         charts[i].render(d3.select(container[0]));
       });
-      block.append(button);
+      col.append(button);
+      row.append(col);
     }
 
+    chartButtons.append(row);
+
     if(charts.length <= 3){
-      return block;
+      return chartButtons;
     }
 
     var button = $('<button class="btn btn-secondary btn-chart">Show more</button>');
     button.click(function(){
-      $(this).siblings(".btn-chart").each(function(){
-        console.log($(this));
+      $(this).siblings(".row").each(function(){
         $(this).show();
       });
       $(this).remove();
     });
-    block.append(button);
+    chartButtons.append(button);
 
-    for(let i = 3; i<charts.length; i++){
-      var button = $('<button class="btn btn-primary btn-chart" style="display: none">'+charts[i].title+'</button>');
-      button.click(function(){
-        var container = $(this).parent();
-        container.empty();
-        container.addClass("chart-block");
-        charts[i].render(d3.select(container[0]));
-      });
-      block.append(button);
+
+
+    for(let i = 3; i<charts.length; i+=3){
+
+      var row = $('<div>');
+      row.addClass('row');
+      row.hide();
+
+      for(let j = 0; j<3; j++){
+        if(!charts[i+j]){
+          break;
+        }
+        var col = $('<div>');
+        col.addClass('col-4');
+        var chartPreview = $('<div>');
+        chartPreview.addClass('chart-preview');
+        col.append(chartPreview);
+        charts[i+j].render(d3.select(chartPreview[0]), 325, 140);
+
+        var button = $('<button class="btn btn-primary btn-chart">'+charts[i+j].title+'</button>');
+        button.click(function(){
+          var container = $(this).parent().parent().parent();
+          container.empty();
+          container.addClass("chart-block");
+          charts[i+j].render(d3.select(container[0]));
+        });
+        col.append(button);
+        row.append(col);
+      }
+      chartButtons.append(row);
+
     }
 
-    return block;
+    return chartButtons;
   }
 
   /**

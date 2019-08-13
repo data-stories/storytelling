@@ -45,3 +45,11 @@ body {
 .btn-add{
     border-radius: 100%;
 }
+
+.story-block-content{
+    width: 90%;
+}
+
+.chart-preview{
+    width: 50px;
+}
