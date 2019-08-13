@@ -39,19 +39,17 @@ function storyViewLeave(){
   Story.instance.metadata.author = $("#export-author").val();
 
   Story.instance.blocks = [];
-  Array.from($(".story-block").children()).forEach(function(element){
-
-    element = $(element);
+  $(".story-block").children().each(function(){
 
     var storyBlock;
-    if(element.hasClass("text-block")){
-      storyBlock = new TextBlock(element.val());
+    if($(this).hasClass("text-block")){
+      storyBlock = new TextBlock($(this).val());
     }
-    else if(element.hasClass("chart-block")){
-      storyBlock = new ChartBlock(element.html());
+    else if($(this).hasClass("chart-block")){
+      storyBlock = new ChartBlock($(this).html());
     }
-    else if(element.hasClass("data-block")){
-      storyBlock = new DataBlock(element.html());
+    else if($(this).hasClass("data-block")){
+      storyBlock = new DataBlock($(this).html());
     }
 
     if(storyBlock){
