@@ -31,6 +31,7 @@ body {
     border: 1px solid rgba(0,0,0,.125);
     border-radius: .25rem;
 
+    padding-right: 80px;
     padding-top: 10px;
     padding-bottom: 5px;
 
@@ -46,8 +47,9 @@ body {
     border-radius: 100%;
 }
 
-.story-block-content{
-    width: 90%;
+.text-block{
+    padding-left: 10px;
+    padding-bottom: 5px;
 }
 
 .chart-preview{

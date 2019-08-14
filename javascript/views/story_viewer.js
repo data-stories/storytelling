@@ -18,7 +18,7 @@ function storyViewInit(){
         Story.instance.blocks.push(new ChartBlock());
         Story.instance.blocks.push(new TextBlock("Explain the relationship between the two variables, and reference the correlation or trend visualised above."));
     });
-    Story.instance.blocks.push(new TextBlock("Conclude your story; summaries the key points you have made and again, emphasise why it is important to your audience."));
+    Story.instance.blocks.push(new TextBlock("Conclude your story; summarise the key points you have made and again, emphasise why it is important to your audience."));
   }
 
   $("#story-sections")
@@ -39,17 +39,22 @@ function storyViewLeave(){
   Story.instance.metadata.author = $("#export-author").val();
 
   Story.instance.blocks = [];
-  $(".story-block").children().each(function(){
+  $(".story-block").each(function(){
 
     var storyBlock;
-    if($(this).hasClass("text-block")){
-      storyBlock = new TextBlock($(this).val());
+    var block = $(this).find('div');
+    
+    if(block.hasClass("text-block")){
+      storyBlock = new TextBlock(block.find('textarea').val());
     }
-    else if($(this).hasClass("chart-block")){
-      storyBlock = new ChartBlock($(this).html());
+    else if(block.hasClass("chart-block")){
+      storyBlock = new ChartBlock(block.html());
     }
-    else if($(this).hasClass("data-block")){
-      storyBlock = new DataBlock($(this).html());
+    else if(block.hasClass("image-block")){
+      storyBlock = new ImageBlock(block.find('.caption').val(), $(this).find('.url').val());
+    }
+    else if(block.hasClass("data-block")){
+      storyBlock = new DataBlock(block.html());
     }
 
     if(storyBlock){
@@ -67,22 +72,25 @@ function newSection(blockContent){
     block
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-file-alt"></i> Text</button>')
         .click(function(){
+          $(this).parent().parent().addClass('text-block');
           insertEmptySection($(this).parent(), newSection(new TextBlock().renderToAuthor()));
         })
       )
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-image"></i> Image</button>')
         .click(function(){
-          //TODO: Upload image?
+          $(this).parent().addClass('image-block');
+          insertEmptySection($(this).parent(), newSection(new ImageBlock().renderToAuthor()));
         })
-        .prop('disabled', true)
       )
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-chart-bar"></i> Chart</button>')
         .click(function(){
+          $(this).parent().addClass('chart-block');
           insertEmptySection($(this).parent(), newSection(new ChartBlock().renderToAuthor()));
         })
       )
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-table"></i> Data</button>')
         .click(function(){
+          $(this).parent().addClass('data-block');
           insertEmptySection($(this).parent(), newSection(new DataBlock().renderToAuthor()));
         })
         .prop('disabled', true)

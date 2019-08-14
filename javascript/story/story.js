@@ -177,7 +177,7 @@ class TextBlock extends StoryBlock {
    */
   renderToAuthor() {
     var content = (this.content) ? this.content : "";
-    return '<textarea class="text-block" rows="4" cols="100">'+content+'</textarea>';
+    return '<div class="text-block"><textarea class="form-control" rows="4" cols="100">'+content+'</textarea></div>';
   }
 
   /**
@@ -208,7 +208,6 @@ class ChartBlock extends StoryBlock {
       return this.renderToHTML();
     }
     var chartButtons = $('<div>');
-    chartButtons.addClass('story-block-content')
     var charts = getRecommendedCharts();
 
     var buttons_to_display;
@@ -300,6 +299,71 @@ class ChartBlock extends StoryBlock {
    */
   renderToHTML() {
     return '<div class="chart-block">'+this.content+'</div>';
+  }
+}
+
+/**
+ * A story block containing a (captioned) image. 
+ */
+class ImageBlock extends StoryBlock {
+  /**
+   * Initialises the properties of the super class and the child class.
+   */
+  constructor(content, url) {
+    super(content);
+    this.url = url;
+  }
+
+  /**
+   * Renders the block to the author, for editing, and pre-fills any existing content
+   */
+  renderToAuthor() {
+    var content = (this.content) ? this.content : "";
+    var url = (this.url) ? this.url : "";
+    var buttonText = (this.url) ? "Update" : "Preview";
+    
+    var block = `
+
+      <form>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">URL:</label>
+          <div class="col-sm-6">
+            <input class="form-control image-url">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Caption:</label>
+          <div class="col-sm-6">
+            <input class="form-control image-caption">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary">`+buttonText+`</button>
+          </div>
+        </div>
+      </form>`;
+
+     if(this.url){
+       block += this.renderToHTML();
+     }
+
+     return block;
+  }
+
+  /**
+   * Renders the block as HTML
+   */
+  renderToHTML() {
+    var content = (this.content) ? this.content : "";
+    var url = (this.url) ? this.url : "";
+    return `
+    <div>
+      <figure>
+        <img src="`+this.url+`" alt="`+this.content+`">
+        <figcaption>`+this.content+`</figcaption>
+      </figure>
+    </div>`;
   }
 }
 
