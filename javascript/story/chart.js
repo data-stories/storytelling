@@ -254,11 +254,9 @@ class Chart{
             .enter()
             .append("circle")
             .attr("cx", function(d){
-                console.log(d.name);
                 return x(d.name);
             })
             .attr("cy", function(d){
-                console.log(d.value);
                 return y(d.value);
             })
             .attr("r", 3.5)
