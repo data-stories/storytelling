@@ -312,7 +312,7 @@ function detectColumnType(header){
 
 function getType(datum){
   
-  if(parseFloat(datum) || parseInt(datum)){
+  if(!isNaN(datum)){
 
     if(datum.includes(".")){
       return "Float";
