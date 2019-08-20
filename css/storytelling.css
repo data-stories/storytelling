@@ -38,6 +38,10 @@ body {
     position: relative;
 }
 
+.btn-story-block{
+    margin: 5px;
+}
+
 .trash-button{
     position:absolute;
     right:30px;
