@@ -38,17 +38,17 @@ function chartsInterestDependency(){
         dependency = dependencies[i]
         var independentField = dependency.independent;
         var dependentField = dependency.dependent;
-        if (interests.includes(independentField) || interests.includes(dependentField)){
-            var dependentFieldType = detectColumnType(dependentField);
-            if (dependentFieldType == "Date" || dependentFieldType == "String"){
+        if (Object.keys(interests).includes(independentField) || Object.keys(interests).includes(dependentField)){
+            var dependentFieldType = interests[dependentField];
+            if (dependentFieldType == "datetime" || dependentFieldType == "string"){
                 // The dependent field is not a numeric field.
                 continue;
             }
-            var independentFieldType = detectColumnType(independentField);
-            if (independentFieldType == "Date"){
+            var independentFieldType = interests[independentField];
+            if (independentFieldType == "datetime"){
                 var chartType = "line";
             }
-            else if (independentFieldType == "String"){
+            else if (independentFieldType == "string"){
                 var chartType = "bar";
             }
             else{
@@ -75,9 +75,9 @@ function chartsInterestDependency(){
 
 function chartsInterests(){
     var charts = [];
-    Story.instance.metadata.interests.forEach(function(interest){
-        var t = detectColumnType(interest);
-        if(t == "Float" || t == "Integer"){
+    Object.keys(Story.instance.metadata.interests).forEach(function(interest){
+        var t = Story.instance.metadata.interests[interest];
+        if(t == "float" || t == "integer"){
             chart = new Chart();
             chart.setType("bar");
             values = [];

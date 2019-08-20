@@ -13,9 +13,11 @@ function dataViewInit(){
 
 function dataViewLeave(){
 
-  Story.instance.metadata.interests = []
-  $(".field-of-interest:checkbox:checked").each(function(index){
-    Story.instance.metadata.interests.push($(this).data('field'));
+  Story.instance.metadata.interests = {}
+  $(".field-of-interest:checkbox:checked").each(function(){
+    //Story.instance.metadata.interests.push($(this).data('field'));
+    var field = $(this).data('field').toString();
+    Story.instance.metadata.interests[field] = $('#field-type-'+field.replace(" ", "-")).val();
   });
 
   Story.instance.metadata.dependencies = []
@@ -139,7 +141,7 @@ function dataView(){
           </div>
         </td>
         <td>
-          <select class="custom-select" id="field-property-`+index+`">`;
+          <select class="custom-select" id="field-type-`+header.replace(" ", "-")+`">`;
           if (detectColumnType(header) == "String"){
             dataView += `<option value="string" selected>String</option>`;
           }

@@ -28,10 +28,9 @@ class Metadata{
          */
         this.type = type;
         /**
-         * Array of interested data fields.
-         * Array member type is string.
+         * Object of interested data fields, and their type: {<field name>: <field type>}.
          * @private
-         * @type {Array}
+         * @type {Object}
          */
         this.interests = [];
         /**
