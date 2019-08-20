@@ -1,8 +1,8 @@
 $(document).ready(function(){
   $("#file-upload").change(function(){
-    $("#data-view").addClass("text-center");
-    $("#data-view").empty();
-    $("#data-view").append($('<img src="static/images/spinner.gif">'));
+    $("#data-view").hide();
+    $("#data-view-loader").hide();
+    $("#data-view-spinner").show();
     Story.createFromDataFile(document.querySelector('input#file-upload').files[0], function(){
       dependencies();
       dataView(); 
@@ -190,12 +190,10 @@ function dataView(){
   <!--<p>Containing Errors: None</p>-->
   <p>Number of fields: `+Story.instance.data.headers.length+`</p>
   <p>Number of rows: `+Story.instance.data.rawData.length+`</p>`;
-
-
-  $("#data-view").removeClass("text-center");
-  $("#data-view").empty();
+  
   $("#data-view").html(dataView);
-
+  $("#data-view-spinner").hide();
+  $("#data-view").show();
 
   $('.sparkline').sparkline('html', {type: 'bar', barColor: '#007bff', disableInteraction:true} );
 

@@ -6,9 +6,14 @@
     <div class="col-9 h-100">
       <div class="card h-100">
         <h6 class="card-header">Data View</h6>
-            <div class="card-body scroll text-center" id="data-view">
+            <div class="card-body text-center" id="data-view-loader">
               <p>To begin, upload a .CSV file</p>
               <a class="btn btn-lg btn-primary file-button" href="#" onClick="$('#file-upload').click(); return;" role="button"><i class="fas fa-file-upload"></i>&nbsp;Upload</a>
+            </div>
+            <div class="card-body text-center" id="data-view-spinner" style="display:none;">
+              <img src="static/images/spinner.gif">
+            </div>
+            <div class="card-body scroll" id="data-view" style="display:none;">
               <!-- Data overview will be generated here -->
             </div>
       </div>
