@@ -1,5 +1,8 @@
 $(document).ready(function(){
   $("#file-upload").change(function(){
+    $("#data-view").addClass("text-center");
+    $("#data-view").empty();
+    $("#data-view").append($('<img src="static/images/spinner.gif">'));
     Story.createFromDataFile(document.querySelector('input#file-upload').files[0], function(){
       dependencies();
       dataView(); 
@@ -84,6 +87,9 @@ function revertDependencies(){
 
 
 function dataView(){
+
+  $("#data-view").removeClass("text-center");
+    $("#data-view").empty();
 
   var dataView = `
   <table class="table table-striped">
