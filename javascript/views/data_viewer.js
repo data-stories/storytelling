@@ -88,9 +88,6 @@ function revertDependencies(){
 
 function dataView(){
 
-  $("#data-view").removeClass("text-center");
-    $("#data-view").empty();
-
   var dataView = `
   <table class="table table-striped">
     <colgroup>
@@ -194,6 +191,9 @@ function dataView(){
   <p>Number of fields: `+Story.instance.data.headers.length+`</p>
   <p>Number of rows: `+Story.instance.data.rawData.length+`</p>`;
 
+
+  $("#data-view").removeClass("text-center");
+  $("#data-view").empty();
   $("#data-view").html(dataView);
 
 
