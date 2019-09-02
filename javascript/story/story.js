@@ -322,32 +322,39 @@ class ImageBlock extends StoryBlock {
     var url = (this.url) ? this.url : "";
     var buttonText = (this.url) ? "Update" : "Preview";
     
-    var block = $('<form>');
-    var form_group, inner_div;
+    var form_group, inner_div, input;
+    var block = $('<div class="image-block">');
+    var form = $('<form>');
+    block.append(form);
 
     form_group = $('<div class="form-group row">');
-    block.append(form_group);
+    form.append(form_group);
     form_group.append('<label class="col-sm-2 col-form-label">URL:</label>');
     inner_div = $('<div class="col-sm-6">');
-    form_group.append(inner_div)
-    inner_div.append('<input class="form-control image-url">');
+    form_group.append(inner_div);
+    input = $('<input class="form-control image-url">');
+    input.val(url);
+    inner_div.append(input);
 
     form_group = $('<div class="form-group row">');
-    block.append(form_group);
+    form.append(form_group);
     form_group.append('<label class="col-sm-2 col-form-label">Caption:</label>');
     inner_div = $('<div class="col-sm-6">');
-    form_group.append(inner_div)
-    inner_div.append('<input class="form-control image-caption">');
+    form_group.append(inner_div);
+    input = $('<input class="form-control image-caption">');
+    input.val(content);
+    inner_div.append(input);
 
     form_group = $('<div class="form-group row">');
-    block.append(form_group);
+    form.append(form_group);
     inner_div = $('<div class="col-sm-10">');
     form_group.append(inner_div)
     var button = $('<button class="btn btn-primary">'+buttonText+'</button>')
       .click(function(){
         var form = $(this).parent().parent().parent();
-        var url = form.find('.image-url').val()
-        var caption = form.find('.image-caption').val()
+        console.log(form);
+        var url = form.find('.image-url').val();
+        var caption = form.find('.image-caption').val();
         var figure = form.find('figure');
         figure.find('img').attr('src', url);
         figure.find('img').attr('alt', caption);
@@ -358,14 +365,16 @@ class ImageBlock extends StoryBlock {
 
     var figure;
     if(this.url){
-      figure = this.renderToHTML();
+      figure = $('<figure class="text-center">');
+      figure.append('<img width="90%" src="'+this.url+'" alt="'+this.content+'">');
+      figure.append('<figcaption>'+this.content+'</figcaption>');
     }
     else{
-      figure = $('<figure style="display:none">');
-      figure.append('<img>');
+      figure = $('<figure class="text-center" style="display:none">');
+      figure.append('<img width="90%">');
       figure.append('<figcaption>');
     }
-    block.append(figure);
+    form.append(figure);
 
     return block;
   }
@@ -381,7 +390,7 @@ class ImageBlock extends StoryBlock {
     figure.append('<img src="'+this.url+'" alt="'+this.content+'">');
     figure.append('<figcaption>'+this.content+'</figcaption>');
 
-    return figure;
+    return figure.html();
   }
 }
 

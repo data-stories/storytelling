@@ -51,7 +51,7 @@ function storyViewLeave(){
       storyBlock = new ChartBlock(block.html());
     }
     else if(block.hasClass("image-block")){
-      storyBlock = new ImageBlock(block.find('.caption').val(), $(this).find('.url').val());
+      storyBlock = new ImageBlock(block.find('.image-caption').val(), $(this).find('.image-url').val());
     }
     else if(block.hasClass("data-block")){
       storyBlock = new DataBlock(block.html());
