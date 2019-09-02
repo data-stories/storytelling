@@ -322,33 +322,52 @@ class ImageBlock extends StoryBlock {
     var url = (this.url) ? this.url : "";
     var buttonText = (this.url) ? "Update" : "Preview";
     
-    var block = `
+    var block = $('<form>');
+    var form_group, inner_div;
 
-      <form>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">URL:</label>
-          <div class="col-sm-6">
-            <input class="form-control image-url">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Caption:</label>
-          <div class="col-sm-6">
-            <input class="form-control image-caption">
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary">`+buttonText+`</button>
-          </div>
-        </div>
-      </form>`;
+    form_group = $('<div class="form-group row">');
+    block.append(form_group);
+    form_group.append('<label class="col-sm-2 col-form-label">URL:</label>');
+    inner_div = $('<div class="col-sm-6">');
+    form_group.append(inner_div)
+    inner_div.append('<input class="form-control image-url">');
 
-     if(this.url){
-       block += this.renderToHTML();
-     }
+    form_group = $('<div class="form-group row">');
+    block.append(form_group);
+    form_group.append('<label class="col-sm-2 col-form-label">Caption:</label>');
+    inner_div = $('<div class="col-sm-6">');
+    form_group.append(inner_div)
+    inner_div.append('<input class="form-control image-caption">');
 
-     return block;
+    form_group = $('<div class="form-group row">');
+    block.append(form_group);
+    inner_div = $('<div class="col-sm-10">');
+    form_group.append(inner_div)
+    var button = $('<button class="btn btn-primary">'+buttonText+'</button>')
+      .click(function(){
+        var form = $(this).parent().parent().parent();
+        var url = form.find('.image-url').val()
+        var caption = form.find('.image-caption').val()
+        var figure = form.find('figure');
+        figure.find('img').attr('src', url);
+        figure.find('img').attr('alt', caption);
+        figure.find('figcaption').text(caption);
+        figure.show();
+      });
+    inner_div.append(button);
+
+    var figure;
+    if(this.url){
+      figure = this.renderToHTML();
+    }
+    else{
+      figure = $('<figure style="display:none">');
+      figure.append('<img>');
+      figure.append('<figcaption>');
+    }
+    block.append(figure);
+
+    return block;
   }
 
   /**
@@ -357,13 +376,12 @@ class ImageBlock extends StoryBlock {
   renderToHTML() {
     var content = (this.content) ? this.content : "";
     var url = (this.url) ? this.url : "";
-    return `
-    <div>
-      <figure>
-        <img src="`+this.url+`" alt="`+this.content+`">
-        <figcaption>`+this.content+`</figcaption>
-      </figure>
-    </div>`;
+    
+    var figure = $('<figure>');
+    figure.append('<img src="'+this.url+'" alt="'+this.content+'">');
+    figure.append('<figcaption>'+this.content+'</figcaption>');
+
+    return figure;
   }
 }
 
