@@ -33,6 +33,15 @@ function dataViewLeave(){
 }
 
 
+function loadDemo(){
+  $("#data-view").hide();
+  $("#data-view-loader").hide();
+  Story.instance = new Story();
+  Story.instance.setData(new Data(demoData));
+  dependencies();
+  dataView();
+}
+
 function dependencies(){
 
   $("#dependencyForm").show();
