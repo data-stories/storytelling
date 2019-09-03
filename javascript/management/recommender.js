@@ -62,6 +62,29 @@ function chartsInterestDependency(){
                 x.push(datum[independentField]);
                 y.push(datum[dependentField]);
             });
+            // calculate the average value of each x
+            if (chartType == "bar"){
+                var x_unique = {};
+                var x_unique_size = {};
+                for(var i=0; i<x.length; i++){
+                    if (x[i] in x_unique){
+                        x_unique[x[i]] += y[i];
+                        x_unique_size[x[i]] += 1;
+                    } 
+                    else{
+                        x_unique[x[i]] = y[i];
+                        x_unique_size[x[i]] = 1;
+                    }
+                }
+                x = []
+                y = []
+                for (var i=0; i<x_unique.length; i++){
+                   x.push(x_unique[i]); 
+                   y.push(x_unique[i] / x_unique_size[i]);
+                }
+
+            }
+
             chart.setX(x);
             chart.setXLabel(independentField);
             chart.setY(y);
