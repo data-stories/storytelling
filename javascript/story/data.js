@@ -24,6 +24,31 @@ class Data {
     this.headers = Object.keys(rawData[0]);
   }
 
+  getExampleValues(header, examples=4){
+
+    var values = [];
+    var maxExamples = (this.rawData.length >= examples) ? examples : this.rawData.length;
+    var exampleIndexes = [];
+
+    for(let i=0; i < maxExamples; i++){
+
+      var index = Math.floor(Math.random() * this.rawData.length);
+
+      //Don't show duplicate indexes (i.e. the same cell more than once)
+      //TODO: Don't show *any* duplicate *values*
+      while(index in exampleIndexes){
+        index = Math.floor(Math.random() * this.rawData.length);
+      }
+      exampleIndexes.push(index);
+
+      values.push(this.rawData[index][header]);
+    }
+
+    return values;
+
+  }
+
+
 
   //TODO: These *could* be implemented at a later date, to highlight points of interest to the author
 

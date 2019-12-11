@@ -1,5 +1,5 @@
 var currentView = "data";
-var VALID_VIEWS = ["data", "story", "export"];
+var VALID_VIEWS = ["data", "analysis", "story", "export"];
 
 function switchView(view){
 

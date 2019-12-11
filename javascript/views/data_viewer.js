@@ -125,7 +125,7 @@ function dataView(){
       </tr>
     </thead>
     <tbody>`;
-
+  console.log(Story.instance.data.rawData);
   Story.instance.data.headers.forEach(function(header, index){
 
     //TODO: There must be a more efficient way d3 can do this
@@ -153,29 +153,33 @@ function dataView(){
           </div>
         </td>
         <td>
-          <select class="custom-select" id="field-type-`+header.replace(" ", "-")+`">`;
-          if (detectColumnType(header) == "String"){
+          <select class="custom-select" id="field-type-`+header.replace(" ", "-")+`" onchange="convertDataType('`+header+`')">`;
+          var detectedType = detectColumnType(header);
+
+          convertDataType(header, detectedType);
+
+          if (detectedType == "string"){
             dataView += `<option value="string" selected>String</option>`;
           }
           else{
             dataView += `<option value="string">String</option>`;
           }
 
-          if (detectColumnType(header) == "Float"){
+          if (detectedType == "float"){
             dataView += `<option value="float" selected>Float</option>`;
           }
           else{
             dataView += `<option value="float">Float</option>`;
           }
 
-          if (detectColumnType(header) == "Integer"){
+          if (detectedType == "integer"){
             dataView += `<option value="integer" selected>Integer</option>`;
           }
           else{
             dataView += `<option value="integer">Integer</option>`;
           }
 
-          if (detectColumnType(header) == "Date/Time"){
+          if (detectedType == "datetime"){
             dataView += `<option value="datetime" selected>Date/Time</option>`;
           }
           else{
@@ -185,12 +189,11 @@ function dataView(){
           dataView += `
           </select>
         </td>
-        <td>`+getExampleValues(header)+`</td>
+        <td>`+Story.instance.data.getExampleValues(header).sort().join(", ")+`</td>
         <td>`+min+`</td>
         <td>`+max+`</td>
         <td><a onClick="modalSparkline('`+header+`')">`+getSparkline(header)+`</a></td>
       </tr>`;
-
   });
 
   dataView += ` 
@@ -228,7 +231,7 @@ function dataView(){
 
 function getSparkline(header){
 
-  if(detectColumnType(header) == "Float" || detectColumnType(header) == "Integer"){
+  if(typeof Story.instance.data.rawData[0][header] == "number"){
 
     var bins = getSparks(header);
     
@@ -248,7 +251,7 @@ function getSparkline(header){
 
 function getSparks(header){
 
-  assert((detectColumnType(header) == "Float" || detectColumnType(header) == "Integer"), "Can't get sparks for non-numeric column");
+  assert(typeof Story.instance.data.rawData[0][header] == "number", "Can't get sparks for non-numeric column");
 
   var values = [];
   Story.instance.data.rawData.forEach(function(row, index){
@@ -277,39 +280,14 @@ function modalSparkline(header){
 }
 
 
-// TODO: move this to Data class.
-function getExampleValues(header, examples=4){
-
-  var values = [];
-  var maxExamples = (Story.instance.data.rawData.length >= examples) ? examples : Story.instance.data.rawData.length;
-  var exampleIndexes = [];
-
-  for(let i=0; i < maxExamples; i++){
-
-    var index = Math.floor(Math.random() * Story.instance.data.rawData.length);
-
-    //Don't show duplicate indexes (i.e. the same cell more than once)
-    //TODO: Don't show *any* duplicate *values*
-    while(index in exampleIndexes){
-      index = Math.floor(Math.random() * Story.instance.data.rawData.length);
-    }
-    exampleIndexes.push(index);
-
-    values.push(Story.instance.data.rawData[index][header]);
-  }
-
-  return values.sort().join(", ");
-
-}
-
-
+//TODO: This currently only works if the data is held as a string
 function detectColumnType(header){
 
   var types = {};
 
   Story.instance.data.rawData.forEach(function(row, index){
 
-    type = getType(row[header])
+    type = detectType(row[header])
 
     if(!types[type]){
       types[type] = 1
@@ -321,27 +299,27 @@ function detectColumnType(header){
   });
 
   type = Object.keys(types).reduce((a, b) => types[a] > types[b] ? a : b);
-  return type.charAt(0).toUpperCase() + type.slice(1);
-
+  
+  //return type.charAt(0).toUpperCase() + type.slice(1);
+  return type;
 }
 
-function getType(datum){
+function detectType(datum){
   
   if(!isNaN(datum)){
-
     if(datum.includes(".")){
-      return "Float";
+      return "float";
     }
     else{
-      return "Integer";  
+      return "integer";  
     }
   }
   else if (Date.parse(datum))
   {
-    return "Date";
+    return "datetime";
   }
   else {
-    return "String";
+    return "string";
   }
 }
 
@@ -355,4 +333,35 @@ function datasetSummary(){
 
   $("#dataset-summary").html(datasetSummary);
 
+}
+
+
+function convertDataType(header, convertTo){
+
+  if(convertTo == null){
+    convertTo = $('#field-type-'+header.replace(" ", "-")).val();
+  }
+
+  for(var i = 0; i < Story.instance.data.rawData.length; i++){
+    try{
+      if(convertTo == "float"){
+        Story.instance.data.rawData[i][header] = parseFloat(Story.instance.data.rawData[i][header]);
+      }
+      else if(convertTo == "integer"){
+        Story.instance.data.rawData[i][header] = parseInt(Story.instance.data.rawData[i][header]);
+      }
+      else if(convertTo == "string"){
+        Story.instance.data.rawData[i][header] = Story.instance.data.rawData[i][header].toString();
+      }
+      else if(convertTo == "datetime"){
+        Story.instance.data.rawData[i][header] = new Date(Date.parse(Story.instance.data.rawData[i][header]));
+      }
+    }
+    catch(error){
+      console.error(error);
+      Story.instance.data.rawData[i][header] = Story.instance.data.rawData[i][header].toString();
+      console.warn("Could not convert column '"+header+"' to type '"+convertTo+"'; converted instead to string")
+    }
+    
+  }
 }

@@ -45,8 +45,8 @@
               </select>
             </div>
             <div class="form-group form-inline" align="right">
-              <button class="btn btn-secondary" onClick="revertDependencies();">Revert</button>&nbsp;&nbsp;
-              <button class="btn btn-primary" onClick="createDependency();">Apply</button>
+              <a href="#" class="btn btn-secondary" onClick="revertDependencies();">Revert</a>&nbsp;&nbsp;
+              <a href="#" class="btn btn-primary" onClick="createDependency();">Apply</a>
             </div>
             <div id="dependency-error" class="invalid-feedback" style="display: none;">
                 
@@ -72,7 +72,7 @@
     <div class="col-12">
       <a class="btn btn-lg btn-secondary" href="#" onClick="if(window.confirm('This will discard any changes to this dataset. Proceed?')){$('#file-upload').click();} return;" role="button"><i class="fas fa-file-upload"></i>&nbsp;Change Datafile</a>
       &nbsp;&nbsp;
-      <a class="btn btn-lg btn-primary" href="#" role="button" onClick="switchView('story');">Continue</a>
+      <a class="btn btn-lg btn-primary" href="#" role="button" onClick="switchView('analysis');">Continue</a>
     </div>
   </div>
 </div>
