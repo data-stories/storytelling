@@ -87,7 +87,7 @@ class Story {
 
       var storyData = JSON.parse(reader.result);
 
-      Data.instance = new Data(storyData["data"]["rawData"]);
+      Data.instance = new Data(storyData["data"]["rawData"], storyData["data"]["parsedData"]);
 
       Story.instance = new Story();
       Story.instance.setData(Data.instance);

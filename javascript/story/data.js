@@ -9,13 +9,15 @@ class Data {
    * The format of each row is as : {"column_1": value_1, "column_2", value_2, ...}.
    * @param {Array} rawData 
    */
-  constructor(rawData) {
+  constructor(rawData, parsedData) {
     /**
      * The raw data in csv format.
      * @private
      * @type {Array}
      */
     this.rawData = rawData;
+    this.parsedData = parsedData || rawData;
+
     /**
      * The header of the raw csv file.
      * @private
@@ -27,21 +29,21 @@ class Data {
   getExampleValues(header, examples=4){
 
     var values = [];
-    var maxExamples = (this.rawData.length >= examples) ? examples : this.rawData.length;
+    var maxExamples = (this.parsedData.length >= examples) ? examples : this.parsedData.length;
     var exampleIndexes = [];
 
     for(let i=0; i < maxExamples; i++){
 
-      var index = Math.floor(Math.random() * this.rawData.length);
+      var index = Math.floor(Math.random() * this.parsedData.length);
 
       //Don't show duplicate indexes (i.e. the same cell more than once)
       //TODO: Don't show *any* duplicate *values*
       while(index in exampleIndexes){
-        index = Math.floor(Math.random() * this.rawData.length);
+        index = Math.floor(Math.random() * this.parsedData.length);
       }
       exampleIndexes.push(index);
 
-      values.push(this.rawData[index][header]);
+      values.push(this.parsedData[index][header]);
     }
 
     return values;

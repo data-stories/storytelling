@@ -345,21 +345,21 @@ function convertDataType(header, convertTo){
   for(var i = 0; i < Story.instance.data.rawData.length; i++){
     try{
       if(convertTo == "float"){
-        Story.instance.data.rawData[i][header] = parseFloat(Story.instance.data.rawData[i][header]);
+        Story.instance.data.parsedData[i][header] = parseFloat(Story.instance.data.rawData[i][header]);
       }
       else if(convertTo == "integer"){
-        Story.instance.data.rawData[i][header] = parseInt(Story.instance.data.rawData[i][header]);
+        Story.instance.data.parsedData[i][header] = parseInt(Story.instance.data.rawData[i][header]);
       }
       else if(convertTo == "string"){
-        Story.instance.data.rawData[i][header] = Story.instance.data.rawData[i][header].toString();
+        Story.instance.data.parsedData[i][header] = Story.instance.data.rawData[i][header].toString();
       }
       else if(convertTo == "datetime"){
-        Story.instance.data.rawData[i][header] = new Date(Date.parse(Story.instance.data.rawData[i][header]));
+        Story.instance.data.parsedData[i][header] = new Date(Date.parse(Story.instance.data.rawData[i][header]));
       }
     }
     catch(error){
       console.error(error);
-      Story.instance.data.rawData[i][header] = Story.instance.data.rawData[i][header].toString();
+      Story.instance.data.parsedData[i][header] = Story.instance.data.rawData[i][header].toString();
       console.warn("Could not convert column '"+header+"' to type '"+convertTo+"'; converted instead to string")
     }
     

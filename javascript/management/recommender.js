@@ -59,7 +59,7 @@ function chartsInterestDependency() {
       chart.setType(chartType);
       var x = [];
       var y = [];
-      Story.instance.data.rawData.forEach(function(datum) {
+      Story.instance.data.parsedData.forEach(function(datum) {
         x.push(datum[independentField]);
         y.push(datum[dependentField]);
       });
@@ -110,7 +110,7 @@ function chartsInterests() {
       chart = new Chart();
       chart.setType("bar");
       values = [];
-      Story.instance.data.rawData.forEach(function(datum) {
+      Story.instance.data.parsedData.forEach(function(datum) {
         values.push(datum[interest]);
       });
       chart.setY(values);
