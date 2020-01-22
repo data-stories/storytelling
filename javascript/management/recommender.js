@@ -5,10 +5,6 @@ function getRecommendedCharts() {
 
   charts = charts.concat(chartsInterests());
 
-  // Story.instance.metadata.dependencies.forEach(function(dependency){
-
-  // });
-
   //TODO: Recommend charts
 
   //TODO: Recommend sensible charts
@@ -96,7 +92,6 @@ function chartsInterestDependency() {
           independentField
       );
       charts.push(chart);
-      console.log(charts);
     }
   }
   return charts;

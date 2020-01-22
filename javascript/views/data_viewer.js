@@ -125,7 +125,6 @@ function dataView(){
       </tr>
     </thead>
     <tbody>`;
-  console.log(Story.instance.data.rawData);
   Story.instance.data.headers.forEach(function(header, index){
 
     //TODO: There must be a more efficient way d3 can do this

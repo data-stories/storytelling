@@ -50,15 +50,12 @@ class Data {
 
   }
 
-
-
-  //TODO: These *could* be implemented at a later date, to highlight points of interest to the author
-
-  // detectTrends(){
-  //     throw new Error("Not Implemented")
-  // }
-
-  // detectSpikes(){
-  //     throw new Error("Not Implemented")
-  // }
+  getColumn(header){
+      var column = [];
+      this.parsedData.forEach(function(row){
+        column.push(row[header]);
+      });
+      return column;
+  }
+  
 }
