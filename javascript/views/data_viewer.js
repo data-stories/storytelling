@@ -10,9 +10,6 @@ $(document).ready(function(){
   });
 });
 
-function dataViewInit(){
-  //This method intentionally left blank
-}
 
 function dataViewLeave(){
 
@@ -31,6 +28,8 @@ function dataViewLeave(){
     });
   });
 }
+
+onPageLeave["data"] = dataViewLeave;
 
 
 function loadDemo(){

@@ -8,9 +8,7 @@ function exportViewInit(){
     generatePreview();
 }
 
-function exportViewLeave(){
-  //This method intentionally left empty
-}
+onPageEnter["export"] = exportViewInit;
 
 
 function generatePreview(){

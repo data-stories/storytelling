@@ -17,9 +17,7 @@ function analysisViewInit(){
     });
 }
 
-function analysisViewLeave(){
-  
-}
+onPageEnter["analysis"] = analysisViewInit;
 
 
 function getPairs(array){

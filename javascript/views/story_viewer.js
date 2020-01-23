@@ -32,6 +32,8 @@ function storyViewInit(){
   });
 }
 
+onPageEnter["story"] = storyViewInit;
+
 
 function storyViewLeave(){
 
@@ -63,6 +65,7 @@ function storyViewLeave(){
   });
 }
 
+onPageLeave["story"] = storyViewLeave;
 
 function newSection(blockContent){
 
