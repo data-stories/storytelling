@@ -1,25 +1,25 @@
+var interestingCharts = {};
+
 function analysisViewInit(){
-    
-    var headerPairs = getPairs(Story.instance.data.headers);
-    
+
+    if(Object.keys(interestingCharts).length > 0){
+        return;
+    }
+
     //Collect interesting features of data-column pairs
     //TODO: collect features of stand-alone data-columns?
-    var interestingCharts = [];
+    var headerPairs = getPairs(Story.instance.data.headers);
     headerPairs.forEach(function(pair){
         interestingFeatures = getInterestingFeatures(pair[0], pair[1]);
         if(interestingFeatures){
-            interestingCharts.push(interestingFeatures)
+            interestingCharts[interestingFeatures.header1.replace(/ /g, "-")+"-"+interestingFeatures.header2.replace(/ /g, "-")] = interestingFeatures
         }
     });
 
-    //Sort charts by how interesting they are
-    interestingCharts.sort((chart1, chart2) => chart2.features.length - chart1.features.length)
-
-    //Display interesting charts
-    $("#data-analysis").empty();
     var row;
     var interesting = 0; //Used to alternate between adding rows/columns
-    interestingCharts.forEach(interestingFeatures =>{
+    //Sort charts by how interesting they are
+    Object.values(interestingCharts).sort((chart1, chart2) => chart2.features.length - chart1.features.length).forEach(interestingFeatures =>{
         interesting++;
 
         if(interesting % 2 == 1){
@@ -38,14 +38,15 @@ function analysisViewInit(){
 
         var button = $("<button>")
             .attr("type", "button")
-            .attr("class", "btn btn-primary")
+            .attr("class", "btn btn-primary interesting-data")
+            .attr("interest", interestingFeatures.header1.replace(/ /g, "-")+"-"+interestingFeatures.header2.replace(/ /g, "-"))
             .attr("data-toggle", "button")
             .attr("aria-pressed", "false")
             .attr("autocomplete", "off")
             .text("Include")
-            .click(() => {
-                console.log("Foo");
-            })
+            // .click(() => {
+            //    
+            // })
 
         interestingDiv.append(button);
         
@@ -58,6 +59,13 @@ function analysisViewInit(){
 
 onPageEnter["analysis"] = analysisViewInit;
 
+function analysisViewLeave(){
+    $(".interesting-data.active").each(function(index, element){
+        console.log(interestingCharts[element.attr("interest")]);
+    });
+}
+
+onPageLeave["analysis"] = analysisViewLeave;
 
 function getPairs(array){
     var pairs = [];
