@@ -9,16 +9,16 @@ function storyViewInit(){
       $("#export-author").val(Story.instance.metadata.author);
   }
 
-  //TODO: Replace this with a proper dynamic template system
+  //TODO: Replace this with a proper rule-based dynamic template system
   if(Story.instance.blocks.length == 0){
-    Story.instance.blocks.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience"));
+    storyTemplate.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience"));
     Story.instance.metadata.dependencies.forEach(function(dependency){
-        Story.instance.blocks.push(new TextBlock("Introduce the independent variable (\""+dependency["independent"]+"\") here; talk about what it is, why it matters, and so on."));
-        Story.instance.blocks.push(new TextBlock("Introduce the dependent variable (\""+dependency["dependent"]+"\") here; talk about what it is, why it matters, and so on."));
-        Story.instance.blocks.push(new ChartBlock());
-        Story.instance.blocks.push(new TextBlock("Explain the relationship between the two variables, and reference the correlation or trend visualised above."));
+        storyTemplate.push(new TextBlock("Introduce the independent variable (\""+dependency["independent"]+"\") here; talk about what it is, why it matters, and so on."));
+        storyTemplate.push(new TextBlock("Introduce the dependent variable (\""+dependency["dependent"]+"\") here; talk about what it is, why it matters, and so on."));
+        storyTemplate.push(new ChartBlock());
+        storyTemplate.push(new TextBlock("Explain the relationship between the two variables, and reference the correlation or trend visualised above."));
     });
-    Story.instance.blocks.push(new TextBlock("Conclude your story; summarise the key points you have made and again, emphasise why it is important to your audience."));
+    storyTemplate.push(new TextBlock("Conclude your story; summarise the key points you have made and again, emphasise why it is important to your audience."));
   }
 
   $("#story-sections")
@@ -67,30 +67,64 @@ function storyViewLeave(){
 
 onPageLeave["story"] = storyViewLeave;
 
+
 function newSection(blockContent){
 
   var block = $('<div class="story-block">');
 
   if(!blockContent){
+    block.append($('<button class="btn btn-sm btn-danger trash-button"><i class="fas fa-trash-alt"></i></button>').click(function(){
+      $(this).parent().after(createAddSectionButton());
+      $(this).parent().remove();
+    }));
+
     block
+      .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-file-alt"></i> Recommend</button>')
+        .click(function(){
+          //TODO: Replace this with a proper rule-based dynamic template system
+          var recommendedBlock = storyTemplate.shift();
+          var blockClass;
+          if(recommendedBlock instanceof TextBlock){
+            blockClass = "text-block";
+          }
+          else if(recommendedBlock instanceof ImageBlock){
+            blockClass = "image-block";
+          }
+          else if(recommendedBlock instanceof ChartBlock){
+            blockClass = "chart-block";
+          }
+          if(recommendedBlock instanceof DataBlock){
+            blockClass = "data-block";
+          }
+          $(this).parent().parent().addClass(blockClass);
+          insertEmptySection($(this).parent(), newSection(recommendedBlock.renderToAuthor()));
+        })
+        //Disable the button if there's nothing in the recommender queue
+        //TODO: replace the queue with a rule based system that takes into account previous and subsequent StoryBlocks
+        .prop('disabled', storyTemplate.length == 0)
+      )
+
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-file-alt"></i> Text</button>')
         .click(function(){
           $(this).parent().parent().addClass('text-block');
           insertEmptySection($(this).parent(), newSection(new TextBlock().renderToAuthor()));
         })
       )
+
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-image"></i> Image</button>')
         .click(function(){
           $(this).parent().addClass('image-block');
           insertEmptySection($(this).parent(), newSection(new ImageBlock().renderToAuthor()));
         })
       )
+
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-chart-bar"></i> Chart</button>')
         .click(function(){
           $(this).parent().addClass('chart-block');
           insertEmptySection($(this).parent(), newSection(new ChartBlock().renderToAuthor()));
         })
       )
+
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-table"></i> Data</button>')
         .click(function(){
           $(this).parent().addClass('data-block');
