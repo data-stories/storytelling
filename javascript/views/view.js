@@ -17,19 +17,24 @@ function switchView(view){
     $("#nav-"+view).addClass("active");
     $('#nav-'+view).find("a").removeClass("disabled");
 
-    try{
+
+    //Call the cleanup code for this page
+    if(currentView in onPageLeave){
         onPageLeave[currentView]();
     }
-    catch{// (e if e instanceof TypeError){
-        console.warn("No cleanup code for leaving page '"+currentView+"'")
+    //If we've tried to call a function that doesn't exist throw a warning. Maybe it's fine, if there's no cleanup code.
+    else{
+        console.warn("No cleanup code for leaving page '"+currentView+"'");
     }
 
 
-    try{
+    //Call the setup code for the new page
+    if(view in onPageEnter){
         onPageEnter[view]();
     }
-    catch{// (e if e instanceof TypeError){
-        console.warn("No cleanup code for entering page '"+view+"'")
+    //If we've tried to call a function that doesn't exist throw a warning. Maybe it's fine, if there's no setup code.
+    else{
+        console.warn("No setup code for entering page '"+view+"'");
     }
     
 
