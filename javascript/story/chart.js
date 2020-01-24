@@ -94,7 +94,7 @@ class Chart{
      */
     render(container, width, height){
 
-        this.margin = {top: 20, right: 20, bottom: 30, left : 40};
+        this.margin = {top: 20, right: 20, bottom: 40, left : 80};
         this.svg_width = width || 960;
         this.svg_height = height || 500;
         this.width = this.svg_width - this.margin.left - this.margin.right;
@@ -138,6 +138,7 @@ class Chart{
                     .padding(0.1);
         var y = d3.scaleLinear()
                     .range([this.height, 0]);
+
         var height = this.height;
         var svg = container.append("svg")
                             .attr("width", this.svg_width)
@@ -164,10 +165,25 @@ class Chart{
             })
             .attr("fill", "teal");
         svg.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
+            .attr("transform", "translate(0," + this.height + ")")
+            .call(d3.axisBottom(x))
+              //Append a label
+              .append("text")
+              .attr("fill", "#000")
+              .attr("y", this.margin.bottom/2)
+              .attr("x", this.width/2)
+              .attr("text-anchor", "middle")
+              .text(this.xLabel);
         svg.append("g")
-            .call(d3.axisLeft(y));
+            .call(d3.axisLeft(y))
+            //Append a label
+          .append("text")
+          .attr("fill", "#000")
+          .attr("y", -this.margin.left/2)
+          .attr("x", -this.height/2)
+          .attr("transform", "rotate(-90)")
+          .attr("text-anchor", "middle")
+          .text(this.yLabel);
     }
 
     /**
@@ -223,10 +239,24 @@ class Chart{
 
         svg.append("g")
                 .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(xScale));
-
+                .call(d3.axisBottom(xScale))
+                  //Append a label
+              .append("text")
+              .attr("fill", "#000")
+              .attr("y", 40)
+              .attr("x", this.width/2)
+              .attr("text-anchor", "middle")
+              .text(this.xLabel);
         svg.append("g")
-                .call(d3.axisLeft(yScale));
+                .call(d3.axisLeft(yScale))
+                //Append a label
+          .append("text")
+          .attr("fill", "#000")
+          .attr("y", -40)
+          .attr("x", -this.height/2)
+          .attr("transform", "rotate(-90)")
+          .attr("text-anchor", "middle")
+          .text(this.yLabel);
     }
 
     /**
@@ -263,8 +293,23 @@ class Chart{
             .attr("fill", "teal");
         svg.append("g")
             .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
+            .call(d3.axisBottom(x))
+              //Append a label
+              .append("text")
+              .attr("fill", "#000")
+              .attr("y", 40)
+              .attr("x", this.width/2)
+              .attr("text-anchor", "middle")
+                  .text(this.xLabel);
         svg.append("g")
-            .call(d3.axisLeft(y));
+            .call(d3.axisLeft(y))
+            //Append a label
+          .append("text")
+          .attr("fill", "#000")
+          .attr("y", -40)
+          .attr("x", -this.height/2)
+          .attr("transform", "rotate(-90)")
+          .attr("text-anchor", "middle")
+          .text(this.yLabel);
     }
 }
