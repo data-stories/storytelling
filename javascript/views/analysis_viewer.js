@@ -1,20 +1,59 @@
 function analysisViewInit(){
-
-    //var tempCharts = createTempCharts();
-    //visualiseCharts(tempCharts);
-
+    
     var headerPairs = getPairs(Story.instance.data.headers);
-
+    
+    //Collect interesting features of data-column pairs
+    //TODO: collect features of stand-alone data-columns?
+    var interestingCharts = [];
     headerPairs.forEach(function(pair){
-        if(isInteresting(pair[0], pair[1])){
-            //TODO Display interesting pair chart
-
-
-            makeChart();
-
-            //TODO: add a <p> explaining why the chart is interesting, etc.
+        interestingFeatures = getInterestingFeatures(pair[0], pair[1]);
+        if(interestingFeatures){
+            interestingCharts.push(interestingFeatures)
         }
     });
+
+    //Sort charts by how interesting they are
+    interestingCharts.sort((chart1, chart2) => chart2.features.length - chart1.features.length)
+
+    //Display interesting charts
+    $("#data-analysis").empty();
+    var row;
+    var interesting = 0; //Used to alternate between adding rows/columns
+    interestingCharts.forEach(interestingFeatures =>{
+        interesting++;
+
+        if(interesting % 2 == 1){
+            row = $("<div>").attr("class", "row");
+            $("#data-analysis").append(row);
+        }
+
+        var interestingDiv = $("<div>")
+            .attr("id", interestingFeatures.header1.replace(/ /g, "-")+"-"+interestingFeatures.header2.replace(/ /g, "-"))
+            .attr("class", "col-6 text-center");
+
+        row.append(interestingDiv);
+
+        interestingFeatures.chart.render(d3.select("#"+interestingDiv.attr("id")), 300, 175);
+        interestingFeatures.features.forEach(t => {interestingDiv.append($("<p>").text(t))});
+
+        var button = $("<button>")
+            .attr("type", "button")
+            .attr("class", "btn btn-primary")
+            .attr("data-toggle", "button")
+            .attr("aria-pressed", "false")
+            .attr("autocomplete", "off")
+            .text("Include")
+            .click(() => {
+                console.log("Foo");
+            })
+
+        interestingDiv.append(button);
+        
+    });
+
+    if (interesting == 0) {
+        $("#data-analysis").append($("<p>No features could be detected at this time</p>"));
+    }
 }
 
 onPageEnter["analysis"] = analysisViewInit;
@@ -31,40 +70,86 @@ function getPairs(array){
 }
 
 
-function isInteresting(header1, header2){
+function getInterestingFeatures(header1, header2){
+
+    var interesting  = {header1: header1, header2: header2, chart: null, features: []}
 
     var col1 = Story.instance.data.getColumn(header1);
     var col2 = Story.instance.data.getColumn(header2);
 
-    console.log(header1+"/"+header2);
+    //If we're looking at an individual value
+    if(!header2){
+        //TODO: Check proportions/distributions
 
-
-    var chartType;
+        return interesting;
+    }
 
     //At least one column contains datetime data
     if(col1[0] instanceof Date || col2[0] instanceof Date){
-        chartType = "line";
+
+        if (col1[0] instanceof Date && col2[0] instanceof Date){
+            //We probably don't care if they're both dates?
+            //TODO: Maybe we do?
+            return;
+        }
+        else if(col1[0] instanceof Date && !isNaN(col2[0])){
+            x = col1.map(date => date.getTime())
+            xheader = header1
+            y = col2
+            yheader = header2
+        }
+        else if(col2[0] instanceof Date && !isNaN(col1[0])){
+            x = col2.map(date => date.getTime())
+            xheader = header2
+            y = col1   
+            yheader = header1
+        }
+        else{
+            //TODO: add additional checks here
+            return;
+        }
+
+        //Create a (hypothetically) interesting chart - we'll add reasons why it might be interesting later
+        interesting.chart = makeChart("line", x, xheader, y, yheader);
 
         //TODO: test for trends
+        var corr = getPearsonCorrelation(x, y);
+        interesting.features.push("There is a correlation of "+Math.round(corr * 1000) / 1000);
+        
 
         //TODO: test for outliers/peaks/troughs
 
     }
+
     //Both columns are numeric data
     else if(!(col1[0] instanceof Date) && !isNaN(col1[0]) && !(col2[0] instanceof Date) && !isNaN(col2[0])){
-        chartType = "scatter";
+        
+        //Create a (hypothetically) interesting chart - we'll add reasons why it might be interesting later
+        interesting.chart = makeChart("scatter", col1, header1, col2, header2);
 
         //Test for correlation
-        console.log(getPearsonCorrelation(col1, col2));
+        var corr = getPearsonCorrelation(col1, col2);
+        if(corr > 0.7){
+            interesting.features.push("There is a correlation of "+Math.round(corr * 1000) / 1000);    
+        }
 
         //Test for clusters
-        getClusters(col1, col2);
+        var clusters = getClusters(col1, col2);
+        if(Math.max(...clusters) > 1){
+            interesting.features.push("There are approximately "+Math.max(...clusters)+" distinct clusters in this data");
+        }
     }
     else{
-        chartType = "bar";
         //TODO: Other "interesting"ness checks
     }
 
+    //If there are no reasons that this chart would be interesting, return null 
+   if(interesting.features.length == 0){
+        return null;
+    }
+    else{
+        return interesting    
+    }
 }
 
 
@@ -84,23 +169,15 @@ function getClusters(xCol, yCol){
     //TODO: eps needs to be detected such that it gives (relatively) sensible clusters
 
     // Configure a DBSCAN instance.
-    var dbscanner = jDBSCAN().eps(7000).minPts(1).distance('EUCLIDEAN').data(pointData);
-    var point_assignment_result = dbscanner();
-    console.log(point_assignment_result);
-
-    console.log("There are approximately "+Math.max(...point_assignment_result)+" distinct clusters in this data");
+    var dbscanner = jDBSCAN().eps(5000).minPts(1).distance('EUCLIDEAN').data(pointData);
+    return dbscanner();
 }
 
-function makeChart(){
+function makeChart(chartType, x, xLabel, y, yLabel){
 
     var chart = new Chart();
     chart.setType(chartType);
-    var x = [];
-    var y = [];
-    Story.instance.data.parsedData.forEach(function(datum) {
-        x.push(datum[independentField]);
-        y.push(datum[dependentField]);
-    });
+
     // calculate the average value of each x
     if (chartType == "bar") {
         var x_unique_sum = {};
@@ -124,14 +201,14 @@ function makeChart(){
     }
 
     chart.setX(x);
-    chart.setXLabel(independentField);
+    chart.setXLabel(xLabel);
     chart.setY(y);
-    chart.setYLabel(dependentField);
+    chart.setYLabel(yLabel);
     chart.setTitle(
-    dependentField.charAt(0).toUpperCase() +
-      dependentField.slice(1) +
+    yLabel.charAt(0).toUpperCase() +
+      yLabel.slice(1) +
       " vs " +
-      independentField
+      xLabel
     );
 
     return chart;
