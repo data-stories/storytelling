@@ -102,13 +102,13 @@ class Chart{
 
         this.genData();
         if (this.type === "bar"){
-            this.renderBar(container);
+            return this.renderBar(container);
         }
         else if (this.type === "line"){
-            this.renderLine(container);
+            return this.renderLine(container);
         }
         else if (this.type ==="scatter"){
-            this.renderScatter(container);
+            return this.renderScatter(container);
         }
         else{
             console.error("Unrecognised chart type: " + this.type);
@@ -133,6 +133,11 @@ class Chart{
      */
     renderBar(container)
     {
+        var virtualContainer = false;
+        if(container == undefined){
+          container = d3.select(document.createElement("div"));
+          virtualContainer = true;
+        }
         var x = d3.scaleBand()
                     .range([0,this.width])
                     .padding(0.1);
@@ -184,6 +189,8 @@ class Chart{
           .attr("transform", "rotate(-90)")
           .attr("text-anchor", "middle")
           .text(this.yLabel);
+    
+        return container;
     }
 
     /**
@@ -207,6 +214,11 @@ class Chart{
      */
     renderLine(container)
     {
+        var virtualContainer = false;
+        if(container == undefined){
+          container = d3.select(document.createElement("div"));
+          virtualContainer = true;
+        }
         var dataset = this.lineData(this.data);
         var xScale = d3.scaleTime()
                         .domain([
@@ -257,6 +269,8 @@ class Chart{
           .attr("transform", "rotate(-90)")
           .attr("text-anchor", "middle")
           .text(this.yLabel);
+    
+        return container;
     }
 
     /**
@@ -265,6 +279,11 @@ class Chart{
      */
     renderScatter(container)
     {
+        var virtualContainer = false;
+        if(container == undefined){
+          container = d3.select(document.createElement("div"));
+          virtualContainer = true;
+        }
         var x = d3.scaleLinear()
                     .range([0,this.width]);
         var y = d3.scaleLinear()
@@ -311,5 +330,7 @@ class Chart{
           .attr("transform", "rotate(-90)")
           .attr("text-anchor", "middle")
           .text(this.yLabel);
+    
+        return container;
     }
 }

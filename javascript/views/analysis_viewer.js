@@ -61,7 +61,11 @@ onPageEnter["analysis"] = analysisViewInit;
 
 function analysisViewLeave(){
     $(".interesting-data.active").each(function(index, element){
-        console.log(interestingCharts[element.attr("interest")]);
+        var interest = interestingCharts[$(element).attr("interest")];
+        storyTemplate.push(new TextBlock("Introduce the concept of '"+interest["header1"]+"' here; talk about what it is, why it matters, and so on."));
+        storyTemplate.push(new TextBlock("Introduce the concept of '"+interest["header2"]+"' here; talk about what it is, why it matters, and so on."));
+        storyTemplate.push(new ChartBlock(interest.chart.render()._groups[0][0].innerHTML));
+        storyTemplate.push(new TextBlock("Explain the relationship between the two variables, and reference the correlation or trend visualised above."));
     });
 }
 
