@@ -93,8 +93,22 @@ function getInterestingFeatures(header1, header2){
     if(!header2){
         //TODO: Check proportions/distributions
 
-        return interesting;
+        return null;
     }
+
+
+    //If a user has marked it as a likely dependant variable, then its automatically interesting for that reason
+    Story.instance.metadata.dependencies.forEach(dependency => {
+        if((dependency["dependent"] == header1 && dependency["independent"] == header2) || (dependency["dependent"] == header2 && dependency["independent"] == header1)){
+            interesting.features.push("User suggested their may be a relationship between these variables");
+            
+            //break;
+            //TODO: js doesn't allow "break" in a .forEach() loop; using .some() loop might be better,
+            //but not really more readable, and this loops is short enough that it likely doesn't matter
+        }
+    });
+
+
 
     //At least one column contains datetime data
     if(col1[0] instanceof Date || col2[0] instanceof Date){
@@ -126,6 +140,7 @@ function getInterestingFeatures(header1, header2){
 
         //TODO: test for trends
         var corr = getPearsonCorrelation(x, y);
+
         interesting.features.push("There is a correlation of "+Math.round(corr * 1000) / 1000);
         
 
@@ -156,7 +171,7 @@ function getInterestingFeatures(header1, header2){
     }
 
     //If there are no reasons that this chart would be interesting, return null 
-   if(interesting.features.length == 0){
+   if(interesting.features.length == 0 || interesting.chart == null){
         return null;
     }
     else{
