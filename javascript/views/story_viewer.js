@@ -9,18 +9,6 @@ function storyViewInit(){
       $("#export-author").val(Story.instance.metadata.author);
   }
 
-  //TODO: Replace this with a proper rule-based dynamic template system
-  if(Story.instance.blocks.length == 0){
-    storyTemplate.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience"));
-    Story.instance.metadata.dependencies.forEach(function(dependency){
-        storyTemplate.push(new TextBlock("Introduce the independent variable (\""+dependency["independent"]+"\") here; talk about what it is, why it matters, and so on."));
-        storyTemplate.push(new TextBlock("Introduce the dependent variable (\""+dependency["dependent"]+"\") here; talk about what it is, why it matters, and so on."));
-        storyTemplate.push(new ChartBlock());
-        storyTemplate.push(new TextBlock("Explain the relationship between the two variables, and reference the correlation or trend visualised above."));
-    });
-    storyTemplate.push(new TextBlock("Conclude your story; summarise the key points you have made and again, emphasise why it is important to your audience."));
-  }
-
   $("#story-sections")
     .empty()
     .append(createAddSectionButton());

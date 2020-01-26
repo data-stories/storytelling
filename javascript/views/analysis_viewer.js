@@ -60,6 +60,7 @@ function analysisViewInit(){
 onPageEnter["analysis"] = analysisViewInit;
 
 function analysisViewLeave(){
+    storyTemplate.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience"));
     $(".interesting-data.active").each(function(index, element){
         var interest = interestingCharts[$(element).attr("interest")];
         storyTemplate.push(new TextBlock("Introduce the concept of '"+interest["header1"]+"' here; talk about what it is, why it matters, and so on."));
@@ -67,6 +68,7 @@ function analysisViewLeave(){
         storyTemplate.push(new ChartBlock(interest.chart.render()._groups[0][0].innerHTML));
         storyTemplate.push(new TextBlock("Explain the relationship between the two variables, and reference the correlation or trend visualised above."));
     });
+    storyTemplate.push(new TextBlock("Conclude your story; summarise the key points you have made and again, emphasise why it is important to your audience."));
 }
 
 onPageLeave["analysis"] = analysisViewLeave;
@@ -100,7 +102,7 @@ function getInterestingFeatures(header1, header2){
     //If a user has marked it as a likely dependant variable, then its automatically interesting for that reason
     Story.instance.metadata.dependencies.forEach(dependency => {
         if((dependency["dependent"] == header1 && dependency["independent"] == header2) || (dependency["dependent"] == header2 && dependency["independent"] == header1)){
-            interesting.features.push("User suggested their may be a relationship between these variables");
+            interesting.features.push("User suggested there may be a relationship between these variables");
             
             //break;
             //TODO: js doesn't allow "break" in a .forEach() loop; using .some() loop might be better,
