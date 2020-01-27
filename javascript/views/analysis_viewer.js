@@ -29,11 +29,12 @@ function analysisViewInit(){
 
         var interestingDiv = $("<div>")
             .attr("id", interestingFeatures.header1.replace(/ /g, "-")+"-"+interestingFeatures.header2.replace(/ /g, "-"))
-            .attr("class", "col-6 text-center");
+            .attr("class", "col-6");// text-center");
 
         row.append(interestingDiv);
 
         interestingFeatures.chart.render(d3.select("#"+interestingDiv.attr("id")), 300, 175);
+        interestingDiv.append($("<h5>").text(interestingFeatures.header1+"/"+interestingFeatures.header2));
         interestingFeatures.features.forEach(t => {interestingDiv.append($("<p>").text(t))});
 
         var button = $("<button>")
@@ -60,6 +61,8 @@ function analysisViewInit(){
 onPageEnter["analysis"] = analysisViewInit;
 
 function analysisViewLeave(){
+    //TODO: Introduce a rule-based template system instead of creating it here - these "interesting features"
+    //could be stored in Story.instance.metadata, and used to drive the story-rules
     storyTemplate.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience"));
     $(".interesting-data.active").each(function(index, element){
         var interest = interestingCharts[$(element).attr("interest")];
@@ -131,6 +134,10 @@ function getInterestingFeatures(header1, header2){
             xheader = header2
             y = col1   
             yheader = header1
+            //Swap these around so that chart labels look
+            //nicer; e.g. "Value/year"
+            interesting.header1 = header2
+            interesting.header2 = header1
         }
         else{
             //TODO: add additional checks here
