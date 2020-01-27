@@ -2,17 +2,27 @@ var interestingCharts = {};
 
 function analysisViewInit(){
 
-    if(Object.keys(interestingCharts).length > 0){
-        return;
-    }
+    // If we've already done the analysis, don't do it again
+    // if(Object.keys(interestingCharts).length > 0){
+    //     return;
+    // }
+    // Update; do it again after all - what if they've gone back to
+    // the data page and changed the dependent/independent variables?
 
     //Collect interesting features of data-column pairs
-    //TODO: collect features of stand-alone data-columns?
     var headerPairs = getPairs(Story.instance.data.headers);
     headerPairs.forEach(function(pair){
         interestingFeatures = getInterestingFeatures(pair[0], pair[1]);
         if(interestingFeatures){
             interestingCharts[interestingFeatures.header1.replace(/ /g, "-")+"-"+interestingFeatures.header2.replace(/ /g, "-")] = interestingFeatures
+        }
+    });
+
+    //Collect features of stand-alone data-columns
+    Story.instance.data.headers.forEach(header => {
+        interestingFeatures = getInterestingFeatures(header);
+        if(interestingFeatures){
+            interestingCharts[interestingFeatures.header1.replace(/ /g, "-")] = interestingFeatures
         }
     });
 
@@ -34,7 +44,12 @@ function analysisViewInit(){
         row.append(interestingDiv);
 
         interestingFeatures.chart.render(d3.select("#"+interestingDiv.attr("id")), 300, 175);
-        interestingDiv.append($("<h5>").text(interestingFeatures.header1+"/"+interestingFeatures.header2));
+        if(interestingFeatures.header2){
+            interestingDiv.append($("<h6>").text(interestingFeatures.header2+"/"+interestingFeatures.header1));    
+        }
+        else{
+            interestingDiv.append($("<h6>").text(interestingFeatures.header1));
+        }
         interestingFeatures.features.forEach(t => {interestingDiv.append($("<p>").text(t))});
 
         var button = $("<button>")
@@ -45,9 +60,6 @@ function analysisViewInit(){
             .attr("aria-pressed", "false")
             .attr("autocomplete", "off")
             .text("Include")
-            // .click(() => {
-            //    
-            // })
 
         interestingDiv.append(button);
         
@@ -96,9 +108,9 @@ function getInterestingFeatures(header1, header2){
 
     //If we're looking at an individual value
     if(!header2){
-        //TODO: Check proportions/distributions
+        interesting.header2 = null //Make it specifically null rather than undefined
 
-        return null;
+        return null; //Its not interesting
     }
 
 
@@ -112,7 +124,6 @@ function getInterestingFeatures(header1, header2){
             //but not really more readable, and this loops is short enough that it likely doesn't matter
         }
     });
-
 
 
     //At least one column contains datetime data
@@ -147,10 +158,23 @@ function getInterestingFeatures(header1, header2){
         //Create a (hypothetically) interesting chart - we'll add reasons why it might be interesting later
         interesting.chart = makeChart("line", x, xheader, y, yheader);
 
-        //TODO: test for trends
-        var corr = getPearsonCorrelation(x, y);
 
-        interesting.features.push("There is a correlation of "+Math.round(corr * 1000) / 1000);
+        var corr = getPearsonCorrelation(x, y);
+        if(Math.abs(corr) > 0.9){
+            interesting.features.push("There is a very strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
+        }
+        else if(Math.abs(corr) > 0.8){
+            interesting.features.push("There is a strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
+        }
+        else if(Math.abs(corr) > 0.7){
+            interesting.features.push("There is a fairly strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
+        }
+        else if(Math.abs(corr) > 0.6){
+            interesting.features.push("There is a fairly weak correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
+        }
+        else if(Math.abs(corr) > 0.5){
+            interesting.features.push("There is a weak correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
+        }
         
 
         //TODO: test for outliers/peaks/troughs
@@ -165,8 +189,20 @@ function getInterestingFeatures(header1, header2){
 
         //Test for correlation
         var corr = getPearsonCorrelation(col1, col2);
-        if(corr > 0.7){
-            interesting.features.push("There is a correlation of "+Math.round(corr * 1000) / 1000);    
+        if(Math.abs(corr) > 0.9){
+            interesting.features.push("There is a very strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
+        }
+        else if(Math.abs(corr) > 0.8){
+            interesting.features.push("There is a strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
+        }
+        else if(Math.abs(corr) > 0.7){
+            interesting.features.push("There is a fairly strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
+        }
+        else if(Math.abs(corr) > 0.6){
+            interesting.features.push("There is a fairly weak correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
+        }
+        else if(Math.abs(corr) > 0.5){
+            interesting.features.push("There is a weak correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
         }
 
         //Test for clusters
