@@ -43,13 +43,14 @@ function analysisViewInit(){
 
         row.append(interestingDiv);
 
-        interestingFeatures.chart.render(d3.select("#"+interestingDiv.attr("id")), 300, 175);
+        
         if(interestingFeatures.header2){
             interestingDiv.append($("<h6>").text(interestingFeatures.header2+"/"+interestingFeatures.header1));    
         }
         else{
             interestingDiv.append($("<h6>").text(interestingFeatures.header1));
         }
+        interestingFeatures.chart.render(d3.select("#"+interestingDiv.attr("id")), 300, 175);
         interestingFeatures.features.forEach(t => {interestingDiv.append($("<p>").text(t))});
 
         var button = $("<button>")
