@@ -37,26 +37,27 @@ function analysisViewInit(){
             $("#data-analysis").append(row);
         }
 
+        var interestID = (interestingFeatures.header2) ? interestingFeatures.header1.replace(/ /g, "-")+"-"+interestingFeatures.header2.replace(/ /g, "-") : interestingFeatures.header1.replace(/ /g, "-");
         var interestingDiv = $("<div>")
-            .attr("id", interestingFeatures.header1.replace(/ /g, "-")+"-"+interestingFeatures.header2.replace(/ /g, "-"))
+            .attr("id", interestID)
             .attr("class", "col-6");// text-center");
 
         row.append(interestingDiv);
 
         
         if(interestingFeatures.header2){
-            interestingDiv.append($("<h6>").text(interestingFeatures.header2+"/"+interestingFeatures.header1));    
+            interestingDiv.append($("<h6>").text(interestingFeatures.header2+"/"+interestingFeatures.header1).attr("class", "text-center"));    
         }
         else{
-            interestingDiv.append($("<h6>").text(interestingFeatures.header1));
+            interestingDiv.append($("<h6>").text(interestingFeatures.header1).attr("class", "text-center"));
         }
-        interestingFeatures.chart.render(d3.select("#"+interestingDiv.attr("id")), 300, 175);
+        interestingFeatures.chart.render(d3.select("#"+interestingDiv.attr("id")), 400, 200);
         interestingFeatures.features.forEach(t => {interestingDiv.append($("<p>").text(t))});
 
         var button = $("<button>")
             .attr("type", "button")
-            .attr("class", "btn btn-primary interesting-data")
-            .attr("interest", interestingFeatures.header1.replace(/ /g, "-")+"-"+interestingFeatures.header2.replace(/ /g, "-"))
+            .attr("class", "btn btn-primary interesting-data, text-center")
+            .attr("interest", interestID)
             .attr("data-toggle", "button")
             .attr("aria-pressed", "false")
             .attr("autocomplete", "off")
@@ -79,10 +80,21 @@ function analysisViewLeave(){
     storyTemplate.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience"));
     $(".interesting-data.active").each(function(index, element){
         var interest = interestingCharts[$(element).attr("interest")];
-        storyTemplate.push(new TextBlock("Introduce the concept of '"+interest["header1"]+"' here; talk about what it is, why it matters, and so on."));
-        storyTemplate.push(new TextBlock("Introduce the concept of '"+interest["header2"]+"' here; talk about what it is, why it matters, and so on."));
+        storyTemplate.push(new TextBlock("Introduce the concept of '"+interest.header1+"' here; talk about what it is, why it matters, and so on."));
+        if(interest.header2){
+            storyTemplate.push(new TextBlock("Introduce the concept of '"+interest.header2+"' here; talk about what it is, why it matters, and so on."));
+        }
         storyTemplate.push(new ChartBlock(interest.chart.render()._groups[0][0].innerHTML));
-        storyTemplate.push(new TextBlock("Explain the relationship between the two variables, and reference the correlation or trend visualised above."));
+
+        //TODO: It would be nice to add some automatically generated text into the block(s) below, such
+        //as from the "interesting.features" array; this might necessitate making a more well-structured 'Feature' object that is
+        //stored in, e.g., Story.instance.metadata
+        if(interest.header2){
+            storyTemplate.push(new TextBlock("Explain the relationship between the two variables, and reference the correlation or trend visualised above."));
+        }
+        else{
+            storyTemplate.push(new TextBlock("Explain the significance of this value, and how the distribution shown above is important in the overall context."));
+        }
     });
     storyTemplate.push(new TextBlock("Conclude your story; summarise the key points you have made and again, emphasise why it is important to your audience."));
 }
@@ -111,7 +123,40 @@ function getInterestingFeatures(header1, header2){
     if(!header2){
         interesting.header2 = null //Make it specifically null rather than undefined
 
-        return null; //Its not interesting
+        //TODO: for now, we'll make a special case that category data is interesting, to demonstrate
+        //the possibilities; later we can implement a threshold for "actually" interesting categories
+
+        if(Story.instance.metadata.interests[header1] === "string"){
+            data = {};
+            col1.forEach(datum => {
+                if(datum in data){
+                    data[datum]++;
+                }
+                else{
+                    data[datum] = 1;
+                }
+            });
+            var x = [];
+            var y = [];
+            Object.keys(data).forEach(key =>{
+                x.push(key);
+                y.push(data[key]);
+            });
+
+            interesting.chart = makeChart("bar", x, header1, y, "#");
+
+
+            var maxKey = Object.keys(data).reduce(function(a, b){ return data[a] > data[b] ? a : b });
+            var total = Object.values(data).reduce((a, b) => a + b, 0);
+            var percent = Math.round(((data[maxKey]/total)*100 * 1000) / 1000);
+            interesting.features.push("\""+maxKey+"\" was the most frequently occurring string, appearing "+data[maxKey]+" times ("+percent+"%)");
+
+            return interesting;
+
+        }
+        else{
+            return null; //Its not interesting    
+        }
     }
 
 
