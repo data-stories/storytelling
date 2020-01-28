@@ -120,6 +120,35 @@ function chartsInterests() {
       chart.setTitle("Value of " + interest);
       charts.push(chart);
     }
+    else if (t=="string"){
+      chart = new Chart();
+      chart.setType("bar");
+      
+
+      data = {};
+      Story.instance.data.parsedData.forEach(datum => {
+          if(datum[interest] in data){
+              data[datum[interest]]++;
+          }
+          else{
+              data[datum[interest]] = 1;
+          }
+      });
+      var x = [];
+      var y = [];
+      Object.keys(data).forEach(key =>{
+          x.push(key);
+          y.push(data[key]);
+      });
+
+
+      chart.setY(y);
+      chart.setX(x);
+      chart.setXLabel(interest)
+      chart.setYLabel("#");
+      chart.setTitle("Distribution of " + interest);
+      charts.push(chart);
+    }
   });
   return charts;
 }
