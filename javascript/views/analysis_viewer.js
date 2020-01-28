@@ -8,6 +8,7 @@ function analysisViewInit(){
     // }
     // Update; do it again after all - what if they've gone back to
     // the data page and changed the dependent/independent variables?
+    $("#data-analysis").empty();
 
     //Collect interesting features of data-column pairs
     var headerPairs = getPairs(Story.instance.data.headers);
@@ -56,7 +57,7 @@ function analysisViewInit(){
 
         var button = $("<button>")
             .attr("type", "button")
-            .attr("class", "btn btn-primary interesting-data, text-center")
+            .attr("class", "btn btn-primary interesting-data text-center")
             .attr("interest", interestID)
             .attr("data-toggle", "button")
             .attr("aria-pressed", "false")
@@ -79,6 +80,7 @@ function analysisViewLeave(){
     //could be stored in Story.instance.metadata, and used to drive the story-rules
     storyTemplate.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience"));
     $(".interesting-data.active").each(function(index, element){
+        console.log("Foo");
         var interest = interestingCharts[$(element).attr("interest")];
         storyTemplate.push(new TextBlock("Introduce the concept of '"+interest.header1+"' here; talk about what it is, why it matters, and so on."));
         if(interest.header2){
