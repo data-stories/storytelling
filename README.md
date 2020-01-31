@@ -2,7 +2,7 @@
 <p align="center"><img width=40% src="https://github.com/TBFY/storytelling/blob/master/logo.png"></p>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Docker](https://img.shields.io/badge/docker-v3.0+-blue.svg)
+![Java](https://img.shields.io/badge/java-v1.8+-blue.svg)
 [![Build Status](https://travis-ci.org/TBFY/storytelling.svg?branch=master)](https://travis-ci.org/TBFY/storytelling)
 [![](https://jitpack.io/v/TBFY/storytelling.svg)](https://jitpack.io/#TBFY/storytelling)
 [![GitHub Issues](https://img.shields.io/github/issues/TBFY/storytelling.svg)](https://github.com/TBFY/storytelling/issues)
