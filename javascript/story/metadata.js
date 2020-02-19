@@ -1,7 +1,7 @@
 /**
  * A metadata class describing metadata information of a data story.
  */
-class Metadata{
+class Metadata {
     /**
      * Initialises class properties;
      * @param {string} author
@@ -40,6 +40,13 @@ class Metadata{
          * @type {Array}
          */
         this.dependencies = [];
+        /**
+         * Array of interesting features determined during data analysis.
+         * Array member type is Feature.
+         * @private
+         * @type {Array}
+         */
+        this.features = [];
     }
 
     /**
@@ -51,12 +58,12 @@ class Metadata{
     }
 
     /**
-     * Appends a new dependency Object {"independent" : ..., "dependent": ...}.
+     * Appends a new Feature.
      * to the array.
-     * @param {Object} newDependency 
+     * @param {Object} newFeature
      */
-    appendDependency(newDependency){
-        this.dependencies.push(newDependency);
+    appendFeature(newFeature){
+        this.features.push(newFeature);
     }
 
     setAuthor(){
@@ -66,4 +73,21 @@ class Metadata{
     setTitle(){
 
     }
+}
+
+class Feature {
+    /**
+     * Initialises class properties;
+     * @param {string} header1
+     * @param {string} header2
+     * @param {string} chart
+     * @param {Array} features
+     */
+    constructor(header1, header2, chart, features ){
+        this.header1 = header1;
+        this.header2 = header2;
+        this.chart = chart;
+        this.features = features;
+    }
+
 }

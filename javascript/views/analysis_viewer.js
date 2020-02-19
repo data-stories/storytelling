@@ -207,23 +207,10 @@ function getInterestingFeatures(header1, header2){
         interesting.chart = makeChart("line", x, xheader, y, yheader);
 
 
-        var corr = getPearsonCorrelation(x, y);
-        if(Math.abs(corr) > 0.9){
-            interesting.features.push("There is a very strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
+        var corrNarrative = getCorrelation(x, y);
+        if(corrNarrative) {
+            interesting.features.push(corrNarrative);
         }
-        else if(Math.abs(corr) > 0.8){
-            interesting.features.push("There is a strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        else if(Math.abs(corr) > 0.7){
-            interesting.features.push("There is a fairly strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        else if(Math.abs(corr) > 0.6){
-            interesting.features.push("There is a fairly weak correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        else if(Math.abs(corr) > 0.5){
-            interesting.features.push("There is a weak correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        
 
         //TODO: test for outliers/peaks/troughs
 
@@ -236,21 +223,9 @@ function getInterestingFeatures(header1, header2){
         interesting.chart = makeChart("scatter", col1, header1, col2, header2);
 
         //Test for correlation
-        var corr = getPearsonCorrelation(col1, col2);
-        if(Math.abs(corr) > 0.9){
-            interesting.features.push("There is a very strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        else if(Math.abs(corr) > 0.8){
-            interesting.features.push("There is a strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        else if(Math.abs(corr) > 0.7){
-            interesting.features.push("There is a fairly strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        else if(Math.abs(corr) > 0.6){
-            interesting.features.push("There is a fairly weak correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        else if(Math.abs(corr) > 0.5){
-            interesting.features.push("There is a weak correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
+        var corrNarrative = getCorrelation(col1, col2);
+        if(corrNarrative) {
+            interesting.features.push(corrNarrative);
         }
 
         //Test for clusters
@@ -292,6 +267,32 @@ function getClusters(xCol, yCol){
     var dbscanner = jDBSCAN().eps(5000).minPts(1).distance('EUCLIDEAN').data(pointData);
     return dbscanner();
 }
+
+
+function getCorrelation(column1, column2){
+    var corr = getPearsonCorrelation(column1, column2);
+    var roundedCorr = Math.round(corr * 1000) / 1000;
+
+    var corrNarrative = null;
+    if(Math.abs(corr) > 0.9){
+        corrNarrative = "There is a very strong correlation between these features (r="+roundedCorr+")";
+    }
+    else if(Math.abs(corr) > 0.8){
+        corrNarrative = "There is a strong correlation between these features (r="+roundedCorr+")";
+    }
+    else if(Math.abs(corr) > 0.7){
+        corrNarrative = "There is a fairly strong correlation between these features (r="+roundedCorr+")";
+    }
+    else if(Math.abs(corr) > 0.6){
+        corrNarrative = "There is a fairly weak correlation between these features (r="+roundedCorr+")";
+    }
+    else if(Math.abs(corr) > 0.5){
+        corrNarrative = "There is a weak correlation between these features (r="+roundedCorr+")";
+    }
+
+    return corrNarrative;
+}
+
 
 function makeChart(chartType, x, xLabel, y, yLabel){
 
