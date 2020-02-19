@@ -75,7 +75,11 @@ class Metadata {
     }
 }
 
-class Feature {
+/*
+ * A class used by the Metadata class to persist interesting narrative features identified during data analysis
+ * for potential selection during story authoring.
+ */
+class NarrativeFeature {
     /**
      * Initialises class properties;
      * @param {string} header1
