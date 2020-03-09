@@ -28,7 +28,10 @@ function storyViewLeave(){
   Story.instance.metadata.title = $("#export-title").val();
   Story.instance.metadata.author = $("#export-author").val();
 
+  Story.instance.blocks = getCurrentStory(true, true);
+  /* TODO: remove this when rule-based system complete
   Story.instance.blocks = [];
+
   $(".story-block").each(function(){
 
     var storyBlock;
@@ -51,9 +54,50 @@ function storyViewLeave(){
       Story.instance.blocks.push(storyBlock);
     }
   });
+  */
 }
 
 onPageLeave["story"] = storyViewLeave;
+
+
+//TODO: add doc
+function getCurrentStory(prevSections, nextSections) {
+
+  var currentStory = [];
+  var foundActive = false;
+
+  $(".story-block").each(function() {
+    var storyBlock;
+    var block = $(this).find('div');
+
+    // Have we found an active story block, i.e. the recommend button has been pressed?
+    if ($(this).data('data-rec-selected') === true) {
+      foundActive = true;
+    }
+
+    // If we're after the preceding story blocks before an active block, and an active block hasn't been found, add it
+    // or if we're after the subsequent story blocks after an active block, and it has been found, add it
+    if ((prevSections && !foundActive) || (nextSections && foundActive)) {
+      if (block.hasClass("text-block")) {
+        // Ensure we also capture the user-selected CFO pattern type of the text block
+        var selectedCFOType = block.find('select').children("option:selected").val();
+        storyBlock = new TextBlock(block.find('textarea').val(), selectedCFOType);
+      } else if (block.hasClass("chart-block")) {
+        storyBlock = new ChartBlock(block.html());
+      } else if (block.hasClass("image-block")) {
+        storyBlock = new ImageBlock(block.find('.image-caption').val(), $(this).find('.image-url').val());
+      } else if (block.hasClass("data-block")) {
+        storyBlock = new DataBlock(block.html());
+      }
+
+      if (storyBlock) {
+        currentStory.push(storyBlock);
+      }
+    }
+  });
+
+  return currentStory;
+}
 
 
 function newSection(blockContent){
@@ -70,6 +114,8 @@ function newSection(blockContent){
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-file-alt"></i> Recommend</button>')
         .click(function(){
           //TODO: Replace this with a proper rule-based dynamic template system
+          $(this).parent().data('data-rec-selected', true);
+
           var recommendedBlock = storyTemplate.shift();
           var blockClass;
           if(recommendedBlock instanceof TextBlock){
@@ -84,6 +130,12 @@ function newSection(blockContent){
           if(recommendedBlock instanceof DataBlock){
             blockClass = "data-block";
           }
+
+          var recs = getRuleBasedRecommendations();
+          $(this).parent().data('data-rec-selected', false);
+
+          // TODO: add in selectable recommendations to a list UI element
+
           $(this).parent().parent().addClass(blockClass);
           insertEmptySection($(this).parent(), newSection(recommendedBlock.renderToAuthor()));
         })
@@ -95,7 +147,7 @@ function newSection(blockContent){
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-file-alt"></i> Text</button>')
         .click(function(){
           $(this).parent().parent().addClass('text-block');
-          insertEmptySection($(this).parent(), newSection(new TextBlock().renderToAuthor()));
+          insertEmptySection($(this).parent(), newSection(new TextBlock("", "").renderToAuthor()));
         })
       )
 

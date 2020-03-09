@@ -78,13 +78,13 @@ onPageEnter["analysis"] = analysisViewInit;
 function analysisViewLeave(){
     //TODO: Introduce a rule-based template system instead of creating it here - these "interesting features"
     //could be stored in Story.instance.metadata, and used to drive the story-rules
-    storyTemplate.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience"));
+    storyTemplate.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience", "I"));
     $(".interesting-data.active").each(function(index, element){
         console.log("Foo");
         var interest = interestingCharts[$(element).attr("interest")];
-        storyTemplate.push(new TextBlock("Introduce the concept of '"+interest.header1+"' here; talk about what it is, why it matters, and so on."));
+        storyTemplate.push(new TextBlock("Introduce the concept of '"+interest.header1+"' here; talk about what it is, why it matters, and so on.", "C"));
         if(interest.header2){
-            storyTemplate.push(new TextBlock("Introduce the concept of '"+interest.header2+"' here; talk about what it is, why it matters, and so on."));
+            storyTemplate.push(new TextBlock("Introduce the concept of '"+interest.header2+"' here; talk about what it is, why it matters, and so on.", "C"));
         }
         storyTemplate.push(new ChartBlock(interest.chart.render()._groups[0][0].innerHTML));
 
@@ -92,13 +92,20 @@ function analysisViewLeave(){
         //as from the "interesting.features" array; this might necessitate making a more well-structured 'Feature' object that is
         //stored in, e.g., Story.instance.metadata
         if(interest.header2){
-            storyTemplate.push(new TextBlock("Explain the relationship between the two variables, and reference the correlation or trend visualised above."));
+            storyTemplate.push(new TextBlock("Explain the relationship between the two variables, and reference the correlation or trend visualised above.", "X"));
         }
         else{
-            storyTemplate.push(new TextBlock("Explain the significance of this value, and how the distribution shown above is important in the overall context."));
+            storyTemplate.push(new TextBlock("Explain the significance of this value, and how the distribution shown above is important in the overall context.", "X"));
         }
     });
-    storyTemplate.push(new TextBlock("Conclude your story; summarise the key points you have made and again, emphasise why it is important to your audience."));
+    storyTemplate.push(new TextBlock("Conclude your story; summarise the key points you have made and again, emphasise why it is important to your audience.", "Z"));
+
+    $(".interesting-data.active").each(function(index, element){
+        var interest = interestingCharts[$(element).attr("interest")];
+        var newNarrFeature = new NarrativeFeature(interest.header1, interest.header2, interest.chart, interest.features);
+        Story.instance.metadata.features.push(newNarrFeature);
+    });
+    console.log(Story.instance.metadata.features);
 }
 
 onPageLeave["analysis"] = analysisViewLeave;
@@ -183,20 +190,20 @@ function getInterestingFeatures(header1, header2){
             return;
         }
         else if(col1[0] instanceof Date && !isNaN(col2[0])){
-            x = col1.map(date => date.getTime())
-            xheader = header1
-            y = col2
-            yheader = header2
+            x = col1.map(date => date.getTime());
+            xheader = header1;
+            y = col2;
+            yheader = header2;
         }
         else if(col2[0] instanceof Date && !isNaN(col1[0])){
             x = col2.map(date => date.getTime())
-            xheader = header2
-            y = col1   
-            yheader = header1
+            xheader = header2;
+            y = col1;
+            yheader = header1;
             //Swap these around so that chart labels look
             //nicer; e.g. "Value/year"
-            interesting.header1 = header2
-            interesting.header2 = header1
+            interesting.header1 = header2;
+            interesting.header2 = header1;
         }
         else{
             //TODO: add additional checks here
@@ -212,10 +219,23 @@ function getInterestingFeatures(header1, header2){
             interesting.features.push(corrNarrative);
         }
 
-        //TODO: test for outliers/peaks/troughs
+        //Test for clusters
+        var clusters = getClusters(x, y);
+        if(Math.max(...clusters) > 1){
+            interesting.features.push("There are approximately "+Math.max(...clusters)+" distinct clusters in this data");
+        }
+
+        //Test for numerical outliers
+        var xOutliers = getIQROutliers(x);
+        var yOutliers = getIQROutliers(y);
+        var numOutliers = xOutliers.length + yOutliers.length;
+        if(numOutliers > 0) {
+            interesting.features.push("There are approximately "+numOutliers+" outliers in this data");
+        }
+
+        //TODO: test for peaks/troughs
 
     }
-
     //Both columns are numeric data
     else if(!(col1[0] instanceof Date) && !isNaN(col1[0]) && !(col2[0] instanceof Date) && !isNaN(col2[0])){
         
@@ -232,6 +252,17 @@ function getInterestingFeatures(header1, header2){
         var clusters = getClusters(col1, col2);
         if(Math.max(...clusters) > 1){
             interesting.features.push("There are approximately "+Math.max(...clusters)+" distinct clusters in this data");
+        }
+        console.log(clusters);
+
+        //Test for numerical outliers
+        var xOutliers = getIQROutliers(col1);
+        var yOutliers = getIQROutliers(col2);
+        console.log(header1, xOutliers);
+        console.log(header2, yOutliers);
+        var numOutliers = xOutliers.length + yOutliers.length;
+        if(numOutliers > 0) {
+            interesting.features.push("There are approximately "+numOutliers+" outliers in this data");
         }
     }
     else{

@@ -164,11 +164,13 @@ class StoryBlock {
  * A story block containing textual information.
  */
 class TextBlock extends StoryBlock {
+
   /**
    * Initialises the properties of the super class and the child class.
    */
-  constructor(content) {
+  constructor(content, cfoType) {
     super(content);
+    this.cfoType = cfoType;
   }
 
 
@@ -177,7 +179,21 @@ class TextBlock extends StoryBlock {
    */
   renderToAuthor() {
     var content = (this.content) ? this.content : "";
-    return '<div class="text-block"><textarea class="form-control" rows="4" cols="100">'+content+'</textarea></div>';
+
+    // TODO: move this over to jquery for consistency
+    var block = '<div class="text-block" data-cfotype="'+this.cfoType+'">';
+    block += '<select class="custom-select">';
+
+    for(var index in CFOTYPES) {
+      var selected = (this.cfoType === index) ? "selected" : "";
+      block += '<option value="'+index+'" '+selected+'>'+index+'</option>';
+    }
+
+    block += '</select>';
+    block += '<textarea class="form-control" rows="4" cols="100">'+content+'</textarea>';
+    block += '</div>';
+
+    return block;
   }
 
   /**
