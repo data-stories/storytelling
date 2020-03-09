@@ -42,7 +42,7 @@ class Metadata {
         this.dependencies = [];
         /**
          * Array of interesting features determined during data analysis.
-         * Array member type is Feature.
+         * Array member type is NarrativeFeature.
          * @private
          * @type {Array}
          */
@@ -87,7 +87,7 @@ class NarrativeFeature {
      * @param {string} chart
      * @param {Array} features
      */
-    constructor(header1, header2, chart, features ){
+    constructor(header1, header2, chart, features){
         this.header1 = header1;
         this.header2 = header2;
         this.chart = chart;
