@@ -7,9 +7,10 @@ var storyTemplate = [];
 
 /**
  * Here we use an extended version of the CFO Pattern proposed by https://dl.acm.org/doi/10.2312/eurovisshort.20171129
- * We add 'Introduction' and 'Article Conclusion' to round-off the types necessary for a whole article
+ * We add 'Introduction' and 'Article Conclusion' to round-off the types necessary for a whole article.
+ * A typical string representation for a story might be ICFFXOCFFFOCFFOZ.
  */
-var CFOTYPES = {
+const CFOTYPES = {
   "Introduction": "I",          // One of these at the start of the article
   "Claim/question": "C",        // 1+ of these throughout the article
   "Fact/evidence": "F",         // 1+ of these for each claim
@@ -41,17 +42,53 @@ function getRuleBasedRecommendations() {
   var aStr = getCFOTypeStrings(allSectionsArr);
 
   //console.log("[" + pStr + "]", "[" + nStr + "]");
+  var recSet = [];
 
-  // Rule: story must start with an introduction
-  if((pStr === "") && (nStr.search(/^I/) === -1) ) {
-    recs.push(new TextBlock("Introduce your article in a single paragraph, highlighting key questions and findings.", "Introduction"));
+  // RULE: story must start with an introduction
+  if((pStr === "") && !/^I/.test(nStr)) {
+    recs.push([new TextBlock("Introduce your article in a single paragraph, highlighting key questions and findings.", "Introduction")]);
   }
 
-  // Rule:
+  // RULE: if preceded by an introduction or a Conclusion, and we have at least one narrative feature suggestion,
+  // suggest the next one as a set of Claim, Fact, Explanation and Conclusion set
+  if(Story.instance.metadata.features.length >= 1 && /[IO]$/.test(pStr)) {
+    var narrFeature = Story.instance.metadata.features.shift();
+    recSet = [];
+    recSet.push(new TextBlock("State a claim regarding the chart below.", "Claim/question"));
+    recSet.push(new ChartBlock(narrFeature.chart.render()._groups[0][0].innerHTML));
+    recSet.push(new TextBlock("Introduce the concept of '"+narrFeature.header1+"' here; talk about what it is, why it matters, and so on.", "Explanation"));
+    recSet.push(new TextBlock("Introduce the concept of '"+narrFeature.header2+"' here; talk about what it is, why it matters, and so on.", "Explanation"));
+    for (var f = 0; f < narrFeature.intFeatures.length; f++) {
+      var feature = narrFeature.intFeatures[f];
+      recSet.push(new TextBlock("Potentially explain the observation that: " + feature + ".", "Fact/evidence"));
+    }
+    recSet.push(new TextBlock("Draw a conclusion, taking into account the claim, chart, and associated facts.", "Conclusion"));
+    recs.push(recSet);
+  }
 
-  // Rule: story must end with an article conclusion
-  if((pStr.search(/Z$/) === -1) && (nStr === "")) {
-    recs.push(new TextBlock("Provide a lead-out summary of the main conclusions in the article.", "Article conclusion"));
+  // RULE: if preceded by an introduction or a Conclusion, and we have no narrative feature suggestions,
+  // suggest a basic Claim/Fact/Conclusion set
+  if(/[IO]$/.test(pStr)) {
+    recSet = [];
+    recSet.push(new TextBlock("State a claim about data already presented, or a new claim.", "Claim/question"));
+    recSet.push(new TextBlock("Explain a fact to justify the claim.", "Fact/evidence"));
+    recSet.push(new TextBlock("Draw a conclusion, taking into account the claim and associated facts.", "Conclusion"));
+    recs.push(recSet);
+  }
+
+  // RULE: if preceded by a Fact/evidence, suggest another Fact/evidence
+  if(/[F]$/.test(pStr)) {
+    recs.push([new TextBlock("Use a fact to justify the claim.", "Fact/evidence")]);
+  }
+
+  // RULE: if preceded by a Fact/evidence, suggest an Explanation for that Fact/evidence
+  if(/[F]$/.test(pStr)) {
+    recs.push([new TextBlock("Elaborate on the fact/evidence just presented, e.g. the collection or analytical mechanisms.", "Explanation")]);
+  }
+
+  // RULE: story must end with an article conclusion
+  if(!/Z$/.test(pStr) && (nStr === "")) {
+    recs.push([new TextBlock("Provide a lead-out summary of the main conclusions in the article.", "Article conclusion")]);
   }
 
   return recs;
@@ -62,7 +99,7 @@ function getRuleBasedRecommendations() {
  * Cycle through each section in an array of StoryBlock sections, returning a string of CFOTYPES character
  * representations for each section type for easier rule-based recommendation analysis.
  * @param {Array} sectionsArr - array of StoryBlock sections
- * @return {Array} sectionsTypeStr - CFOTYPES string representation of each StoryBlock section
+ * @return {string} sectionsTypeStr - CFOTYPES string representation of each StoryBlock section
  */
 function getCFOTypeStrings(sectionsArr) {
   var sectionsTypeStr = "";

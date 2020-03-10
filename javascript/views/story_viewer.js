@@ -123,28 +123,42 @@ function newSection(blockContent){
           $(this).parent().data('data-rec-selected', true);
 
           //var recommendedBlock = storyTemplate.shift();
-          var recommendedBlock = getRuleBasedRecommendations()[0];
-          if(recommendedBlock){
-            var blockClass;
-            if(recommendedBlock instanceof TextBlock){
-              blockClass = "text-block";
-            }
-            else if(recommendedBlock instanceof ImageBlock){
-              blockClass = "image-block";
-            }
-            else if(recommendedBlock instanceof ChartBlock){
-              blockClass = "chart-block";
-            }
-            if(recommendedBlock instanceof DataBlock){
-              blockClass = "data-block";
-            }
-
+          var recommendedBlockArr = getRuleBasedRecommendations()[0];
+          if(recommendedBlockArr){
+            console.log(recommendedBlockArr);
             $(this).parent().data('data-rec-selected', false);
 
-            // TODO: add in all selectable recommendations to a list UI element
+            var container = $(this).parent();
+            for(var rb = 0; rb < recommendedBlockArr.length; rb++){
+              var recommendedBlock = recommendedBlockArr[rb];
+              if(recommendedBlock){
+                var blockClass;
+                if(recommendedBlock instanceof TextBlock){
+                  blockClass = "text-block";
+                }
+                else if(recommendedBlock instanceof ImageBlock){
+                  blockClass = "image-block";
+                }
+                else if(recommendedBlock instanceof ChartBlock){
+                  blockClass = "chart-block";
+                }
+                if(recommendedBlock instanceof DataBlock){
+                  blockClass = "data-block";
+                }
 
-            $(this).parent().parent().addClass(blockClass);
-            insertEmptySection($(this).parent(), newSection(recommendedBlock.renderToAuthor()));
+                // TODO: add in all selectable recommendation sets to a list UI element
+
+                // Add the recommendation before this container block, so multiple ones are inserted into
+                // the story chain in the right order (and not backwards, as if we had used '.after')
+                container.parent().addClass(blockClass);
+                container
+                  .before(createAddSectionButton())
+                  .before(newSection(recommendedBlock.renderToAuthor()))
+              }
+            }
+            container
+              .after(createAddSectionButton())
+              .remove();
           }
         })
         //Disable the button if there's nothing in the recommender queue
@@ -192,7 +206,6 @@ function newSection(blockContent){
 
   return block;
 }
-
 
 function insertEmptySection(container, section){
   container
