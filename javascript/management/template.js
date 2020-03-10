@@ -19,6 +19,7 @@ const CFOTYPES = {
   "Article conclusion": "Z"     // Summarises the article's contribution
 };
 
+const MAX_CLAIMS = 3;           // The maximum suggested number of claims in a story
 
 /**
  * Provide a list of potential recommendations, dependent on the context of where in the story recommendations
@@ -44,9 +45,18 @@ function getRuleBasedRecommendations() {
   //console.log("[" + pStr + "]", "[" + nStr + "]");
   var recSet = [];
 
+  /*
+   * Narrative rules are defined below, in priority order
+   */
+
   // RULE: story must start with an introduction
   if((pStr === "") && !/^I/.test(nStr)) {
     recs.push([new TextBlock("Introduce your article in a single paragraph, highlighting key questions and findings.", "Introduction")]);
+  }
+
+  // RULE: story must end with an article conclusion if we've reached a set amount of claims
+  if(!/Z$/.test(pStr) && (nStr === "") && (pStr.split('C').length-1 >= MAX_CLAIMS)) {
+    recs.push([new TextBlock("Provide a lead-out summary of the main conclusions in the article.", "Article conclusion")]);
   }
 
   // RULE: if preceded by an introduction or a Conclusion, and we have at least one narrative feature suggestion,
@@ -66,7 +76,7 @@ function getRuleBasedRecommendations() {
     recs.push(recSet);
   }
 
-  // RULE: if preceded by an introduction or a Conclusion, and we have no narrative feature suggestions,
+  // RULE: if preceded by an Introduction or a Conclusion, and we have no narrative feature suggestions,
   // suggest a basic Claim/Fact/Conclusion set
   if(/[IO]$/.test(pStr)) {
     recSet = [];
@@ -76,20 +86,19 @@ function getRuleBasedRecommendations() {
     recs.push(recSet);
   }
 
-  // RULE: if preceded by a Fact/evidence, suggest another Fact/evidence
-  if(/[F]$/.test(pStr)) {
+  // RULE: if preceded by a Claim, Fact/evidence, or Explanation, suggest another Fact/evidence
+  if(/[CFX]$/.test(pStr)) {
     recs.push([new TextBlock("Use a fact to justify the claim.", "Fact/evidence")]);
   }
 
   // RULE: if preceded by a Fact/evidence, suggest an Explanation for that Fact/evidence
-  if(/[F]$/.test(pStr)) {
+  if(/F$/.test(pStr)) {
     recs.push([new TextBlock("Elaborate on the fact/evidence just presented, e.g. the collection or analytical mechanisms.", "Explanation")]);
   }
 
-  // RULE: story must end with an article conclusion
-  if(!/Z$/.test(pStr) && (nStr === "")) {
-    recs.push([new TextBlock("Provide a lead-out summary of the main conclusions in the article.", "Article conclusion")]);
-  }
+  /*
+   * End of rule definitions
+   */
 
   return recs;
 }
