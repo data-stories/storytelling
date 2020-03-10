@@ -29,32 +29,6 @@ function storyViewLeave(){
   Story.instance.metadata.author = $("#export-author").val();
 
   Story.instance.blocks = getCurrentStory(true, true);
-  /* TODO: remove this when rule-based system complete
-  Story.instance.blocks = [];
-
-  $(".story-block").each(function(){
-
-    var storyBlock;
-    var block = $(this).find('div');
-    
-    if(block.hasClass("text-block")){
-      storyBlock = new TextBlock(block.find('textarea').val());
-    }
-    else if(block.hasClass("chart-block")){
-      storyBlock = new ChartBlock(block.html());
-    }
-    else if(block.hasClass("image-block")){
-      storyBlock = new ImageBlock(block.find('.image-caption').val(), $(this).find('.image-url').val());
-    }
-    else if(block.hasClass("data-block")){
-      storyBlock = new DataBlock(block.html());
-    }
-
-    if(storyBlock){
-      Story.instance.blocks.push(storyBlock);
-    }
-  });
-  */
 }
 
 onPageLeave["story"] = storyViewLeave;
@@ -119,10 +93,8 @@ function newSection(blockContent){
     block
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-file-alt"></i> Recommend</button>')
         .click(function(){
-          //TODO: Replace this with a proper rule-based dynamic template system
           $(this).parent().data('data-rec-selected', true);
 
-          //var recommendedBlock = storyTemplate.shift();
           var recommendedBlockArr = getRuleBasedRecommendations()[0];
           if(recommendedBlockArr){
             console.log(recommendedBlockArr);
@@ -161,9 +133,9 @@ function newSection(blockContent){
               .remove();
           }
         })
-        //Disable the button if there's nothing in the recommender queue
+        //Disable the button if there's nothing that can be recommended - replace <condition>
         //TODO: replace the queue with a rule based system that takes into account previous and subsequent StoryBlocks
-        .prop('disabled', storyTemplate.length == 0)
+        //.prop('disabled', <condition>)
       )
 
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-file-alt"></i> Text</button>')

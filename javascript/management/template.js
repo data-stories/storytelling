@@ -1,9 +1,6 @@
-// TODO: deprecated - remove when rule-based system in place
-// Used by:
-//  - analysis_viewer.js to populate with recommended story blocks
-//  - story_viewer.js to 'pop' recommendations from when 'Recommendation' is clicked
-var storyTemplate = [];
-
+/**
+ * The rule-based recommendation system.
+ */
 
 /**
  * Here we use an extended version of the CFO Pattern proposed by https://dl.acm.org/doi/10.2312/eurovisshort.20171129

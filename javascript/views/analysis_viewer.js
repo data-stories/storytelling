@@ -76,32 +76,8 @@ function analysisViewInit(){
 onPageEnter["analysis"] = analysisViewInit;
 
 function analysisViewLeave(){
-    //TODO: Introduce a rule-based template system instead of creating it here - these "interesting features"
-    //could be stored in Story.instance.metadata, and used to drive the story-rules
-    storyTemplate.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience", "I"));
-    $(".interesting-data.active").each(function(index, element){
-        console.log("Foo");
-        var interest = interestingCharts[$(element).attr("interest")];
-        storyTemplate.push(new TextBlock("Introduce the concept of '"+interest.header1+"' here; talk about what it is, why it matters, and so on.", "C"));
-        if(interest.header2){
-            storyTemplate.push(new TextBlock("Introduce the concept of '"+interest.header2+"' here; talk about what it is, why it matters, and so on.", "C"));
-        }
-        storyTemplate.push(new ChartBlock(interest.chart.render()._groups[0][0].innerHTML));
-
-        //TODO: It would be nice to add some automatically generated text into the block(s) below, such
-        //as from the "interesting.features" array; this might necessitate making a more well-structured 'Feature' object that is
-        //stored in, e.g., Story.instance.metadata
-        if(interest.header2){
-            storyTemplate.push(new TextBlock("Explain the relationship between the two variables, and reference the correlation or trend visualised above.", "X"));
-        }
-        else{
-            storyTemplate.push(new TextBlock("Explain the significance of this value, and how the distribution shown above is important in the overall context.", "X"));
-        }
-    });
-    storyTemplate.push(new TextBlock("Conclude your story; summarise the key points you have made and again, emphasise why it is important to your audience.", "Z"));
-
     // Add each interesting feature to a NarrativeFeatures array for use by rule-based recommendation system
-    // TODO: look at refactoring interestingcharts to use NarrativeFeatures class
+    // TODO: look at refactoring interestingCharts to use NarrativeFeatures class directly
     $(".interesting-data.active").each(function(index, element){
         var interest = interestingCharts[$(element).attr("interest")];
         var newNarrFeature = new NarrativeFeature(interest.header1, interest.header2, interest.chart, interest.features);
