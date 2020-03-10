@@ -170,7 +170,7 @@ class TextBlock extends StoryBlock {
    */
   constructor(content, cfoType) {
     super(content);
-    this.cfoType = cfoType;
+    this.cfoType = cfoType;   // CFO Pattern subtype
   }
 
 
@@ -180,18 +180,18 @@ class TextBlock extends StoryBlock {
   renderToAuthor() {
     var content = (this.content) ? this.content : "";
 
-    // TODO: move this over to jquery for consistency
-    var block = '<div class="text-block" data-cfotype="'+this.cfoType+'">';
-    block += '<select class="custom-select">';
-
-    for(var index in CFOTYPES) {
-      var selected = (this.cfoType === index) ? "selected" : "";
-      block += '<option value="'+index+'" '+selected+'>'+index+'</option>';
+    var block = $('<div>');
+    block.addClass('text-block');
+    var select = $('<select>');
+    select.addClass('custom-select');
+    for(var cfotype in CFOTYPES) {
+      var selected = (this.cfoType === cfotype) ? "selected" : "";
+      var option = $('<option value="'+cfotype+'" '+selected+'>'+cfotype+'</option>');
+      select.append(option);
     }
-
-    block += '</select>';
-    block += '<textarea class="form-control" rows="4" cols="100">'+content+'</textarea>';
-    block += '</div>';
+    block.append(select);
+    var textarea = $('<textarea class="form-control" rows="4" cols="100">'+content+'</textarea>');
+    block.append(textarea);
 
     return block;
   }

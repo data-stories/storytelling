@@ -1,9 +1,10 @@
-/*
+/**
  * A function to identify and extract outliers using an Inter-Quartile Range (IQR), most commonly used to generate boxplots.
  * Based on code by: James Peterson, https://stackoverflow.com/questions/20811131/javascript-remove-outlier-from-an-array
  * 2013
+ * @param {Array} someArray - array of number values
+ * @returns {Array} outlierValues - outlier values that are outside the calculated range
  */
-
 function getIQROutliers(someArray){
     // Copy the values, rather than operating on references to existing values
     var values = someArray.concat();

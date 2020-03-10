@@ -75,9 +75,9 @@ class Metadata {
     }
 }
 
-/*
+/**
  * A class used by the Metadata class to persist interesting narrative features identified during data analysis
- * for potential selection during story authoring.
+ * for potential selection for a story during rule-based recommendation analysis.
  */
 class NarrativeFeature {
     /**

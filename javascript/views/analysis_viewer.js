@@ -100,6 +100,8 @@ function analysisViewLeave(){
     });
     storyTemplate.push(new TextBlock("Conclude your story; summarise the key points you have made and again, emphasise why it is important to your audience.", "Z"));
 
+    // Add each interesting feature to a NarrativeFeatures array for use by rule-based recommendation system
+    // TODO: look at refactoring interestingcharts to use NarrativeFeatures class
     $(".interesting-data.active").each(function(index, element){
         var interest = interestingCharts[$(element).attr("interest")];
         var newNarrFeature = new NarrativeFeature(interest.header1, interest.header2, interest.chart, interest.features);

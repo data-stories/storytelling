@@ -60,7 +60,13 @@ function storyViewLeave(){
 onPageLeave["story"] = storyViewLeave;
 
 
-//TODO: add doc
+/**
+ * Obtain the current story from the UI in terms of StoryBlocks, returning either (or both) of the sections prior
+ * and subsequent to the seelction point in the story the 'Recommendation' button is pressed.
+ * @param {boolean} prevSections - whether the sections prior to the selection point are included
+ * @param {boolean} nextSections - whether the sections subsequent to the selection point are included
+ * @returns {Array} currentStory - the current story as an array of StoryBlocks
+ */
 function getCurrentStory(prevSections, nextSections) {
 
   var currentStory = [];
@@ -116,28 +122,30 @@ function newSection(blockContent){
           //TODO: Replace this with a proper rule-based dynamic template system
           $(this).parent().data('data-rec-selected', true);
 
-          var recommendedBlock = storyTemplate.shift();
-          var blockClass;
-          if(recommendedBlock instanceof TextBlock){
-            blockClass = "text-block";
-          }
-          else if(recommendedBlock instanceof ImageBlock){
-            blockClass = "image-block";
-          }
-          else if(recommendedBlock instanceof ChartBlock){
-            blockClass = "chart-block";
-          }
-          if(recommendedBlock instanceof DataBlock){
-            blockClass = "data-block";
-          }
+          //var recommendedBlock = storyTemplate.shift();
+          var recommendedBlock = getRuleBasedRecommendations()[0];
+          if(recommendedBlock){
+            var blockClass;
+            if(recommendedBlock instanceof TextBlock){
+              blockClass = "text-block";
+            }
+            else if(recommendedBlock instanceof ImageBlock){
+              blockClass = "image-block";
+            }
+            else if(recommendedBlock instanceof ChartBlock){
+              blockClass = "chart-block";
+            }
+            if(recommendedBlock instanceof DataBlock){
+              blockClass = "data-block";
+            }
 
-          var recs = getRuleBasedRecommendations();
-          $(this).parent().data('data-rec-selected', false);
+            $(this).parent().data('data-rec-selected', false);
 
-          // TODO: add in selectable recommendations to a list UI element
+            // TODO: add in all selectable recommendations to a list UI element
 
-          $(this).parent().parent().addClass(blockClass);
-          insertEmptySection($(this).parent(), newSection(recommendedBlock.renderToAuthor()));
+            $(this).parent().parent().addClass(blockClass);
+            insertEmptySection($(this).parent(), newSection(recommendedBlock.renderToAuthor()));
+          }
         })
         //Disable the button if there's nothing in the recommender queue
         //TODO: replace the queue with a rule based system that takes into account previous and subsequent StoryBlocks
