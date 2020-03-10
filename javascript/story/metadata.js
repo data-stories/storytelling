@@ -82,16 +82,16 @@ class Metadata {
 class NarrativeFeature {
     /**
      * Initialises class properties;
-     * @param {string} header1
-     * @param {string} header2
-     * @param {string} chart
-     * @param {Array} features
+     * @param {string} header1 - the column header name for the first axis
+     * @param {string} header2 - the column header name for the second axis
+     * @param {string} chart - the generated chart, based on the two columns
+     * @param {Array} intFeatures - an array of feature strings describing analytical observations about the data
      */
-    constructor(header1, header2, chart, features){
+    constructor(header1, header2, chart, intFeatures){
         this.header1 = header1;
         this.header2 = header2;
         this.chart = chart;
-        this.features = features;
+        this.intFeatures = intFeatures;
     }
 
 }
