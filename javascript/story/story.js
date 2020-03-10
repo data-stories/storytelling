@@ -184,6 +184,8 @@ class TextBlock extends StoryBlock {
     block.addClass('text-block');
     var select = $('<select>');
     select.addClass('custom-select');
+    var option = $('<option value="">(None)</option>');
+    select.append(option);
     for(var cfotype in CFOTYPES) {
       var selected = (this.cfoType === cfotype) ? "selected" : "";
       var option = $('<option value="'+cfotype+'" '+selected+'>'+cfotype+'</option>');
