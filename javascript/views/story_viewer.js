@@ -39,12 +39,19 @@ onPageLeave["story"] = storyViewLeave;
  * and subsequent to the seelction point in the story the 'Recommendation' button is pressed.
  * @param {boolean} prevSections - whether the sections prior to the selection point are included
  * @param {boolean} nextSections - whether the sections subsequent to the selection point are included
+ * @param {string} container - optional DOM element to use as marker to determine prev/next sections
  * @returns {Array} currentStory - the current story as an array of StoryBlocks
  */
-function getCurrentStory(prevSections, nextSections) {
+function getCurrentStory(prevSections, nextSections, container) {
 
   var currentStory = [];
   var foundActive = false;
+
+  // If set, we set a temporary marker in the DOM so we can
+  // determine the previous and subsequent sections of the story
+  if(!!container) {
+    container.data('data-rec-selected', true);
+  }
 
   $(".story-block").each(function() {
     var storyBlock;
@@ -52,6 +59,7 @@ function getCurrentStory(prevSections, nextSections) {
 
     // Have we found an active story block, i.e. the recommend button has been pressed?
     if ($(this).data('data-rec-selected') === true) {
+      console.log("Found!");
       foundActive = true;
     }
 
@@ -76,6 +84,11 @@ function getCurrentStory(prevSections, nextSections) {
     }
   });
 
+  // Unset our temporary DOM marker
+  if(!!container) {
+    container.data('data-rec-selected', false);
+  }
+
   return currentStory;
 }
 
@@ -90,75 +103,28 @@ function newSection(blockContent){
       $(this).parent().remove();
     }));
 
+    addRecommendationOptions(block);
+
     block
-      .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-file-alt"></i> Recommend</button>')
-        .click(function(){
-          $(this).parent().data('data-rec-selected', true);
-
-          var recommendedBlockArr = getRuleBasedRecommendations()[0];
-          if(recommendedBlockArr){
-            console.log(recommendedBlockArr);
-            $(this).parent().data('data-rec-selected', false);
-
-            var container = $(this).parent();
-            for(var rb = 0; rb < recommendedBlockArr.length; rb++){
-              var recommendedBlock = recommendedBlockArr[rb];
-              if(recommendedBlock){
-                var blockClass;
-                if(recommendedBlock instanceof TextBlock){
-                  blockClass = "text-block";
-                }
-                else if(recommendedBlock instanceof ImageBlock){
-                  blockClass = "image-block";
-                }
-                else if(recommendedBlock instanceof ChartBlock){
-                  blockClass = "chart-block";
-                }
-                if(recommendedBlock instanceof DataBlock){
-                  blockClass = "data-block";
-                }
-
-                // TODO: add in all selectable recommendation sets to a list UI element
-
-                // Add the recommendation before this container block, so multiple ones are inserted into
-                // the story chain in the right order (and not backwards, as if we had used '.after')
-                container.parent().addClass(blockClass);
-                container
-                  .before(createAddSectionButton())
-                  .before(newSection(recommendedBlock.renderToAuthor()))
-              }
-            }
-            container
-              .after(createAddSectionButton())
-              .remove();
-          }
-        })
-        //Disable the button if there's nothing that can be recommended - replace <condition>
-        //TODO: replace the queue with a rule based system that takes into account previous and subsequent StoryBlocks
-        //.prop('disabled', <condition>)
-      )
-
+      .append($('</br>'))
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-file-alt"></i> Text</button>')
         .click(function(){
           $(this).parent().parent().addClass('text-block');
           insertEmptySection($(this).parent(), newSection(new TextBlock("", "").renderToAuthor()));
         })
       )
-
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-image"></i> Image</button>')
         .click(function(){
           $(this).parent().addClass('image-block');
           insertEmptySection($(this).parent(), newSection(new ImageBlock().renderToAuthor()));
         })
       )
-
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-chart-bar"></i> Chart</button>')
         .click(function(){
           $(this).parent().addClass('chart-block');
           insertEmptySection($(this).parent(), newSection(new ChartBlock().renderToAuthor()));
         })
       )
-
       .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-table"></i> Data</button>')
         .click(function(){
           $(this).parent().addClass('data-block');
@@ -166,7 +132,6 @@ function newSection(blockContent){
         })
         .prop('disabled', true)
       );
-
   }
   else{
     block.append($('<button class="btn btn-sm btn-danger trash-button"><i class="fas fa-trash-alt"></i></button>').click(function(){
@@ -177,6 +142,53 @@ function newSection(blockContent){
   }
 
   return block;
+}
+
+/**
+ * Obtain and add recommendations to the new section panel based on where we are in the story
+ * when the user clicked the recommendations button.
+ * @param container - the StoryBlock new section panel that will contain the list of recommendations
+ */
+function addRecommendationOptions(container) {
+  var recSetArr = getRuleBasedRecommendations(container);
+
+  for (var rs = recSetArr.length-1; rs >= 0; rs--) {
+    var recArr = recSetArr[rs];
+    container.prepend($('<button class="btn btn-info btn-story-block w-75"><i class="fas fa-check-square"></i> ' + recArr.reason + '</button>')
+      .click(function(recArr) {
+        return function() {
+          var recSet = recArr.recommendations;
+          var container = $(this).parent();
+          for (var rb = 0; rb < recSet.length; rb++) {
+            var recommendedBlock = recSet[rb];
+            if (recommendedBlock) {
+              var blockClass;
+              if (recommendedBlock instanceof TextBlock) {
+                blockClass = "text-block";
+              } else if (recommendedBlock instanceof ImageBlock) {
+                blockClass = "image-block";
+              } else if (recommendedBlock instanceof ChartBlock) {
+                blockClass = "chart-block";
+              }
+              if (recommendedBlock instanceof DataBlock) {
+                blockClass = "data-block";
+              }
+
+              // Add the recommendation before this container block, so multiple ones are inserted into
+              // the story chain in the right order (and not backwards, as if we had used '.after')
+              container.parent().addClass(blockClass);
+              container
+                .before(createAddSectionButton())
+                .before(newSection(recommendedBlock.renderToAuthor()))
+            }
+          }
+          container
+            .after(createAddSectionButton())
+            .remove();
+        }
+      }(recArr))
+    );
+  }
 }
 
 function insertEmptySection(container, section){
