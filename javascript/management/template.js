@@ -1,10 +1,3 @@
-// TODO: deprecated - remove when rule-based system in place
-// Used by:
-//  - analysis_viewer.js to populate with recommended story blocks
-//  - story_viewer.js to 'pop' recommendations from when 'Recommendation' is clicked
-var storyTemplate = [];
-
-
 /**
  * Here we use an extended version of the CFO Pattern proposed by https://dl.acm.org/doi/10.2312/eurovisshort.20171129
  * We add 'Introduction' and 'Article Conclusion' to round-off the types necessary for a whole article.
