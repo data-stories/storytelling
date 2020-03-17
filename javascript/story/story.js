@@ -263,51 +263,107 @@ class ChartBlock extends StoryBlock {
 
     chartButtons.append(row);
 
-    if(charts.length <= 3){
-      return chartButtons;
-    }
+    if(charts.length > 3){
 
-    var button = $('<button class="btn btn-secondary btn-chart">Show more</button>');
-    button.click(function(){
-      $(this).siblings(".row").each(function(){
-        $(this).show();
-      });
-      $(this).remove();
-    });
-    chartButtons.append(button);
-
-
-
-    for(let i = 3; i<charts.length; i+=3){
-
-      var row = $('<div>');
-      row.addClass('row');
-      row.hide();
-
-      for(let j = 0; j<3; j++){
-        if(!charts[i+j]){
-          break;
-        }
-        var col = $('<div>');
-        col.addClass('col-4');
-        var chartPreview = $('<div>');
-        chartPreview.addClass('chart-preview');
-        col.append(chartPreview);
-        charts[i+j].render(d3.select(chartPreview[0]), 325, 140);
-
-        var button = $('<button class="btn btn-primary btn-chart">'+charts[i+j].title+'</button>');
-        button.click(function(){
-          var container = $(this).parent().parent().parent();
-          container.empty();
-          container.addClass("chart-block");
-          charts[i+j].render(d3.select(container[0]));
+      chartButtons.append($('</br>'));
+      var button = $('<button class="btn btn-secondary btn-chart">Show more</button>');
+      button.click(function(){
+        $(this).siblings(".row").each(function(){
+          $(this).show();
         });
-        col.append(button);
-        row.append(col);
-      }
-      chartButtons.append(row);
+        $(this).remove();
+      });
+      chartButtons.append(button);
 
+      for(let i = 3; i<charts.length; i+=3){
+
+        var row = $('<div>');
+        row.addClass('row');
+        row.hide();
+
+        for(let j = 0; j<3; j++){
+          if(!charts[i+j]){
+            break;
+          }
+          var col = $('<div>');
+          col.addClass('col-4');
+          var chartPreview = $('<div>');
+          chartPreview.addClass('chart-preview');
+          col.append(chartPreview);
+          charts[i+j].render(d3.select(chartPreview[0]), 325, 140);
+
+          var button = $('<button class="btn btn-primary btn-chart">'+charts[i+j].title+'</button>');
+          button.click(function(){
+            var container = $(this).parent().parent().parent();
+            container.empty();
+            container.addClass("chart-block");
+            charts[i+j].render(d3.select(container[0]));
+          });
+          col.append(button);
+          row.append(col);
+        }
+        chartButtons.append(row);
+
+      }
     }
+
+    // Create a custom chart creation panel
+    chartButtons.append($('</br>'));
+
+    var card = $('<div class="card w-50 m-3">');
+    card.append('<h6 class="card-header">Custom Chart</h6>');
+
+    var cardBody = $('<div class="card-body">');
+
+    var selectChartType = $('<select class="custom-select col-sm-4 m-1" id="custom-chart-type">');
+    selectChartType.append($('<option value="bar">Bar chart</option>'));
+    selectChartType.append($('<option value="line">Line chart</option>'));
+    selectChartType.append($('<option value="scatter">Scatter chart</option>'));
+
+    var selectXCol = $('<select class="custom-select col-sm-4 m-1" id="custom-x-select">');
+    for(let xa = 0; xa < Story.instance.data.headers.length; xa++) {
+      var xAxisOption = $('<option value="' + Story.instance.data.headers[xa] + '">' + Story.instance.data.headers[xa] + '</option>');
+      selectXCol.append(xAxisOption);
+    }
+    var selectYCol = $('<select class="custom-select col-sm-4 m-1" id="custom-y-select">');
+    for(let xa = 0; xa < Story.instance.data.headers.length; xa++) {
+      var yAxisOption = $('<option value="' + Story.instance.data.headers[xa] + '">' + Story.instance.data.headers[xa] + '</option>');
+      selectYCol.append(yAxisOption);
+    }
+
+    var button = $('<button class="btn btn-primary btn-chart m-1 pull-right"> Create</button>');
+    button.click(function(){
+      var chartType = $('#custom-chart-type').val();
+      var header1 = $('#custom-x-select').val();
+      var header2 = $('#custom-y-select').val();
+      var col1 = Story.instance.data.getColumn(header1);
+      var col2 = Story.instance.data.getColumn(header2);
+      var chart = makeChart(chartType, col1, header1, col2, header2);
+      var container = $(this).parent().parent().parent().parent();
+
+      // Insert the chart directly inline
+      container.empty();
+      container.addClass("chart-block");
+      chart.render(d3.select(container[0]));
+    });
+
+    var formGroup = $('<div class="form-group row">');
+
+    cardBody
+      .append($('<label for="custom-chart-type" class="col-sm-4 col-form-label">Chart Type</label>'))
+      .append(selectChartType)
+      .append($('</br>'))
+      .append($('<label for="custom-x-select" class="col-sm-4 col-form-label">Independent</label>'))
+      .append(selectXCol)
+      .append($('</br>'))
+      .append($('<label for="custom-y-select" class="col-sm-4 col-form-label">Dependent</label>'))
+      .append(selectYCol)
+      .append($('</br>'))
+      .append(button);
+
+    formGroup.append(cardBody);
+    card.append(formGroup);
+    chartButtons.append(card);
 
     return chartButtons;
   }
