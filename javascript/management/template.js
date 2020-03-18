@@ -58,6 +58,8 @@ function getRuleBasedRecommendations(container) {
   if(Story.instance.metadata.features.length >= 1 && /[IO]$/.test(pStr)) {
     // TODO: now we've delayed processing of the recommendations, the features need to be replenished somehow
     // maybe add an optional function callback to recSetArr to remove the 'feature' explicitly? (Likely need a closure)
+    // or perhaps better: just iterate through all narrative features and add each of them as a separate set of recommendations
+    // (do this nondestuctively to the metadata.features array)
     var narrFeature = Story.instance.metadata.features.shift();
     var recArr = [];
     recArr.push(new TextBlock("State a claim regarding the chart below.", "Claim/question"));
@@ -69,6 +71,7 @@ function getRuleBasedRecommendations(container) {
       recArr.push(new TextBlock("Potentially explain the observation that: " + feature + ".", "Fact/evidence"));
     }
     recArr.push(new TextBlock("Draw a conclusion, taking into account the claim, chart, and associated facts.", "Conclusion"));
+    // TODO: add both header column names to reason to distinguish them
     recSetArr.push(createRecBlock("Present a new claim supported by observed data features", recArr));
   }
 
