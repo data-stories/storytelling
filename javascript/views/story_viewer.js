@@ -47,19 +47,12 @@ function getCurrentStory(prevSections, nextSections, container) {
   var currentStory = [];
   var foundActive = false;
 
-  // If set, we set a temporary marker in the DOM so we can
-  // determine the previous and subsequent sections of the story
-  if(!!container) {
-    container.data('data-rec-selected', true);
-  }
-
   $(".story-block").each(function() {
     var storyBlock;
     var block = $(this).find('div');
 
-    // Have we found an active story block, i.e. the recommend button has been pressed?
-    if ($(this).data('data-rec-selected') === true) {
-      console.log("Found!");
+    // Have we found our optional active story block, i.e. the recommend button has been pressed at this point?
+    if ($(this).is(container)) {
       foundActive = true;
     }
 
@@ -84,11 +77,6 @@ function getCurrentStory(prevSections, nextSections, container) {
     }
   });
 
-  // Unset our temporary DOM marker
-  if(!!container) {
-    container.data('data-rec-selected', false);
-  }
-
   return currentStory;
 }
 
@@ -103,7 +91,7 @@ function newSection(blockContent){
       $(this).parent().remove();
     }));
 
-    addRecommendationOptions(block);
+    // NB: recommendations will be added here after the block has been created - see createAddSectionButton()
 
     block
       .append($('</br>'))
@@ -201,8 +189,16 @@ function insertEmptySection(container, section){
 
 function createAddSectionButton(){
   return $('<button class="btn btn-primary btn-sm btn-add"><i class="fas fa-plus"></i></button>').click(function(){
+    var newSec = newSection();
+
     $(this)
-      .after(newSection())
+      .after(newSec)
       .remove();
+
+    // Now the new section panel has been created, analysis and add recommendations to the panel
+    // We can't do this in newSection(), since it's impossible to get a context of where
+    // the block is being created in the story. We need context to provide recommendations
+    // based on that story location context
+    addRecommendationOptions(newSec);
   });
 }
