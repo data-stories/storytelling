@@ -189,7 +189,7 @@ class Chart{
           .attr("transform", "rotate(-90)")
           .attr("text-anchor", "middle")
           .text(this.yLabel);
-    
+
         return container;
     }
 

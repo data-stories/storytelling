@@ -126,10 +126,24 @@ function newSection(blockContent){
       $(this).parent().next(".btn-add").remove();
       $(this).parent().remove();
     }));
+
+    // If this previously generated block content is a chart, add an edit button
+    if ($(blockContent).hasClass('chart-block')) {
+      addEditChartButton(block);
+    }
     block.append($(blockContent));
   }
 
   return block;
+}
+
+function addEditChartButton(container) {
+  var eButton = $('<button class="btn btn-sm btn-info edit-button"><i class="fas fa-edit"></i></button>');
+  eButton.click(function(){
+    var chartBlock = $(this).parent().find('div');    // chart-block container
+    openEditChartModal(chartBlock);
+  });
+  container.append(eButton);
 }
 
 /**

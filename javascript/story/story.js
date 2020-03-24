@@ -256,6 +256,7 @@ class ChartBlock extends StoryBlock {
         container.empty();
         container.addClass("chart-block");
         charts[i].render(d3.select(container[0]));
+        addEditChartButton(container.parent());
       });
       col.append(button);
       row.append(col);
@@ -298,6 +299,7 @@ class ChartBlock extends StoryBlock {
             container.empty();
             container.addClass("chart-block");
             charts[i+j].render(d3.select(container[0]));
+            addEditChartButton(container.parent());
           });
           col.append(button);
           row.append(col);
@@ -345,6 +347,7 @@ class ChartBlock extends StoryBlock {
       container.empty();
       container.addClass("chart-block");
       chart.render(d3.select(container[0]));
+      addEditChartButton(container.parent());
     });
 
     var formGroup = $('<div class="form-group row">');
