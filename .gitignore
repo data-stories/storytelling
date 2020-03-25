@@ -1,3 +1,5 @@
+.idea/
+.jekyll-cache/
 try/
 _site/
 *.sublime-project

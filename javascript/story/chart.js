@@ -175,7 +175,7 @@ class Chart{
               //Append a label
               .append("text")
               .attr("fill", "#000")
-              .attr("y", this.margin.bottom/2)
+              .attr("y", 40 + ((this.height-500) * 0.01)) //this.margin.bottom/2)
               .attr("x", this.width/2)
               .attr("text-anchor", "middle")
               .text(this.xLabel);
@@ -189,7 +189,7 @@ class Chart{
           .attr("transform", "rotate(-90)")
           .attr("text-anchor", "middle")
           .text(this.yLabel);
-    
+
         return container;
     }
 
@@ -255,7 +255,7 @@ class Chart{
                   //Append a label
               .append("text")
               .attr("fill", "#000")
-              .attr("y", 40)
+              .attr("y", 40 + ((this.height-500) * 0.01))
               .attr("x", this.width/2)
               .attr("text-anchor", "middle")
               .text(this.xLabel);
@@ -316,7 +316,7 @@ class Chart{
               //Append a label
               .append("text")
               .attr("fill", "#000")
-              .attr("y", 40)
+              .attr("y", 40 + ((this.height-500) * 0.01))
               .attr("x", this.width/2)
               .attr("text-anchor", "middle")
                   .text(this.xLabel);

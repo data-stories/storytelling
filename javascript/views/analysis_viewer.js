@@ -76,29 +76,14 @@ function analysisViewInit(){
 onPageEnter["analysis"] = analysisViewInit;
 
 function analysisViewLeave(){
-    //TODO: Introduce a rule-based template system instead of creating it here - these "interesting features"
-    //could be stored in Story.instance.metadata, and used to drive the story-rules
-    storyTemplate.push(new TextBlock("Introduce your story here; talk about the background, the context, and why it matters to your audience"));
+    // Add each interesting feature to a NarrativeFeatures array for use by rule-based recommendation system
+    // TODO: look at refactoring interestingCharts to use NarrativeFeatures class directly
     $(".interesting-data.active").each(function(index, element){
-        console.log("Foo");
         var interest = interestingCharts[$(element).attr("interest")];
-        storyTemplate.push(new TextBlock("Introduce the concept of '"+interest.header1+"' here; talk about what it is, why it matters, and so on."));
-        if(interest.header2){
-            storyTemplate.push(new TextBlock("Introduce the concept of '"+interest.header2+"' here; talk about what it is, why it matters, and so on."));
-        }
-        storyTemplate.push(new ChartBlock(interest.chart.render()._groups[0][0].innerHTML));
-
-        //TODO: It would be nice to add some automatically generated text into the block(s) below, such
-        //as from the "interesting.features" array; this might necessitate making a more well-structured 'Feature' object that is
-        //stored in, e.g., Story.instance.metadata
-        if(interest.header2){
-            storyTemplate.push(new TextBlock("Explain the relationship between the two variables, and reference the correlation or trend visualised above."));
-        }
-        else{
-            storyTemplate.push(new TextBlock("Explain the significance of this value, and how the distribution shown above is important in the overall context."));
-        }
+        var newNarrFeature = new NarrativeFeature(interest.header1, interest.header2, interest.chart, interest.features);
+        Story.instance.metadata.features.push(newNarrFeature);
     });
-    storyTemplate.push(new TextBlock("Conclude your story; summarise the key points you have made and again, emphasise why it is important to your audience."));
+    console.log(Story.instance.metadata.features);
 }
 
 onPageLeave["analysis"] = analysisViewLeave;
@@ -183,20 +168,20 @@ function getInterestingFeatures(header1, header2){
             return;
         }
         else if(col1[0] instanceof Date && !isNaN(col2[0])){
-            x = col1.map(date => date.getTime())
-            xheader = header1
-            y = col2
-            yheader = header2
+            x = col1.map(date => date.getTime());
+            xheader = header1;
+            y = col2;
+            yheader = header2;
         }
         else if(col2[0] instanceof Date && !isNaN(col1[0])){
             x = col2.map(date => date.getTime())
-            xheader = header2
-            y = col1   
-            yheader = header1
+            xheader = header2;
+            y = col1;
+            yheader = header1;
             //Swap these around so that chart labels look
             //nicer; e.g. "Value/year"
-            interesting.header1 = header2
-            interesting.header2 = header1
+            interesting.header1 = header2;
+            interesting.header2 = header1;
         }
         else{
             //TODO: add additional checks here
@@ -207,28 +192,28 @@ function getInterestingFeatures(header1, header2){
         interesting.chart = makeChart("line", x, xheader, y, yheader);
 
 
-        var corr = getPearsonCorrelation(x, y);
-        if(Math.abs(corr) > 0.9){
-            interesting.features.push("There is a very strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
+        var corrNarrative = getCorrelation(x, y);
+        if(corrNarrative) {
+            interesting.features.push(corrNarrative);
         }
-        else if(Math.abs(corr) > 0.8){
-            interesting.features.push("There is a strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        else if(Math.abs(corr) > 0.7){
-            interesting.features.push("There is a fairly strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        else if(Math.abs(corr) > 0.6){
-            interesting.features.push("There is a fairly weak correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        else if(Math.abs(corr) > 0.5){
-            interesting.features.push("There is a weak correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        
 
-        //TODO: test for outliers/peaks/troughs
+        //Test for clusters
+        var clusters = getClusters(x, y);
+        if(Math.max(...clusters) > 1){
+            interesting.features.push("There are approximately "+Math.max(...clusters)+" distinct clusters in this data");
+        }
+
+        //Test for numerical outliers
+        var xOutliers = getIQROutliers(x);
+        var yOutliers = getIQROutliers(y);
+        var numOutliers = xOutliers.length + yOutliers.length;
+        if(numOutliers > 0) {
+            interesting.features.push("There are approximately "+numOutliers+" outliers in this data");
+        }
+
+        //TODO: test for peaks/troughs
 
     }
-
     //Both columns are numeric data
     else if(!(col1[0] instanceof Date) && !isNaN(col1[0]) && !(col2[0] instanceof Date) && !isNaN(col2[0])){
         
@@ -236,27 +221,26 @@ function getInterestingFeatures(header1, header2){
         interesting.chart = makeChart("scatter", col1, header1, col2, header2);
 
         //Test for correlation
-        var corr = getPearsonCorrelation(col1, col2);
-        if(Math.abs(corr) > 0.9){
-            interesting.features.push("There is a very strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        else if(Math.abs(corr) > 0.8){
-            interesting.features.push("There is a strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        else if(Math.abs(corr) > 0.7){
-            interesting.features.push("There is a fairly strong correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        else if(Math.abs(corr) > 0.6){
-            interesting.features.push("There is a fairly weak correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
-        }
-        else if(Math.abs(corr) > 0.5){
-            interesting.features.push("There is a weak correlation between these features (r="+(Math.round(corr * 1000) / 1000)+")");    
+        var corrNarrative = getCorrelation(col1, col2);
+        if(corrNarrative) {
+            interesting.features.push(corrNarrative);
         }
 
         //Test for clusters
         var clusters = getClusters(col1, col2);
         if(Math.max(...clusters) > 1){
             interesting.features.push("There are approximately "+Math.max(...clusters)+" distinct clusters in this data");
+        }
+        console.log(clusters);
+
+        //Test for numerical outliers
+        var xOutliers = getIQROutliers(col1);
+        var yOutliers = getIQROutliers(col2);
+        console.log(header1, xOutliers);
+        console.log(header2, yOutliers);
+        var numOutliers = xOutliers.length + yOutliers.length;
+        if(numOutliers > 0) {
+            interesting.features.push("There are approximately "+numOutliers+" outliers in this data");
         }
     }
     else{
@@ -292,6 +276,32 @@ function getClusters(xCol, yCol){
     var dbscanner = jDBSCAN().eps(5000).minPts(1).distance('EUCLIDEAN').data(pointData);
     return dbscanner();
 }
+
+
+function getCorrelation(column1, column2){
+    var corr = getPearsonCorrelation(column1, column2);
+    var roundedCorr = Math.round(corr * 1000) / 1000;
+
+    var corrNarrative = null;
+    if(Math.abs(corr) > 0.9){
+        corrNarrative = "There is a very strong correlation between these features (r="+roundedCorr+")";
+    }
+    else if(Math.abs(corr) > 0.8){
+        corrNarrative = "There is a strong correlation between these features (r="+roundedCorr+")";
+    }
+    else if(Math.abs(corr) > 0.7){
+        corrNarrative = "There is a fairly strong correlation between these features (r="+roundedCorr+")";
+    }
+    else if(Math.abs(corr) > 0.6){
+        corrNarrative = "There is a fairly weak correlation between these features (r="+roundedCorr+")";
+    }
+    else if(Math.abs(corr) > 0.5){
+        corrNarrative = "There is a weak correlation between these features (r="+roundedCorr+")";
+    }
+
+    return corrNarrative;
+}
+
 
 function makeChart(chartType, x, xLabel, y, yLabel){
 

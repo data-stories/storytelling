@@ -1,7 +1,7 @@
 /**
  * A metadata class describing metadata information of a data story.
  */
-class Metadata{
+class Metadata {
     /**
      * Initialises class properties;
      * @param {string} author
@@ -40,6 +40,13 @@ class Metadata{
          * @type {Array}
          */
         this.dependencies = [];
+        /**
+         * Array of interesting features determined during data analysis.
+         * Array member type is NarrativeFeature.
+         * @private
+         * @type {Array}
+         */
+        this.features = [];
     }
 
     /**
@@ -51,12 +58,12 @@ class Metadata{
     }
 
     /**
-     * Appends a new dependency Object {"independent" : ..., "dependent": ...}.
+     * Appends a new Feature.
      * to the array.
-     * @param {Object} newDependency 
+     * @param {Object} newFeature
      */
-    appendDependency(newDependency){
-        this.dependencies.push(newDependency);
+    appendFeature(newFeature){
+        this.features.push(newFeature);
     }
 
     setAuthor(){
@@ -66,4 +73,25 @@ class Metadata{
     setTitle(){
 
     }
+}
+
+/**
+ * A class used by the Metadata class to persist interesting narrative features identified during data analysis
+ * for potential selection for a story during rule-based recommendation analysis.
+ */
+class NarrativeFeature {
+    /**
+     * Initialises class properties;
+     * @param {string} header1 - the column header name for the first axis
+     * @param {string} header2 - the column header name for the second axis
+     * @param {string} chart - the generated chart, based on the two columns
+     * @param {Array} intFeatures - an array of feature strings describing analytical observations about the data
+     */
+    constructor(header1, header2, chart, intFeatures){
+        this.header1 = header1;
+        this.header2 = header2;
+        this.chart = chart;
+        this.intFeatures = intFeatures;
+    }
+
 }

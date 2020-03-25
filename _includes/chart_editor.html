@@ -1,0 +1,54 @@
+<div id="edit-chart-modal" class="modal" style="height: auto !important; width: auto !important; max-width: 80%; overflow: hidden;">
+  <div class="row">
+    <div class="col mx-auto" align="left">
+      <h6>Chart Annotation Editor</h6>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col mx-auto">
+      <div id="chart-to-edit" style="width: auto !important"></div>
+    </div>
+  </div>
+  <div id="edit-annotation-panel">
+    <div class="row m-1">
+      <div class="col" align="right">
+        <label for="annotation-title" class="col-form-label">Title</label>
+      </div>
+      <div class="col col-8" align="center">
+        <input class="form-control" id="annotation-title">
+      </div>
+      <div class="col" align="left">
+        <a class="btn btn-warning" href="#" role="button" onClick="deleteSelectedAnnotation();">Delete</a>
+      </div>
+    </div>
+    <div class="row m-1">
+      <div class="col" align="right">
+        <label for="annotation-label" class="col-form-label">Label</label>
+      </div>
+      <div class="col col-8" align="center">
+        <input class="form-control" id="annotation-label">
+      </div>
+      <div class="col" align="left">
+        <a class="btn btn-info" href="#" role="button" onClick="updateEditAnnotationText();">Update</a>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col my-auto" align="left">
+      <a class="btn btn-secondary" href="#" role="button" rel="modal:close" onClick="cancelEditedChart();">Cancel</a>
+    </div>
+    <div class="col col-md-9" align="left">
+      <small>
+        <ul>
+          <li><b>Create annotation:</b> fill in <i>Title</i> and <i>Label</i> fields, double-click on the chart</li>
+          <li><b>Edit/delete annotation:</b> select it and change <i>Title</i> and <i>Label</i> fields, select <i>Update</i>. <i>Delete</i> remove it</li>
+          <li><b>Move/resize:</b> use drag handles on annotation to move, resize the reticule, and move the text</li>
+        </ul>
+      </small>
+    </div>
+    <div class="col my-auto" align="right">
+      <a class="btn btn-primary" href="#" role="button" rel="modal:close" onClick="saveEditedChart();">Save</a>
+    </div>
+  </div>
+</div>
