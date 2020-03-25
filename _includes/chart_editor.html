@@ -35,11 +35,20 @@
   </div>
   <hr>
   <div class="row">
-    <div class="col" align="left">
-      <a class="btn btn-sm btn-secondary" href="#" role="button" rel="modal:close" onClick="cancelEditedChart();">Cancel</a>
+    <div class="col my-auto" align="left">
+      <a class="btn btn-secondary" href="#" role="button" rel="modal:close" onClick="cancelEditedChart();">Cancel</a>
     </div>
-    <div class="col" align="right">
-      <a class="btn btn-sm btn-primary" href="#" role="button" rel="modal:close" onClick="saveEditedChart();">Save</a>
+    <div class="col col-md-9" align="left">
+      <small>
+        <ul>
+          <li><b>Create annotation:</b> fill in <i>Title</i> and <i>Label</i> fields, double-click on the chart</li>
+          <li><b>Edit/delete annotation:</b> select it and change <i>Title</i> and <i>Label</i> fields, select <i>Update</i>. <i>Delete</i> remove it</li>
+          <li><b>Move/resize:</b> use drag handles on annotation to move, resize the reticule, and move the text</li>
+        </ul>
+      </small>
+    </div>
+    <div class="col my-auto" align="right">
+      <a class="btn btn-primary" href="#" role="button" rel="modal:close" onClick="saveEditedChart();">Save</a>
     </div>
   </div>
 </div>
