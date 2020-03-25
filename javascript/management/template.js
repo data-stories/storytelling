@@ -72,7 +72,7 @@ function getRuleBasedRecommendations(container) {
     }
     recArr.push(new TextBlock("Draw a conclusion, taking into account the claim, chart, and associated facts.", "Conclusion"));
     // TODO: add both header column names to reason to distinguish them
-    recSetArr.push(createRecBlock("Present new claim supported by observed data features - <i>present an argument in terms of Claim, Facts and optional Explanations helps to structure and clarify your arguments</i>", recArr));
+    recSetArr.push(createRecBlock("Present new claim supported by observed data features - <i>present an argument in terms of claims, facts, and optional explanations to offer more detail on interpreting facts, helps to structure and clarify your arguments</i>", recArr));
   }
 
   // RULE: if preceded by an Introduction or a Conclusion, and we have no narrative feature suggestions,
@@ -82,7 +82,7 @@ function getRuleBasedRecommendations(container) {
     recArr.push(new TextBlock("State a claim about data already presented, or a new claim.", "Claim/question"));
     recArr.push(new TextBlock("Explain a fact to justify the claim.", "Fact/evidence"));
     recArr.push(new TextBlock("Draw a conclusion, taking into account the claim and associated facts.", "Conclusion"));
-    recSetArr.push(createRecBlock("Present a new claim with supporting facts - <i>composing your article as separate groups of Claim, Facts and optional Explanations helps to structure and clarify your arguments</i>", recArr));
+    recSetArr.push(createRecBlock("Present a new claim with supporting facts - <i>composing your article as separate groups of claim, facts, and optional explanations to offer more detail on interpreting facts, helps to structure and clarify your arguments</i>", recArr));
   }
 
   // RULE: if preceded by a Claim, Fact/evidence, or Explanation, suggest another Fact/evidence
