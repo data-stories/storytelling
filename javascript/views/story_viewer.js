@@ -112,13 +112,6 @@ function newSection(blockContent){
           $(this).parent().addClass('chart-block');
           insertEmptySection($(this).parent(), newSection(new ChartBlock().renderToAuthor()));
         })
-      )
-      .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-table"></i> Data</button>')
-        .click(function(){
-          $(this).parent().addClass('data-block');
-          insertEmptySection($(this).parent(), newSection(new DataBlock().renderToAuthor()));
-        })
-        .prop('disabled', true)
       );
   }
   else{
