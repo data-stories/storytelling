@@ -95,19 +95,19 @@ function newSection(blockContent){
 
     block
       .append($('</br>'))
-      .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-file-alt"></i> Text</button>')
+      .append($('<button class="btn btn-secondary btn-story-block"><i class="fas fa-file-alt"></i> Text</button>')
         .click(function(){
           $(this).parent().parent().addClass('text-block');
           insertEmptySection($(this).parent(), newSection(new TextBlock("", "").renderToAuthor()));
         })
       )
-      .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-image"></i> Image</button>')
+      .append($('<button class="btn btn-secondary btn-story-block"><i class="fas fa-image"></i> Image</button>')
         .click(function(){
           $(this).parent().addClass('image-block');
           insertEmptySection($(this).parent(), newSection(new ImageBlock().renderToAuthor()));
         })
       )
-      .append($('<button class="btn btn-primary btn-story-block"><i class="fas fa-chart-bar"></i> Chart</button>')
+      .append($('<button class="btn btn-secondary btn-story-block"><i class="fas fa-chart-bar"></i> Chart</button>')
         .click(function(){
           $(this).parent().addClass('chart-block');
           insertEmptySection($(this).parent(), newSection(new ChartBlock().renderToAuthor()));
@@ -149,7 +149,7 @@ function addRecommendationOptions(container) {
 
   for (var rs = recSetArr.length-1; rs >= 0; rs--) {
     var recArr = recSetArr[rs];
-    container.prepend($('<button class="btn btn-info btn-story-block w-75">' + recArr.reason + '</button>')
+    container.prepend($('<button class="btn btn-primary btn-story-block w-75">' + recArr.reason + '</button>')
       .click(function(recArr) {
         return function() {
           var recSet = recArr.recommendations;
