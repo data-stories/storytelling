@@ -59,12 +59,24 @@ function analysisViewInit(){
 
         var button = $("<button>")
             .attr("type", "button")
-            .attr("class", "btn btn-primary interesting-data text-center")
+            .attr("class", "btn btn-secondary interesting-data text-center")
             .attr("interest", interestID)
             .attr("data-toggle", "button")
             .attr("aria-pressed", "false")
             .attr("autocomplete", "off")
             .text("Include")
+            .click(function(){
+                if($(this).hasClass("btn-primary")){
+                    $(this).removeClass("btn-primary")
+                        .addClass("btn-secondary")
+                        .text("Include");
+                }
+                else{
+                    $(this).removeClass("btn-secondary")
+                        .addClass("btn-primary")
+                        .text("Remove");
+                }
+            });
 
         var buttonDiv = $("<div>")
             .attr("class", "col-6 text-center");
