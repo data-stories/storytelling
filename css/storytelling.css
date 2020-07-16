@@ -52,3 +52,7 @@ body {
 .chart-preview{
     width: 50px;
 }
+
+select.block-type{
+    font-weight: bold;
+}
