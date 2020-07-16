@@ -190,7 +190,7 @@ function dataView(){
         <td>`+Story.instance.data.getExampleValues(header).sort().join(", ")+`</td>
         <td>`+min+`</td>
         <td>`+max+`</td>
-        <td><a onClick="modalSparkline('`+header+`')">`+getSparkline(header)+`</a></td>
+        <td>`+getSparkline(header)+`</td>
       </tr>`;
   });
 
@@ -262,21 +262,6 @@ function getSparks(header){
 
   return histGenerator(values);
 }
-
-function modalSparkline(header){
-  var spark = getSparkline(header);
-  if(spark == "n/a"){
-    return;
-  }
-  var spark = $(spark);
-  spark.addClass("modalSparkline");
-  $("#modalSparkline").html(spark);
-  $("#modalSparkline").modal();
-  $('.modalSparkline').sparkline('html', {type: 'bar', barColor: '#007bff', barWidth: (700/getSparks(header).length)+'px', height: '500px'} );
-  $("#modalSparkline").width(800);
-  $("#modalSparkline").height(600);
-}
-
 
 //TODO: This currently only works if the data is held as a string
 function detectColumnType(header){
