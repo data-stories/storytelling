@@ -160,11 +160,41 @@ function getInterestingFeatures(header1, header2){
 
     //At least one column contains datetime data
     if(col1[0] instanceof Date || col2[0] instanceof Date){
-
         if (col1[0] instanceof Date && col2[0] instanceof Date){
-            //We probably don't care if they're both dates?
-            //TODO: Maybe we do?
-            return;
+            //If they're both dates, they could/should be a scatter plot
+            //Create a (hypothetically) interesting chart - we'll add reasons why it might be interesting later
+            interesting.chart = makeChart("scatter", col1, header1, col2, header2);
+
+            //Test for correlation
+            var corrNarrative = getCorrelation(col1, col2);
+            if(corrNarrative) {
+                interesting.features.push(corrNarrative);
+            }
+
+            //Test for clusters
+            var clusters = getClusters(col1, col2);
+            if(Math.max(...clusters) > 1){
+                interesting.features.push("There are approximately "+Math.max(...clusters)+" distinct clusters in this data");
+            }
+            console.log(clusters);
+
+            //Test for numerical outliers
+            var xOutliers = getIQROutliers(col1);
+            var yOutliers = getIQROutliers(col2);
+            console.log(header1, xOutliers);
+            console.log(header2, yOutliers);
+            var numOutliers = xOutliers.length + yOutliers.length;
+            if(numOutliers > 0) {
+                interesting.features.push("There are approximately "+numOutliers+" outliers in this data");
+            }
+
+            //If there are no reasons that this chart would be interesting, return null 
+            if(interesting.features.length == 0 || interesting.chart == null){
+                return null;
+            }
+            else{
+                return interesting;   
+            }
         }
         else if(col1[0] instanceof Date && !isNaN(col2[0])){
             x = col1.map(date => date.getTime());
@@ -183,9 +213,10 @@ function getInterestingFeatures(header1, header2){
             interesting.header2 = header1;
         }
         else{
-            //TODO: add additional checks here
+            //TODO: One column is category data: what do?
             return;
         }
+
 
         //Create a (hypothetically) interesting chart - we'll add reasons why it might be interesting later
         interesting.chart = makeChart("line", x, xheader, y, yheader);
@@ -246,12 +277,12 @@ function getInterestingFeatures(header1, header2){
         //TODO: Other "interesting"ness checks
     }
 
-    //If there are no reasons that this chart would be interesting, return null 
+   //If there are no reasons that this chart would be interesting, return null 
    if(interesting.features.length == 0 || interesting.chart == null){
         return null;
     }
     else{
-        return interesting    
+        return interesting;   
     }
 }
 
