@@ -156,7 +156,7 @@ function addRecommendationOptions(container) {
 
   for (var rs = recSetArr.length-1; rs >= 0; rs--) {
     var recArr = recSetArr[rs];
-    container.prepend($('<button class="btn btn-info btn-story-block w-75"><i class="fas fa-check-square"></i> ' + recArr.reason + '</button>')
+    container.prepend($('<button class="btn btn-info btn-story-block w-75">' + recArr.reason + '</button>')
       .click(function(recArr) {
         return function() {
           var recSet = recArr.recommendations;
