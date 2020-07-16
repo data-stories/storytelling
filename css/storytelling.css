@@ -56,3 +56,7 @@ body {
 select.block-type{
     font-weight: bold;
 }
+
+button.interesting-data{
+    margin-bottom: 30px;
+}

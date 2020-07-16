@@ -27,15 +27,18 @@ function analysisViewInit(){
         }
     });
 
-    var row;
+    var chartRow;
+    var buttonRow;
     var interesting = 0; //Used to alternate between adding rows/columns
     //Sort charts by how interesting they are
     Object.values(interestingCharts).sort((chart1, chart2) => chart2.features.length - chart1.features.length).forEach(interestingFeatures =>{
         interesting++;
 
         if(interesting % 2 == 1){
-            row = $("<div>").attr("class", "row");
-            $("#data-analysis").append(row);
+            chartRow = $("<div>").attr("class", "row");
+            $("#data-analysis").append(chartRow);
+            buttonRow = $("<div>").attr("class", "row");
+            $("#data-analysis").append(buttonRow);
         }
 
         var interestID = (interestingFeatures.header2) ? interestingFeatures.header1.replace(/ /g, "-")+"-"+interestingFeatures.header2.replace(/ /g, "-") : interestingFeatures.header1.replace(/ /g, "-");
@@ -43,9 +46,8 @@ function analysisViewInit(){
             .attr("id", interestID)
             .attr("class", "col-6");// text-center");
 
-        row.append(interestingDiv);
+        chartRow.append(interestingDiv);
 
-        
         if(interestingFeatures.header2){
             interestingDiv.append($("<h6>").text(interestingFeatures.header2+"/"+interestingFeatures.header1).attr("class", "text-center"));    
         }
@@ -64,7 +66,11 @@ function analysisViewInit(){
             .attr("autocomplete", "off")
             .text("Include")
 
-        interestingDiv.append(button);
+        var buttonDiv = $("<div>")
+            .attr("class", "col-6 text-center");
+        
+        buttonDiv.append(button);
+        buttonRow.append(buttonDiv);
         
     });
 
