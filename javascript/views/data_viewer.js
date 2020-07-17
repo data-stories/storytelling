@@ -96,34 +96,40 @@ function revertDependencies(){
 
 function dataView(){
 
-  var dataView = `
-  <table class="table table-striped">
-    <colgroup>
-       <col span="1" style="width: 20%;">
-       <col span="1" style="width: 20%;">
-       <col span="1" style="width: 30%;">
-       <col span="1" style="width: 10%;">
-       <col span="1" style="width: 10%;">
-       <col span="1" style="width: 10%;">
-    </colgroup>
-    <thead>
-      <tr>
-        <th scope="col">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="field-of-interest-all">
-            <label class="form-check-label" for="field-of-interest-all">
-              Field
-            </label>
-          </div>
-        </th>
-        <th scope="col">Datatype</th>
-        <th scope="col">Example Values</th>
-        <th scope="col">Min.</th>
-        <th scope="col">Max.</th>
-        <th scope="col">Distribution</th>
-      </tr>
-    </thead>
-    <tbody>`;
+  var dataTable;
+
+  var overviewTable = $('<table>')
+    .addClass('table', 'table-striped')
+    .append(
+      $('<colgroup>')
+        .append($('<col span="1" style="width: 20%;">'))
+        .append($('<col span="1" style="width: 20%;">'))
+        .append($('<col span="1" style="width: 30%;">'))
+        .append($('<col span="1" style="width: 10%;">'))
+        .append($('<col span="1" style="width: 10%;">'))
+        .append($('<col span="1" style="width: 10%;">'))
+    )
+    .append(
+      $('<thead>')
+        .append(
+          $('<tr>')
+            .append($('<th scope="col">')
+              .append(
+                $('<div>')
+                  .addClass('form-check')
+                  .append($('<input class="form-check-input" type="checkbox" value="" id="field-of-interest-all">'))
+                  .append($('<label class="form-check-label" for="field-of-interest-all">').text('Field'))
+              )
+            )
+            .append($('<th scope="col">').text('Datatype'))
+            .append($('<th scope="col">').text('Example Values'))
+            .append($('<th scope="col">').text('Min.'))
+            .append($('<th scope="col">').text('Max.'))
+            .append($('<th scope="col">').text('Distribution'))
+        )
+    );
+
+  var tableBody = $('<tbody>');
   Story.instance.data.headers.forEach(function(header, index){
 
     //TODO: There must be a more efficient way d3 can do this
@@ -140,68 +146,61 @@ function dataView(){
       max = "n/a";
     }
 
-    dataView += `
-      <tr>
-        <td>
-          <div class="form-check">
-            <input class="form-check-input field-of-interest" type="checkbox" value="" data-field="`+header+`" id="field-of-interest-`+index+`">
-            <label class="form-check-label" for="field-of-interest-`+index+`">
-              `+header+`
-            </label>
-          </div>
-        </td>
-        <td>
-          <select class="custom-select" id="field-type-`+header.replace(" ", "-")+`" onchange="convertDataType('`+header+`')">`;
-          var detectedType = detectColumnType(header);
+    var tableRow = $('<tr>');
+    var tableCell = $('<td>');
 
-          convertDataType(header, detectedType);
+    tableCell.append(
+      $('<div>').addClass('form-check')
+        .append($('<input class="form-check-input field-of-interest" type="checkbox" value="" data-field="'+header+'" id="field-of-interest-'+index+'">'))
+        .append($('<label class="form-check-label" for="field-of-interest-'+index+'">').text(header))
+    );
 
-          if (detectedType == "string"){
-            dataView += `<option value="string" selected>String</option>`;
-          }
-          else{
-            dataView += `<option value="string">String</option>`;
-          }
+    tableRow.append(tableCell);
+    tableCell = $('<td>');
 
-          if (detectedType == "float"){
-            dataView += `<option value="float" selected>Float</option>`;
-          }
-          else{
-            dataView += `<option value="float">Float</option>`;
-          }
+    var detectedType = detectColumnType(header);
+    convertDataType(header, detectedType);
 
-          if (detectedType == "integer"){
-            dataView += `<option value="integer" selected>Integer</option>`;
-          }
-          else{
-            dataView += `<option value="integer">Integer</option>`;
-          }
+    var typeSelect = $('<select>')
+      .addClass('custom-select')
+      .attr('id', 'field-type-'+header.replace(" ", "-"))
+      .attr('onchange', 'convertDataType("'+header+'")')
 
-          if (detectedType == "datetime"){
-            dataView += `<option value="datetime" selected>Date/Time</option>`;
-          }
-          else{
-            dataView += `<option value="datetime">Date/Time</option>`;
-          }
 
-          dataView += `
-          </select>
-        </td>
-        <td>`+Story.instance.data.getExampleValues(header).sort().join(", ")+`</td>
-        <td>`+min+`</td>
-        <td>`+max+`</td>
-        <td>`+getSparkline(header)+`</td>
-      </tr>`;
+    var types = {"string": "String", "float": "Float", "integer": "Integer", "datetime": "Date/Time"}
+    Object.keys(types).forEach(function(type){
+
+      var option = $('<option>')
+        .attr('value', type)
+        .text(types[type]);
+
+      if(detectedType == type){
+        option.attr('selected', '');
+      }
+
+      typeSelect.append(option)
+
+    });
+
+    tableCell.append(typeSelect);
+    tableRow.append(tableCell);
+
+
+    tableRow.append($('<td>').text(Story.instance.data.getExampleValues(header).sort().join(", ")));
+    tableRow.append($('<td>').text(min));
+    tableRow.append($('<td>').text(max));
+    tableRow.append($('<td>').html(getSparkline(header)));
+
+    overviewTable.append(tableRow);
   });
 
-  dataView += ` 
-    </tbody>
-  </table>
-  <!--<p>Containing Errors: None</p>-->
-  <p>Number of fields: `+Story.instance.data.headers.length+`</p>
-  <p>Number of rows: `+Story.instance.data.rawData.length+`</p>`;
   
-  $("#data-view").html(dataView);
+  $("#data-view")
+    .empty()
+    .append(overviewTable)
+    .append($('<p>').text('Number of fields: '+Story.instance.data.headers.length))
+    .append($('<p>').text('Number of rows: '+Story.instance.data.rawData.length));
+
   $("#data-view-spinner").hide();
   $("#data-view").show();
 
