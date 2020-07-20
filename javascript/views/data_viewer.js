@@ -96,10 +96,81 @@ function revertDependencies(){
 
 function dataView(){
 
-  var dataTable;
+  $("#data-view").empty();
+
+  $("#data-view").append(
+
+    //Add toggle buttons to show/hide raw/overview data
+    $('<div>')
+    .addClass('btn-group btn-group-toggle')
+    .attr('data-toggle', 'buttons')
+    .append(
+      $('<label>')
+      .addClass('btn btn-secondary active')
+      .append(
+        $('<input>')
+        .attr('type', 'radio')
+        .attr('autocomplete', 'off')
+        .attr('checked', '')
+      )
+      .append("Raw Data")
+    )
+    .append(
+      $('<label>')
+      .addClass('btn btn-secondary')
+      .append(
+        $('<input>')
+        .attr('type', 'radio')
+        .attr('autocomplete', 'off')
+      )
+      .append("Overview")
+    )
+    .change(function(){
+      $('#data-table').toggle();
+      $('#overview-table').toggle();
+    })
+  );
+
+
+  var dataTable = $('<table>')
+    .addClass('table table-striped')
+    .append($('<colgroup>'));
+
+  var width = ((100 / Story.instance.data.headers.length) >= 10) ? (100 / Story.instance.data.headers.length) : 10;
+  for(let i = 0; i < Story.instance.data.headers.length; i++){
+    dataTable.children('colgroup')
+      .append($('<col span="1" style="width: '+width+'%;">'));
+  }
+
+
+  dataTable.append($('<thead>').append($('<tr>')));
+            
+  Story.instance.data.headers.forEach(function(header, index){
+    dataTable.children('thead').children('tr').append($('<th scope="col">').text(header));
+  });
+
+  for(let i = 0; i < 10; i++){
+    var row = Story.instance.data.rawData[i];
+    var tableRow = $('<tr>');
+    Story.instance.data.headers.forEach(function(header, index){      
+      tableRow.append($('<td>').text(row[header]));
+    });
+    dataTable.append(tableRow);;
+  }
+
+
+  $("#data-view")
+    .append(
+      $('<div>')
+      .attr('id', 'data-table')
+      .append(dataTable)
+    );
+
+
+  ///////////////////////////////////////////////////
 
   var overviewTable = $('<table>')
-    .addClass('table', 'table-striped')
+    .addClass('table table-striped')
     .append(
       $('<colgroup>')
         .append($('<col span="1" style="width: 20%;">'))
@@ -196,10 +267,14 @@ function dataView(){
 
   
   $("#data-view")
-    .empty()
+  .append(
+    $('<div>')
+    .attr('id', 'overview-table')
     .append(overviewTable)
     .append($('<p>').text('Number of fields: '+Story.instance.data.headers.length))
-    .append($('<p>').text('Number of rows: '+Story.instance.data.rawData.length));
+    .append($('<p>').text('Number of rows: '+Story.instance.data.rawData.length))
+    .toggle()
+  );
 
   $("#data-view-spinner").hide();
   $("#data-view").show();
