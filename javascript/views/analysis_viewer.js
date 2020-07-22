@@ -83,6 +83,15 @@ function analysisViewInit(){
         
         buttonDiv.append(button);
         buttonRow.append(buttonDiv);
+
+
+        Story.instance.metadata.features.forEach(function(feature){
+
+            if(feature.header1 == interestingFeatures.header1 && feature.header2 == interestingFeatures.header2){
+                button.click();
+                return;
+            }
+        });
         
     });
 
@@ -101,7 +110,19 @@ function analysisViewLeave(){
         var newNarrFeature = new NarrativeFeature(interest.header1, interest.header2, interest.chart, interest.features);
         Story.instance.metadata.features.push(newNarrFeature);
     });
-    console.log(Story.instance.metadata.features);
+
+    //If a chart is NOT selected, and is in Story.instance.metadata.features, remove it
+    $(".interesting-data:not(.active)").each(function(index, element){
+        var interest = interestingCharts[$(element).attr("interest")];
+        var i = Story.instance.metadata.features;
+        while (i--) {
+            if (Story.instance.metadata.features.header1 == interest.header1 && Story.instance.metadata.features.header2 == interest.header2) { 
+                Story.instance.metadata.features.splice(i, 1);
+            } 
+        }
+    });
+
+    //TODO: remove the narrative features from the recommendations in the story page (if they haven't been used yet)
 }
 
 onPageLeave["analysis"] = analysisViewLeave;
