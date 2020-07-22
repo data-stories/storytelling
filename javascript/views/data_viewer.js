@@ -8,8 +8,22 @@ $(document).ready(function(){
       dataView(); 
     });
   });
+
+  $('#data-continue').click(function(){
+    $('#data-continue').html('<img width="20px" height="20px" src="static/images/spinner.gif"> Loading...');
+
+    //Include a (tiny) sleep, to give the button text a chance to update if needed
+    setTimeout(() => { switchView('analysis'); }, 10);
+    
+  });
 });
 
+
+function dataViewInit(){
+  $('#data-continue').html("Continue");
+}
+
+onPageEnter["data"] = dataViewInit;
 
 function dataViewLeave(){
 
