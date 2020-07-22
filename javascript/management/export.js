@@ -1,5 +1,5 @@
 function storyToRawHTML(){
-    var out = '<div class="data-story>\n';
+    var out = '<div class="data-story">\n';
     Story.instance.blocks.forEach(function(block){
         out += '  '+block.renderToHTML() + '\n';
     });
