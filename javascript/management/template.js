@@ -44,13 +44,13 @@ function getRuleBasedRecommendations(container) {
   // RULE: story must start with an introduction
   if((pStr === "") && !/^I/.test(nStr)) {
     var recArr = [new TextBlock("Introduce your article and subject matter in a single paragraph, highlighting key questions and findings.", "Introduction")];
-    recSetArr.push(createRecBlock("Add article introduction - <i>important to set context and an overview of findings</i>", recArr));
+    recSetArr.push(createRecBlock("Add article introduction<br/><i>important to set context and an overview of findings</i>", recArr));
   }
 
   // RULE: story should end with an article conclusion if we've reached a set amount of claims
   if(!/Z$/.test(pStr) && (nStr === "") && (pStr.split('C').length-1 >= MAX_CLAIMS)) {
     var recArr = [new TextBlock("Provide a lead-out summary of the main conclusions in the article.", "Article conclusion")];
-    recSetArr.push(createRecBlock("Add article conclusion - <i>you have made at least "+MAX_CLAIMS+" claims, you should now conclude your article to avoid overwhelming your readership</i>", recArr));
+    recSetArr.push(createRecBlock("Add article conclusion<br/><i>you have made at least "+MAX_CLAIMS+" claims, you should now conclude your article to avoid overwhelming your readership</i>", recArr));
   }
 
   // RULE: if preceded by an introduction or a Conclusion, and we have at least one narrative feature suggestion,
@@ -72,7 +72,7 @@ function getRuleBasedRecommendations(container) {
     }
     recArr.push(new TextBlock("Draw a conclusion, taking into account the claim, chart, and associated facts.", "Conclusion"));
     // TODO: add both header column names to reason to distinguish them
-    recSetArr.push(createRecBlock("Present new claim supported by observed data features - <i>present an argument in terms of claims, facts, and optional explanations to offer more detail on interpreting facts, helps to structure and clarify your arguments</i>", recArr));
+    recSetArr.push(createRecBlock("Present claim based on your selected chart<br/><i>present an argument in terms of claims, facts, and optional explanations to offer more detail on interpreting facts, helps to structure and clarify your arguments</i>", recArr));
   }
 
   // RULE: if preceded by an Introduction or a Conclusion, and we have no narrative feature suggestions,
@@ -82,19 +82,19 @@ function getRuleBasedRecommendations(container) {
     recArr.push(new TextBlock("State a claim about data already presented, or a new claim.", "Claim/question"));
     recArr.push(new TextBlock("Explain a fact to justify the claim.", "Fact/evidence"));
     recArr.push(new TextBlock("Draw a conclusion, taking into account the claim and associated facts.", "Conclusion"));
-    recSetArr.push(createRecBlock("Present a new claim with supporting facts - <i>composing your article as separate groups of claim, facts, and optional explanations to offer more detail on interpreting facts, helps to structure and clarify your arguments</i>", recArr));
+    recSetArr.push(createRecBlock("Create a new claim with supporting facts<br/><i>composing your article as separate groups of claim, facts, and optional explanations to offer more detail on interpreting facts, helps to structure and clarify your arguments</i>", recArr));
   }
 
   // RULE: if preceded by a Claim, Fact/evidence, or Explanation, suggest another Fact/evidence
   if(/[CFX]$/.test(pStr)) {
     var recArr = [new TextBlock("Use a fact to justify the claim.", "Fact/evidence")];
-    recSetArr.push(createRecBlock("Add additional fact/evidence to justify this claim - <i>all claims should be supported by credible evidence</i>", recArr));
+    recSetArr.push(createRecBlock("Add additional fact/evidence to justify this claim<br/><i>all claims should be supported by credible evidence</i>", recArr));
   }
 
   // RULE: if preceded by a Fact/evidence, suggest an Explanation for that Fact/evidence
   if(/F$/.test(pStr)) {
     var recArr = [new TextBlock("Elaborate on the fact/evidence just presented, e.g. the collection or analytical mechanisms.", "Explanation")];
-    recSetArr.push(createRecBlock("Explain nature of fact/evidence just presented - <i>more complex facts often need additional explanation or clarification</i>", recArr));
+    recSetArr.push(createRecBlock("Explain nature of fact/evidence just presented<br/><i>more complex facts often need additional explanation or clarification</i>", recArr));
   }
 
   // TODO: add rule for adding conclusion after F or O
@@ -104,7 +104,7 @@ function getRuleBasedRecommendations(container) {
   // if we've already reached MAX_CLAIMS
   if(!/Z$/.test(pStr) && (nStr === "") && (pStr.split('C').length-1 >= 1) && (pStr.split('C').length-1 < MAX_CLAIMS)) {
     var recArr = [new TextBlock("Provide a lead-out summary of the main conclusions in the article.", "Article conclusion")];
-    recSetArr.push(createRecBlock("Add article conclusion - <i>you have presented one claim, you may conclude your article</i>", recArr));
+    recSetArr.push(createRecBlock("Add article conclusion<br/><i>you have presented one claim, you may conclude your article</i>", recArr));
   }
 
   /*
