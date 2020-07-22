@@ -8,6 +8,8 @@ function analysisViewInit(){
     // }
     // Update; do it again after all - what if they've gone back to
     // the data page and changed the dependent/independent variables?
+    //
+    // TODO: ONLY UPDATE THE USER-SELECTED VARAIBLES THEN - OTHERWISE THIS TAKES FOREVER
     $("#data-analysis").empty();
 
     //Collect interesting features of data-column pairs
@@ -30,8 +32,23 @@ function analysisViewInit(){
     var chartRow;
     var buttonRow;
     var interesting = 0; //Used to alternate between adding rows/columns
-    //Sort charts by how interesting they are
-    Object.values(interestingCharts).sort((chart1, chart2) => chart2.features.length - chart1.features.length).forEach(interestingFeatures =>{
+
+    //Sort charts by how interesting they are (prioritising user-selected combinations)
+    function sortInterestingCharts(chart1, chart2){
+        var user = "You suggested there may be a relationship between these variables";
+        console.log();
+
+        if(chart1.features.includes(user) && !chart2.features.includes(user)){
+            return -1;
+        }
+        else if (!chart1.features.includes(user) && chart2.features.includes(user)){
+            return 1;
+        }
+        else{
+            return chart2.features.length - chart1.features.length    
+        }
+    }
+    Object.values(interestingCharts).sort((chart1, chart2) => sortInterestingCharts(chart1, chart2)).forEach(interestingFeatures =>{
         interesting++;
 
         if(interesting % 2 == 1){
@@ -89,7 +106,7 @@ function analysisViewInit(){
 
             if(feature.header1 == interestingFeatures.header1 && feature.header2 == interestingFeatures.header2){
                 button.click();
-                return;
+                //TODO: break;
             }
         });
         
