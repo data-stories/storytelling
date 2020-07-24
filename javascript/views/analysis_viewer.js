@@ -11,9 +11,12 @@ function analysisViewInit(){
     //
     // TODO: ONLY UPDATE THE USER-SELECTED VARAIBLES THEN - OTHERWISE THIS TAKES FOREVER
     $("#data-analysis").empty();
+    interestingCharts = {};
+    
+    console.log(Object.keys(Story.instance.metadata.interests));
 
     //Collect interesting features of data-column pairs
-    var headerPairs = getPairs(Story.instance.data.headers);
+    var headerPairs = getPairs(Object.keys(Story.instance.metadata.interests));
     headerPairs.forEach(function(pair){
         interestingFeatures = getInterestingFeatures(pair[0], pair[1]);
         if(interestingFeatures){
@@ -21,8 +24,10 @@ function analysisViewInit(){
         }
     });
 
+    console.log(headerPairs);
+
     //Collect features of stand-alone data-columns
-    Story.instance.data.headers.forEach(header => {
+    Object.keys(Story.instance.metadata.interests).forEach(header => {
         interestingFeatures = getInterestingFeatures(header);
         if(interestingFeatures){
             interestingCharts[interestingFeatures.header1.replace(/ /g, "-")] = interestingFeatures
