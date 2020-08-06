@@ -94,7 +94,8 @@ function newSection(blockContent){
     // NB: recommendations will be added here after the block has been created - see createAddSectionButton()
 
     block
-      .append($('</br>'))
+      .append($('<br/>'))
+      .append($('<p style="margin-top: 32px; margin-bottom: 0px">Alternatively, you could add:</p>'))
       .append($('<button class="btn btn-secondary btn-story-block"><i class="fas fa-file-alt"></i> Text</button>')
         .click(function(){
           $(this).parent().parent().addClass('text-block');
@@ -207,5 +208,6 @@ function createAddSectionButton(){
     // the block is being created in the story. We need context to provide recommendations
     // based on that story location context
     addRecommendationOptions(newSec);
+    newSec.prepend($('<p style="margin-bottom: 0px;">We recommend that you add:</p>'));
   });
 }
